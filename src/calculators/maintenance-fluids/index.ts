@@ -7,7 +7,8 @@ import type { FormulaCalculatorConfig } from '../../types/calculator-formula.js'
 export const maintenanceFluidsConfig: FormulaCalculatorConfig = {
     id: 'maintenance-fluids',
     title: 'Maintenance Fluids Calculations',
-    description: 'Calculates maintenance fluid requirements by weight using the Holliday-Segar method.',
+    description:
+        'Calculates maintenance fluid requirements by weight using the Holliday-Segar method.',
     inputs: [
         {
             id: 'weight-fluids',
@@ -34,13 +35,15 @@ export const maintenanceFluidsConfig: FormulaCalculatorConfig = {
         type: 'warning',
         message: `
             <h5>⚠️ Important Notes:</h5>
-            <ul>
-                <li>This calculates <strong>maintenance fluids only</strong>, not replacement for deficits or ongoing losses</li>
-                <li>The Holliday-Segar method is widely used in pediatric and adult medicine</li>
-                <li>Adjust based on clinical conditions, renal function, and fluid losses</li>
-                <li>Consider insensible losses (respiratory, skin) and urine output</li>
-                <li>For critically ill patients, may need additional adjustment (e.g., 50-75% of calculated)</li>
-            </ul>
+            ${uiBuilder.createList({
+                items: [
+                    'This calculates <strong>maintenance fluids only</strong>, not replacement for deficits or ongoing losses',
+                    'The Holliday-Segar method is widely used in pediatric and adult medicine',
+                    'Adjust based on clinical conditions, renal function, and fluid losses',
+                    'Consider insensible losses (respiratory, skin) and urine output',
+                    'For critically ill patients, may need additional adjustment (e.g., 50-75% of calculated)'
+                ]
+            })}
         `
     })
 };

@@ -288,10 +288,12 @@ export class FHIRFeedback {
         }
 
         if (missing.length > 0) {
-            const listItems = missing.map(item => {
-                if (typeof item === 'string') return `<li>${item}</li>`;
-                return `<li data-field-id="${item.id}">${item.label}</li>`;
-            }).join('');
+            const listItems = missing
+                .map(item => {
+                    if (typeof item === 'string') return `<li>${item}</li>`;
+                    return `<li data-field-id="${item.id}">${item.label}</li>`;
+                })
+                .join('');
             detailsHTML += `
                 <div class="details">
                     <strong>Please enter manually:</strong>
@@ -369,7 +371,10 @@ export class FHIRFeedback {
                         results.loaded.push(field.label);
                     } else {
                         this.showWarning(input, field.label);
-                        results.missing.push({ id: field.inputId.replace(/^#/, ''), label: field.label });
+                        results.missing.push({
+                            id: field.inputId.replace(/^#/, ''),
+                            label: field.label
+                        });
                     }
                 } catch (error: any) {
                     console.error(`Error loading ${field.label}:`, error);
@@ -445,7 +450,9 @@ export class FHIRFeedback {
 
         this.currentMissingIds.delete(fieldId);
 
-        const summaryItem = document.querySelector(`#fhir-data-summary li[data-field-id="${fieldId}"]`);
+        const summaryItem = document.querySelector(
+            `#fhir-data-summary li[data-field-id="${fieldId}"]`
+        );
         if (summaryItem) {
             summaryItem.classList.add('removing');
             setTimeout(() => summaryItem.remove(), 300);
@@ -474,7 +481,7 @@ export class FHIRFeedback {
             li.classList.add('adding');
             missingList.appendChild(li);
             // Trigger reflow for animation
-            li.offsetHeight;
+            void li.offsetHeight;
             li.classList.remove('adding');
         } else {
             // Need to recreate the summary banner
@@ -504,7 +511,9 @@ export class FHIRFeedback {
             if (title) title.textContent = 'All required data has been entered';
 
             // Hide the details section
-            summary.querySelectorAll('.details').forEach(d => (d as HTMLElement).style.display = 'none');
+            summary
+                .querySelectorAll('.details')
+                .forEach(d => ((d as HTMLElement).style.display = 'none'));
 
             // Auto-hide after 3 seconds
             setTimeout(() => {
@@ -522,7 +531,9 @@ export class FHIRFeedback {
             if (title) title.textContent = 'Some patient data is missing';
 
             // Show the details section
-            summary.querySelectorAll('.details').forEach(d => (d as HTMLElement).style.display = '');
+            summary
+                .querySelectorAll('.details')
+                .forEach(d => ((d as HTMLElement).style.display = ''));
         }
     }
 
@@ -566,9 +577,7 @@ export class FHIRFeedback {
         this.cleanupEventListeners();
 
         missingFields.forEach(field => {
-            const fieldObj = typeof field === 'string'
-                ? { id: field, label: field }
-                : field;
+            const fieldObj = typeof field === 'string' ? { id: field, label: field } : field;
 
             // Normalize ID: remove leading # if present
             const cleanId = fieldObj.id.replace(/^#/, '');

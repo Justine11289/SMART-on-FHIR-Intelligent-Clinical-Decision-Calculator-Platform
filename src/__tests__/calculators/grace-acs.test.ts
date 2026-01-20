@@ -1,13 +1,12 @@
 /**
  * GRACE ACS Calculator - SaMD Verification Tests
- * 
+ *
  * Formula: Sum of age, HR, SBP, Cr, Killip, Arrest, ST, Enzymes points.
  */
 
 import { calculateGraceAcs } from '../../calculators/grace-acs/calculation';
 
 describe('GRACE ACS Calculator', () => {
-
     // ===========================================
     // TC-001: Standard Calculation Tests
     // ===========================================

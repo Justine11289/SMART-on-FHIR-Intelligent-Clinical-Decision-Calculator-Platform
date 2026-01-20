@@ -30,7 +30,7 @@ initialize: function (client, patient, container) {
     // 創建過期數據追蹤器
     const stalenessTracker = createStalenessTracker();
     stalenessTracker.setContainer(container);
-    
+
     // ... 其他初始化代碼
 }
 ```
@@ -43,13 +43,13 @@ getMostRecentObservation(client, LOINC_CODES.SODIUM).then(obs => {
     if (obs?.valueQuantity) {
         // 設置輸入值
         setValue('#calculator-sodium', obs.valueQuantity.value.toFixed(0));
-        
+
         // 追蹤過期狀態（會自動顯示警告如果超過 3 個月）
         stalenessTracker.trackObservation(
-            '#calculator-sodium',  // 欄位 ID
-            obs,                   // FHIR Observation 資源
-            LOINC_CODES.SODIUM,    // LOINC 代碼
-            'Sodium'               // 自定義標籤（選填）
+            '#calculator-sodium', // 欄位 ID
+            obs, // FHIR Observation 資源
+            LOINC_CODES.SODIUM, // LOINC 代碼
+            'Sodium' // 自定義標籤（選填）
         );
     }
 });
@@ -62,6 +62,7 @@ getMostRecentObservation(client, LOINC_CODES.SODIUM).then(obs => {
 創建一個新的過期數據追蹤器。
 
 **參數：**
+
 - `options.thresholdMs`：過期閾值（毫秒），默認 90 天
 - `options.warningContainerId`：警告容器 ID，默認 `'staleness-warnings'`
 
@@ -76,6 +77,7 @@ getMostRecentObservation(client, LOINC_CODES.SODIUM).then(obs => {
 追蹤一個觀察值的過期狀態。
 
 **參數：**
+
 - `fieldId`：輸入欄位的 ID（用於識別）
 - `observation`：FHIR Observation 資源對象
 - `code`：LOINC 代碼
@@ -112,13 +114,14 @@ getMostRecentObservation(client, LOINC_CODES.SODIUM).then(obs => {
 
 ```javascript
 const stalenessTracker = createStalenessTracker({
-    thresholdMs: 30 * 24 * 60 * 60 * 1000  // 30 天
+    thresholdMs: 30 * 24 * 60 * 60 * 1000 // 30 天
 });
 ```
 
 ## 樣式
 
 過期警告使用標準的 UI Builder 警告樣式，並額外包含：
+
 - 動畫淡入效果
 - 深色模式支援
 - 列表格式展示過期項目

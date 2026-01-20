@@ -1,111 +1,115 @@
 <!doctype html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <!-- Security Headers -->
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="default-src 'self' https://cdn.jsdelivr.net https://launch.smarthealthit.org https://*.smarthealthit.org https://*.cerner.com; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; img-src 'self' data: https:; connect-src 'self' https://cdn.jsdelivr.net https://launch.smarthealthit.org https://*.smarthealthit.org https://*.cerner.com; frame-ancestors 'none'; upgrade-insecure-requests;"
+        />
+        <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+        <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+        <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()" />
 
-    <!-- Security Headers -->
-    <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self' https://cdn.jsdelivr.net https://launch.smarthealthit.org https://*.smarthealthit.org; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://cdn.jsdelivr.net https://launch.smarthealthit.org https://*.smarthealthit.org;" />
-    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-    <!-- X-Frame-Options removed - can only be set via HTTP header, not meta tag -->
-    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
-    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()" />
+        <title>CGMH EHRCALC</title>
+        <meta
+            name="description"
+            content="92 Clinical Calculators for Healthcare Professionals integrated with FHIR EHR systems"
+        />
+        <link
+            rel="icon"
+            href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚕️</text></svg>"
+        />
+        <!-- 新的模組化 CSS 結構 -->
+        <link rel="stylesheet" href="css/main.css" />
+        <!-- 深色科技主題（通過 data-theme 屬性啟用） -->
+        <link rel="stylesheet" href="css/themes/tech-theme.css" />
+        <script src="js/auth-redirect.js"></script>
+    </head>
 
-    <title>CGMH EHRCALC</title>
-    <meta name="description"
-        content="92 Clinical Calculators for Healthcare Professionals integrated with FHIR EHR systems" />
-    <link rel="icon"
-        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚕️</text></svg>" />
-    <!-- 新的模組化 CSS 結構 -->
-    <link rel="stylesheet" href="css/main.css" />
-    <!-- 深色科技主題（通過 data-theme 屬性啟用） -->
-    <link rel="stylesheet" href="css/themes/tech-theme.css" />
-    <script>
-        // Redirect to launch.html if this page is loaded directly,
-        // the URL doesn't contain a "state" parameter,
-        // and there is no active FHIR session data in sessionStorage.
-        if (!/state=/.test(location.search) && !sessionStorage.getItem('SMART_KEY')) {
-            window.location.href = 'launch.html';
-        }
-    </script>
-</head>
+    <body>
+        <div class="container">
+            <div class="sticky-header">
+                <div class="header-top">
+                    <h1>CGMH EHRCALC on FHIR</h1>
+                    <button id="theme-toggle" class="theme-toggle-btn" title="Toggle Theme">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                </div>
+                <div id="patient-info">Loading patient data...</div>
+                <hr />
+                <div class="calculators-header">
+                    <div class="header-title-row">
+                        <h2>Available Calculators</h2>
+                        <div id="practitioner-info" class="practitioner-info hidden">
+                            <span class="practitioner-label">Practitioner:</span>
+                            <span id="practitioner-name">Loading...</span>
+                        </div>
+                    </div>
 
-<body>
-    <div class="container">
-        <div class="sticky-header">
-            <div class="header-top">
-                <h1>CGMH EHRCALC on FHIR</h1>
-                <button id="theme-toggle" class="theme-toggle-btn" title="Toggle Theme">
-                    <span class="theme-icon">🌙</span>
-                </button>
+                    <!-- Filter Buttons -->
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all">
+                            <span>All</span>
+                        </button>
+                        <button class="filter-btn" data-filter="favorites">
+                            <span>⭐ Favorites</span>
+                        </button>
+                        <button class="filter-btn" data-filter="recent">
+                            <span>🕒 Recent</span>
+                        </button>
+                    </div>
+
+                    <!-- Search and Filter Controls -->
+                    <div class="controls-row">
+                        <div class="search-container">
+                            <input
+                                type="search"
+                                id="search-bar"
+                                placeholder="Search for a calculator..."
+                            />
+                        </div>
+
+                        <div class="category-container">
+                            <label for="category-select">Category:</label>
+                            <select id="category-select">
+                                <!-- Options will be dynamically added -->
+                            </select>
+                        </div>
+
+                        <div class="sort-container">
+                            <label for="sort-select">Sort:</label>
+                            <select id="sort-select">
+                                <option value="a-z">A → Z</option>
+                                <option value="z-a">Z → A</option>
+                                <option value="recently-added">Date Added</option>
+                                <option value="most-used">Most Used</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Statistics -->
+                    <div id="calculator-stats" class="calculator-stats">
+                        Showing 92 / 92 results
+                    </div>
+                </div>
             </div>
-            <div id="patient-info">Loading patient data...</div>
-            <hr />
-            <div class="calculators-header">
-                <div class="header-title-row">
-                    <h2>Available Calculators</h2>
-                    <div id="practitioner-info" class="practitioner-info" style="display: none;">
-                        <span class="practitioner-label">Practitioner:</span>
-                        <span id="practitioner-name">Loading...</span>
-                    </div>
-                </div>
-
-                <!-- Filter Buttons -->
-                <div class="filter-buttons">
-                    <button class="filter-btn active" data-filter="all">
-                        <span>All</span>
-                    </button>
-                    <button class="filter-btn" data-filter="favorites">
-                        <span>⭐ Favorites</span>
-                    </button>
-                    <button class="filter-btn" data-filter="recent">
-                        <span>🕒 Recent</span>
-                    </button>
-                </div>
-
-                <!-- Search and Filter Controls -->
-                <div class="controls-row">
-                    <div class="search-container">
-                        <input type="search" id="search-bar" placeholder="Search for a calculator..." />
-                    </div>
-
-                    <div class="category-container">
-                        <label for="category-select">Category:</label>
-                        <select id="category-select">
-                            <!-- Options will be dynamically added -->
-                        </select>
-                    </div>
-
-                    <div class="sort-container">
-                        <label for="sort-select">Sort:</label>
-                        <select id="sort-select">
-                            <option value="a-z">A → Z</option>
-                            <option value="z-a">Z → A</option>
-                            <option value="recently-added">Date Added</option>
-                            <option value="most-used">Most Used</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Statistics -->
-                <div id="calculator-stats" class="calculator-stats">
-                    Showing 92 / 92 results
+            <div class="content-area">
+                <div id="calculator-list" class="calculator-list">
+                    <!-- Calculator links will be dynamically inserted here -->
                 </div>
             </div>
         </div>
-        <div class="content-area">
-            <div id="calculator-list" class="calculator-list">
-                <!-- Calculator links will be dynamically inserted here -->
-            </div>
-        </div>
-    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/fhirclient/build/fhir-client.js"></script>
-    <script type="module" src="js/theme-toggle.js"></script>
-    <script type="module" src="js/main.js"></script>
-</body>
-
+        <script
+            src="https://cdn.jsdelivr.net/npm/fhirclient@2.6.3/build/fhir-client.js"
+            integrity="sha384-dGS6R4ht5hVL6tx4pQCGGEFJV/rS1ywziGTuH/fJeDtWoS4YQJeAaF1qu2/0ZXkk"
+            crossorigin="anonymous"
+        ></script>
+        <script type="module" src="js/theme-toggle.js"></script>
+        <script type="module" src="js/main.js"></script>
+    </body>
 </html>

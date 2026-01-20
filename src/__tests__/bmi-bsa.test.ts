@@ -5,7 +5,7 @@ import { fhirDataService } from '../fhir-data-service';
 // Mock dependencies if needed
 // For now, we use real UnitConverter and UIBuilder as they are pure logic/string generation
 // Mock FHIR services to prevent network calls
-jest.spyOn(fhirDataService, 'initialize').mockImplementation(() => { });
+jest.spyOn(fhirDataService, 'initialize').mockImplementation(() => {});
 jest.spyOn(fhirDataService, 'isReady').mockReturnValue(false);
 
 describe('BMI & BSA Calculator', () => {

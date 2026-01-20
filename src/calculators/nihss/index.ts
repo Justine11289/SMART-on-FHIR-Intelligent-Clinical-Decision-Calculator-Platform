@@ -5,10 +5,7 @@
  * Quantifies stroke severity and monitors for neurological changes over time.
  */
 
-import {
-    createScoringCalculator,
-    ScoringCalculatorConfig
-} from '../shared/scoring-calculator.js';
+import { createScoringCalculator, ScoringCalculatorConfig } from '../shared/scoring-calculator.js';
 import { uiBuilder } from '../../ui-builder.js';
 
 const config: ScoringCalculatorConfig = {
@@ -237,17 +234,17 @@ const config: ScoringCalculatorConfig = {
 
         return `
             ${uiBuilder.createResultItem({
-            label: 'Total Score',
-            value: score.toString(),
-            unit: '/ 42 points',
-            interpretation: severity,
-            alertClass: `ui-alert-${alertClass}`
-        })}
+                label: 'Total Score',
+                value: score.toString(),
+                unit: '/ 42 points',
+                interpretation: severity,
+                alertClass: `ui-alert-${alertClass}`
+            })}
             
             ${uiBuilder.createAlert({
-            type: alertClass,
-            message: interpretation
-        })}
+                type: alertClass,
+                message: interpretation
+            })}
         `;
     }
 };

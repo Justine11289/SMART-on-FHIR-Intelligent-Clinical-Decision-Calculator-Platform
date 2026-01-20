@@ -1,14 +1,14 @@
 /**
  * tPA (Alteplase) Dosing Calculator - SaMD Verification Tests
- * 
+ *
  * Formula:
  *   Total Dose = 0.9 mg/kg (Maximum 90 mg)
  *   Bolus Dose = 10% of total dose
  *   Infusion Dose = 90% of total dose
- * 
+ *
  * Constraints:
  *   - Maximum total dose is 90 mg (weight capped at 100 kg)
- * 
+ *
  * Reference:
  * NINDS rt-PA Stroke Study Group. N Engl J Med. 1995;333(24):1581-1587.
  */
@@ -19,7 +19,7 @@ describe('tPA (Alteplase) Dosing Calculator', () => {
     // ===========================================
     // TC-001: Standard Calculation Tests
     // ===========================================
-    
+
     describe('Standard Calculations', () => {
         test('Should calculate correct doses for 70 kg patient', () => {
             // Total = 70 * 0.9 = 63 mg
@@ -75,7 +75,7 @@ describe('tPA (Alteplase) Dosing Calculator', () => {
     // ===========================================
     // TC-002: Maximum Dose Cap Tests
     // ===========================================
-    
+
     describe('Maximum Dose Cap', () => {
         test('Should cap total dose at 90 mg for weight > 100 kg', () => {
             // 120 kg patient should be capped
@@ -123,32 +123,32 @@ describe('tPA (Alteplase) Dosing Calculator', () => {
     // ===========================================
     // TC-003: Dose Ratio Tests
     // ===========================================
-    
+
     describe('Dose Ratios', () => {
         test('Bolus should be exactly 10% of total', () => {
             const weights = [50, 60, 70, 80, 90];
-            
+
             weights.forEach(weight => {
                 const result = calculateTpaDosing({ 'tpa-weight': weight });
                 expect(result).not.toBeNull();
-                
+
                 const total = parseFloat(result![0].value as string);
                 const bolus = parseFloat(result![1].value as string);
-                
+
                 expect(bolus).toBeCloseTo(total * 0.1, 2);
             });
         });
 
         test('Infusion should be exactly 90% of total', () => {
             const weights = [50, 60, 70, 80, 90];
-            
+
             weights.forEach(weight => {
                 const result = calculateTpaDosing({ 'tpa-weight': weight });
                 expect(result).not.toBeNull();
-                
+
                 const total = parseFloat(result![0].value as string);
                 const infusion = parseFloat(result![2].value as string);
-                
+
                 expect(infusion).toBeCloseTo(total * 0.9, 2);
             });
         });
@@ -156,11 +156,11 @@ describe('tPA (Alteplase) Dosing Calculator', () => {
         test('Bolus + Infusion should equal Total', () => {
             const result = calculateTpaDosing({ 'tpa-weight': 75 });
             expect(result).not.toBeNull();
-            
+
             const total = parseFloat(result![0].value as string);
             const bolus = parseFloat(result![1].value as string);
             const infusion = parseFloat(result![2].value as string);
-            
+
             expect(bolus + infusion).toBeCloseTo(total, 2);
         });
     });
@@ -168,7 +168,7 @@ describe('tPA (Alteplase) Dosing Calculator', () => {
     // ===========================================
     // TC-004: Boundary Value Tests
     // ===========================================
-    
+
     describe('Boundary Values', () => {
         test('Should work for minimum reasonable weight (30 kg)', () => {
             const result = calculateTpaDosing({
@@ -203,7 +203,7 @@ describe('tPA (Alteplase) Dosing Calculator', () => {
     // ===========================================
     // TC-005: Invalid Input Tests
     // ===========================================
-    
+
     describe('Invalid Inputs', () => {
         test('Should return null for zero weight', () => {
             const result = calculateTpaDosing({
@@ -239,18 +239,18 @@ describe('tPA (Alteplase) Dosing Calculator', () => {
     // ===========================================
     // TC-006: Golden Dataset Verification
     // ===========================================
-    
+
     describe('Golden Dataset', () => {
         const goldenDataset = [
             // weight, expectedTotal, expectedBolus, expectedInfusion
-            { w: 50, total: 45.00, bolus: 4.50, infusion: 40.50 },
-            { w: 60, total: 54.00, bolus: 5.40, infusion: 48.60 },
-            { w: 70, total: 63.00, bolus: 6.30, infusion: 56.70 },
-            { w: 80, total: 72.00, bolus: 7.20, infusion: 64.80 },
-            { w: 90, total: 81.00, bolus: 8.10, infusion: 72.90 },
-            { w: 100, total: 90.00, bolus: 9.00, infusion: 81.00 },
-            { w: 110, total: 90.00, bolus: 9.00, infusion: 81.00 },  // Capped
-            { w: 120, total: 90.00, bolus: 9.00, infusion: 81.00 },  // Capped
+            { w: 50, total: 45.0, bolus: 4.5, infusion: 40.5 },
+            { w: 60, total: 54.0, bolus: 5.4, infusion: 48.6 },
+            { w: 70, total: 63.0, bolus: 6.3, infusion: 56.7 },
+            { w: 80, total: 72.0, bolus: 7.2, infusion: 64.8 },
+            { w: 90, total: 81.0, bolus: 8.1, infusion: 72.9 },
+            { w: 100, total: 90.0, bolus: 9.0, infusion: 81.0 },
+            { w: 110, total: 90.0, bolus: 9.0, infusion: 81.0 }, // Capped
+            { w: 120, total: 90.0, bolus: 9.0, infusion: 81.0 } // Capped
         ];
 
         goldenDataset.forEach((data, index) => {
@@ -268,7 +268,7 @@ describe('tPA (Alteplase) Dosing Calculator', () => {
     // ===========================================
     // TC-007: Clinical Context Tests
     // ===========================================
-    
+
     describe('Clinical Context', () => {
         test('Should include administration instructions', () => {
             const result = calculateTpaDosing({ 'tpa-weight': 70 });
@@ -279,4 +279,3 @@ describe('tPA (Alteplase) Dosing Calculator', () => {
         });
     });
 });
-

@@ -83,7 +83,8 @@ const config: ScoringCalculatorConfig = {
     formulaSection: {
         show: true,
         title: 'Scoring Criteria',
-        calculationNote: 'Select all applicable criteria. At admission (5 criteria) + 48 hours (6 criteria) = possible 11 points.',
+        calculationNote:
+            'Select all applicable criteria. At admission (5 criteria) + 48 hours (6 criteria) = possible 11 points.',
         scoringCriteria: [
             { criteria: 'At Admission Criteria', isHeader: true },
             { criteria: 'Age > 55 years', points: '+1' },
@@ -103,7 +104,12 @@ const config: ScoringCalculatorConfig = {
         tableHeaders: ['Score', 'Mortality', 'Severity'],
         interpretations: [
             { score: '0-2', category: '0-3%', interpretation: 'Low Risk', severity: 'success' },
-            { score: '3-4', category: '15-20%', interpretation: 'Moderate Risk', severity: 'warning' },
+            {
+                score: '3-4',
+                category: '15-20%',
+                interpretation: 'Moderate Risk',
+                severity: 'warning'
+            },
             { score: '5-6', category: '~40%', interpretation: 'High Risk', severity: 'danger' },
             { score: '≥7', category: '>50%', interpretation: 'Very High Risk', severity: 'danger' }
         ]
@@ -133,17 +139,17 @@ const config: ScoringCalculatorConfig = {
 
         return `
             ${uiBuilder.createResultItem({
-            label: 'Total Ranson Score',
-            value: score.toString(),
-            unit: '/ 11 points',
-            interpretation: severity,
-            alertClass: `ui-alert-${alertType}`
-        })}
+                label: 'Total Ranson Score',
+                value: score.toString(),
+                unit: '/ 11 points',
+                interpretation: severity,
+                alertClass: `ui-alert-${alertType}`
+            })}
             ${uiBuilder.createResultItem({
-            label: 'Estimated Mortality',
-            value: mortality,
-            alertClass: `ui-alert-${alertType}`
-        })}
+                label: 'Estimated Mortality',
+                value: mortality,
+                alertClass: `ui-alert-${alertType}`
+            })}
         `;
     },
 

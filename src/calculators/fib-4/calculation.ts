@@ -1,7 +1,9 @@
 ﻿import { AlertSeverity } from '../../types/calculator-base.js';
 import { FormulaResultItem } from '../../types/calculator-formula.js';
 
-export function fib4Calculation(values: Record<string, number | string | boolean>): FormulaResultItem[] {
+export function fib4Calculation(
+    values: Record<string, number | string | boolean>
+): FormulaResultItem[] {
     const age = Number(values['fib4-age']);
     const ast = Number(values['fib4-ast']);
     const alt = Number(values['fib4-alt']);

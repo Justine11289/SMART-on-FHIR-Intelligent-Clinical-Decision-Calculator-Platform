@@ -7,7 +7,8 @@ import type { FormulaCalculatorConfig } from '../../types/calculator-formula.js'
 export const mapConfig: FormulaCalculatorConfig = {
     id: 'map',
     title: 'Mean Arterial Pressure (MAP)',
-    description: 'Calculates the average arterial pressure during one cardiac cycle, important for organ perfusion assessment.',
+    description:
+        'Calculates the average arterial pressure during one cardiac cycle, important for organ perfusion assessment.',
     inputs: [
         {
             id: 'map-sbp',
@@ -39,7 +40,7 @@ export const mapConfig: FormulaCalculatorConfig = {
         { label: 'Equivalent', formula: 'MAP = (SBP + 2 × DBP) / 3' }
     ],
     calculate: calculateMAP,
-    customResultRenderer: (results) => {
+    customResultRenderer: results => {
         const res = results[0];
         if (!res) return '';
 
@@ -54,17 +55,17 @@ export const mapConfig: FormulaCalculatorConfig = {
 
         return `
             ${uiBuilder.createResultItem({
-            label: res.label,
-            value: res.value.toString(),
-            unit: res.unit,
-            interpretation: res.interpretation,
-            alertClass: `ui-alert-${res.alertClass}`
-        })}
+                label: res.label,
+                value: res.value.toString(),
+                unit: res.unit,
+                interpretation: res.interpretation,
+                alertClass: `ui-alert-${res.alertClass}`
+            })}
             
             ${uiBuilder.createAlert({
-            type: res.alertClass === 'success' ? 'info' : res.alertClass as any,
-            message: note
-        })}
+                type: res.alertClass === 'success' ? 'info' : (res.alertClass as any),
+                message: note
+            })}
         `;
     }
 };

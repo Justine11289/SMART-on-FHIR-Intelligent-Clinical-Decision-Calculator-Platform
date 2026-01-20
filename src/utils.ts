@@ -76,48 +76,57 @@ export function calculateAge(birthDate: string): number {
 export function displayPatientInfo(client: any, patientInfoDiv: HTMLElement): Promise<any> {
     const renderPatient = (patient: any) => {
         const name = patient.name[0];
-        // Prioritize text field (Taiwanese format), if missing use given and family names
-        const formattedName =
-            name.text || `${name.given?.join(' ') || ''} ${name.family || ''}`.trim();
+        const formattedName = name.text || `${name.given?.join(' ') || ''} ${name.family || ''}`.trim();
         const age = calculateAge(patient.birthDate);
 
-        // Use escapeHTML to prevent XSS attacks from FHIR data
-        const safeName = escapeHTML(formattedName);
-        const safeBirthDate = escapeHTML(patient.birthDate);
-        const safeGender = escapeHTML(patient.gender);
+        // 檢查是否符合 TW Core Patient Profile
+        const isTWCore = patient.meta?.profile?.some(
+            (p: string) => p.includes("twcore/StructureDefinition/Patient-twcore")
+        );
+
+        // 取得台灣身分證字號
+        const twId = patient.identifier?.find(
+            (i: any) => i.system === "http://www.moi.gov.tw/"
+        )?.value || "N/A";
 
         patientInfoDiv.innerHTML = `
-            <p><strong>Name:</strong> ${safeName}</p>
-            <p><strong>Birth Date:</strong> ${safeBirthDate} (Age: ${age})</p>
-            <p><strong>Gender:</strong> ${safeGender}</p>
+            <div class="tw-core-info">
+                ${isTWCore ? '<span class="badge-twcore">✓ TW Core IG Verified</span>' : ''}
+                <p><strong>Name:</strong> ${escapeHTML(formattedName)}</p>
+                <p><strong>National ID:</strong> ${escapeHTML(twId)}</p>
+                <p><strong>Birth Date:</strong> ${escapeHTML(patient.birthDate)} (Age: ${age})</p>
+                <p><strong>Gender:</strong> ${escapeHTML(patient.gender)}</p>
+            </div>
         `;
     };
-
-    // First, try to display data from session storage for a faster UI response.
-    const cachedPatient = sessionStorage.getItem('patientData');
-    if (cachedPatient) {
-        renderPatient(JSON.parse(cachedPatient));
-    }
-
     if (!client?.patient?.id) {
-        if (!cachedPatient) {
-            patientInfoDiv.innerHTML =
-                '<p>No patient data available. Please launch from the EHR.</p>';
-        }
-        return Promise.resolve(cachedPatient ? JSON.parse(cachedPatient) : null);
+        patientInfoDiv.innerHTML = '<p>No patient data available. Please launch from the EHR.</p>';
+        return Promise.resolve(null);
     }
+    // First, try to display data from session storage for a faster UI response.
+    // const cachedPatient = sessionStorage.getItem('patientData');
+    // if (cachedPatient) {
+    //     renderPatient(JSON.parse(cachedPatient));
+    // }
+
+    // if (!client?.patient?.id) {
+    //     if (!cachedPatient) {
+    //         patientInfoDiv.innerHTML =
+    //             '<p>No patient data available. Please launch from the EHR.</p>';
+    //     }
+    //     return Promise.resolve(cachedPatient ? JSON.parse(cachedPatient) : null);
+    // }
 
     return client.patient.read().then(
         (patient: any) => {
+            // 您可以保留寫入，但讀取時跳過它
             sessionStorage.setItem('patientData', JSON.stringify(patient));
             renderPatient(patient);
             return patient;
         },
         (error: any) => {
             console.error(error);
-            if (!cachedPatient) {
-                patientInfoDiv.innerText = 'Error fetching patient data.';
-            }
+            patientInfoDiv.innerText = 'Error fetching patient data.';
             throw error;
         }
     );

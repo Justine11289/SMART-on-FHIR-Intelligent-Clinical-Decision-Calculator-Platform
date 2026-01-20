@@ -11,10 +11,10 @@
     display: flex;
     align-items: flex-start;
     gap: var(--spacing-3);
-    
+
     padding: var(--spacing-4) var(--spacing-5);
     margin-bottom: var(--spacing-5);
-    
+
     border-radius: var(--radius-lg);
     border-left: 4px solid;
 }
@@ -96,18 +96,18 @@
     position: absolute;
     top: var(--spacing-4);
     right: var(--spacing-4);
-    
+
     width: 24px;
     height: 24px;
-    
+
     display: flex;
     align-items: center;
     justify-content: center;
-    
+
     background: transparent;
     border: none;
     border-radius: var(--radius-full);
-    
+
     cursor: pointer;
     opacity: 0.6;
     transition: opacity var(--transition-fast);
@@ -144,4 +144,3 @@
     color: var(--color-danger);
     margin-bottom: var(--spacing-2);
 }
-

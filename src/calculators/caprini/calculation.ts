@@ -1,6 +1,6 @@
 import type { SimpleCalculateFn, FormulaResultItem } from '../../types/calculator-formula.js';
 
-export const calculateCaprini: SimpleCalculateFn = (values) => {
+export const calculateCaprini: SimpleCalculateFn = values => {
     let score = 0;
 
     // Sum all values (assuming all inputs are numeric or string numbers)
@@ -27,8 +27,7 @@ export const calculateCaprini: SimpleCalculateFn = (values) => {
         alertClass = 'info';
     } else if (score >= 3 && score <= 4) {
         riskCategory = 'Moderate Risk';
-        recommendation =
-            'Pharmacologic prophylaxis (e.g., LMWH or UFH) OR Mechanical prophylaxis.';
+        recommendation = 'Pharmacologic prophylaxis (e.g., LMWH or UFH) OR Mechanical prophylaxis.';
         alertClass = 'warning';
     } else {
         riskCategory = 'High Risk';

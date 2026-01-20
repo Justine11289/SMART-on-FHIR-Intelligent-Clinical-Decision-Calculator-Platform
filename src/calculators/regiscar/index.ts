@@ -109,9 +109,24 @@ export const regiscar = createScoringCalculator({
         tableHeaders: ['Score', 'Diagnosis', 'Likelihood'],
         interpretations: [
             { score: '< 2', category: 'No case', interpretation: 'Unlikely', severity: 'success' },
-            { score: '2-3', category: 'Possible case', interpretation: 'Consider DRESS', severity: 'warning' },
-            { score: '4-5', category: 'Probable case', interpretation: 'High likelihood', severity: 'danger' },
-            { score: '> 5', category: 'Definite case', interpretation: 'Confirmed', severity: 'danger' }
+            {
+                score: '2-3',
+                category: 'Possible case',
+                interpretation: 'Consider DRESS',
+                severity: 'warning'
+            },
+            {
+                score: '4-5',
+                category: 'Probable case',
+                interpretation: 'High likelihood',
+                severity: 'danger'
+            },
+            {
+                score: '> 5',
+                category: 'Definite case',
+                interpretation: 'Confirmed',
+                severity: 'danger'
+            }
         ]
     },
     customResultRenderer: (score: number) => {

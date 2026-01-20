@@ -14,11 +14,14 @@ import type { FormulaCalculatorConfig } from '../../types/calculator-formula.js'
 export const feureaConfig: FormulaCalculatorConfig = {
     id: 'feurea',
     title: 'Fractional Excretion of Urea (FEUrea)',
-    description: 'Determines if renal failure is due to prerenal or intrinsic pathology, especially useful in patients on diuretics.',
-    infoAlert: '<p>FEUrea is particularly useful when FENa is unreliable (e.g., patients on diuretics, contrast nephropathy, or early obstruction).</p>' +
+    description:
+        'Determines if renal failure is due to prerenal or intrinsic pathology, especially useful in patients on diuretics.',
+    infoAlert:
+        '<p>FEUrea is particularly useful when FENa is unreliable (e.g., patients on diuretics, contrast nephropathy, or early obstruction).</p>' +
         uiBuilder.createAlert({
             type: 'info',
-            message: '<strong>Advantage:</strong> Unlike FENa, FEUrea is not significantly affected by diuretic use.'
+            message:
+                '<strong>Advantage:</strong> Unlike FENa, FEUrea is not significantly affected by diuretic use.'
         }),
     sections: [
         {
@@ -51,7 +54,7 @@ export const feureaConfig: FormulaCalculatorConfig = {
                         default: 'mg/dL'
                     },
                     validationType: 'bun',
-                    loincCode: '3095-7',
+                    loincCode: LOINC_CODES.URINE_UREA_NITROGEN,
                     standardUnit: 'mg/dL',
                     required: true
                 },
@@ -91,11 +94,12 @@ export const feureaConfig: FormulaCalculatorConfig = {
     formulas: [
         {
             label: 'FEUrea (%)',
-            formula: '<span class="formula-fraction"><span class="numerator">Serum<sub>Cr</sub> × U<sub>Urea</sub></span><span class="denominator">Serum<sub>Urea</sub> × U<sub>Cr</sub></span></span> × 100'
+            formula:
+                '<span class="formula-fraction"><span class="numerator">Serum<sub>Cr</sub> × U<sub>Urea</sub></span><span class="denominator">Serum<sub>Urea</sub> × U<sub>Cr</sub></span></span> × 100'
         }
     ],
     calculate: calculateFEUrea,
-    customResultRenderer: (results) => {
+    customResultRenderer: results => {
         const mainResult = results[0];
         const noteResult = results[1];
 
@@ -123,13 +127,13 @@ export const feureaConfig: FormulaCalculatorConfig = {
             content: `
                 <p class="mb-15">This test can provide similar information to the <a href="#fena" class="text-link">FENa</a> equation, but can still be used in patients on diuretic therapy (diuretics alter the sodium concentration, making the FENa equation unusable).</p>
                 ${uiBuilder.createTable({
-                headers: ['', 'Prerenal', 'Intrinsic renal', 'Postrenal'],
-                rows: [
-                    ['FENa', '<1%', '>1%', '>4%'],
-                    ['FEUrea', '≤ 35%', '>50%', 'N/A']
-                ],
-                stickyFirstColumn: true
-            })}
+                    headers: ['', 'Prerenal', 'Intrinsic renal', 'Postrenal'],
+                    rows: [
+                        ['FENa', '<1%', '>1%', '>4%'],
+                        ['FEUrea', '≤ 35%', '>50%', 'N/A']
+                    ],
+                    stickyFirstColumn: true
+                })}
             `
         });
 

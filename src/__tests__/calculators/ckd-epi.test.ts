@@ -1,10 +1,10 @@
 /**
  * CKD-EPI GFR Calculator - SaMD Verification Tests
- * 
+ *
  * Formula (2021 Race-Free Equation):
  *   Female: 142 × min(Scr/0.7, 1)^(-0.241) × max(Scr/0.7, 1)^(-1.200) × 0.9938^Age × 1.012
  *   Male:   142 × min(Scr/0.9, 1)^(-0.302) × max(Scr/0.9, 1)^(-1.200) × 0.9938^Age
- * 
+ *
  * CKD Staging:
  *   Stage 1: GFR ≥90 (Normal)
  *   Stage 2: GFR 60-89 (Mild)
@@ -12,7 +12,7 @@
  *   Stage 3b: GFR 30-44 (Moderate to severe)
  *   Stage 4: GFR 15-29 (Severe)
  *   Stage 5: GFR <15 (Kidney failure)
- * 
+ *
  * Reference:
  * Inker LA, et al. N Engl J Med. 2021;385(19):1737-1749.
  */
@@ -23,7 +23,7 @@ describe('CKD-EPI GFR Calculator', () => {
     // ===========================================
     // TC-001: Standard Calculation Tests
     // ===========================================
-    
+
     describe('Standard Calculations', () => {
         test('Should calculate correct eGFR for Male, normal kidney function', () => {
             // 40 yo male, Scr 0.9 mg/dL
@@ -76,7 +76,7 @@ describe('CKD-EPI GFR Calculator', () => {
     // ===========================================
     // TC-002: CKD Staging Tests
     // ===========================================
-    
+
     describe('CKD Staging', () => {
         test('Should identify Stage 1 (GFR ≥90)', () => {
             // Young healthy male with low creatinine
@@ -176,7 +176,7 @@ describe('CKD-EPI GFR Calculator', () => {
     // ===========================================
     // TC-003: Age Effect Tests
     // ===========================================
-    
+
     describe('Age Effect', () => {
         test('Should show lower eGFR for older patients', () => {
             // Same creatinine, different ages
@@ -205,7 +205,7 @@ describe('CKD-EPI GFR Calculator', () => {
     // ===========================================
     // TC-004: Gender Effect Tests
     // ===========================================
-    
+
     describe('Gender Effect', () => {
         test('Should show higher eGFR for females at same creatinine', () => {
             // Same age and creatinine, different gender
@@ -236,7 +236,7 @@ describe('CKD-EPI GFR Calculator', () => {
     // ===========================================
     // TC-005: Invalid Input Tests
     // ===========================================
-    
+
     describe('Invalid Inputs', () => {
         test('Should return null for zero age', () => {
             const result = calculateCkdEpi({
@@ -280,7 +280,7 @@ describe('CKD-EPI GFR Calculator', () => {
     // ===========================================
     // TC-006: Golden Dataset Verification
     // ===========================================
-    
+
     describe('Golden Dataset', () => {
         // Reference values calculated using CKD-EPI 2021 equation
         const goldenDataset = [
@@ -288,9 +288,9 @@ describe('CKD-EPI GFR Calculator', () => {
             { age: 40, cr: 0.9, g: 'male', minGfr: 105, maxGfr: 115 },
             { age: 40, cr: 0.7, g: 'female', minGfr: 110, maxGfr: 120 },
             { age: 60, cr: 1.0, g: 'male', minGfr: 80, maxGfr: 90 },
-            { age: 60, cr: 1.0, g: 'female', minGfr: 60, maxGfr: 70 },  // Female with higher Scr
+            { age: 60, cr: 1.0, g: 'female', minGfr: 60, maxGfr: 70 }, // Female with higher Scr
             { age: 70, cr: 1.5, g: 'male', minGfr: 42, maxGfr: 52 },
-            { age: 80, cr: 2.0, g: 'male', minGfr: 28, maxGfr: 35 },
+            { age: 80, cr: 2.0, g: 'male', minGfr: 28, maxGfr: 35 }
         ];
 
         goldenDataset.forEach((data, index) => {
@@ -312,7 +312,7 @@ describe('CKD-EPI GFR Calculator', () => {
     // ===========================================
     // TC-007: Formula Component Verification
     // ===========================================
-    
+
     describe('Formula Components', () => {
         test('Should use kappa=0.7 for female', () => {
             // At Scr=0.7 (equals kappa), min and max terms become 1
@@ -345,4 +345,3 @@ describe('CKD-EPI GFR Calculator', () => {
         });
     });
 });
-

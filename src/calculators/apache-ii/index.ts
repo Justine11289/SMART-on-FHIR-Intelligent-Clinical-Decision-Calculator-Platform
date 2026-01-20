@@ -217,7 +217,8 @@ export const apacheIi = createUnifiedFormulaCalculator({
     formulaSection: {
         show: true,
         title: 'APACHE II Scoring Criteria',
-        calculationNote: 'Total Score = Acute Physiology Score (APS) + Age Points + Chronic Health Points',
+        calculationNote:
+            'Total Score = Acute Physiology Score (APS) + Age Points + Chronic Health Points',
         scoringCriteria: [
             // Age
             { criteria: 'Age (years)', isHeader: true },
@@ -228,7 +229,10 @@ export const apacheIi = createUnifiedFormulaCalculator({
             { criteria: '>74', points: '+6' },
 
             // Chronic Health Status
-            { criteria: 'History of severe organ insufficiency or immunocompromised', isHeader: true },
+            {
+                criteria: 'History of severe organ insufficiency or immunocompromised',
+                isHeader: true
+            },
             { criteria: 'Yes, nonoperative or emergency postoperative', points: '+5' },
             { criteria: 'Yes, elective postoperative', points: '+2' },
             { criteria: 'No', points: '0' },
@@ -274,11 +278,17 @@ export const apacheIi = createUnifiedFormulaCalculator({
             { criteria: '<6', points: '+4' },
 
             // Oxygenation
-            { criteria: 'Oxygenation (use PaO₂ if FiO₂ <50%, otherwise use A-a gradient)', isHeader: true },
+            {
+                criteria: 'Oxygenation (use PaO₂ if FiO₂ <50%, otherwise use A-a gradient)',
+                isHeader: true
+            },
             { criteria: 'A-a gradient ≥500', points: '+4' },
             { criteria: 'A-a gradient 350-499', points: '+3' },
             { criteria: 'A-a gradient 200-349', points: '+2' },
-            { criteria: 'A-a gradient <200 (if FiO₂ ≥50%) or PaO₂ >70 (if FiO₂ <50%)', points: '0' },
+            {
+                criteria: 'A-a gradient <200 (if FiO₂ ≥50%) or PaO₂ >70 (if FiO₂ <50%)',
+                points: '0'
+            },
             { criteria: 'PaO₂ 61-70', points: '+1' },
             { criteria: 'PaO₂ 55-60', points: '+3' },
             { criteria: 'PaO₂ <55', points: '+4' },
@@ -392,7 +402,9 @@ export const apacheIi = createUnifiedFormulaCalculator({
         const paco2Group = paco2Input?.closest('.ui-input-group') as HTMLElement;
 
         const updatePaco2Visibility = () => {
-            const method = container.querySelector('input[name="oxy_method"]:checked') as HTMLInputElement;
+            const method = container.querySelector(
+                'input[name="oxy_method"]:checked'
+            ) as HTMLInputElement;
             if (method && paco2Group) {
                 if (method.value === 'pao2_only') {
                     paco2Group.style.display = 'none';
@@ -414,32 +426,30 @@ export const apacheIi = createUnifiedFormulaCalculator({
         updatePaco2Visibility();
     },
 
-
-
     reference: `
         ${uiBuilder.createSection({
-        title: 'Approximated In-Hospital Mortality Rates',
-        icon: '📊',
-        content: uiBuilder.createTable({
-            headers: ['APACHE II Score', 'Nonoperative', 'Postoperative'],
-            rows: [
-                ['0-4', '4%', '1%'],
-                ['5-9', '8%', '3%'],
-                ['10-14', '15%', '7%'],
-                ['15-19', '25%', '12%'],
-                ['20-24', '40%', '30%'],
-                ['25-29', '55%', '35%'],
-                ['30-34', '73%', '73%'],
-                ['>34', '85%', '88%']
-            ]
-        })
-    })}
+            title: 'Approximated In-Hospital Mortality Rates',
+            icon: '📊',
+            content: uiBuilder.createTable({
+                headers: ['APACHE II Score', 'Nonoperative', 'Postoperative'],
+                rows: [
+                    ['0-4', '4%', '1%'],
+                    ['5-9', '8%', '3%'],
+                    ['10-14', '15%', '7%'],
+                    ['15-19', '25%', '12%'],
+                    ['20-24', '40%', '30%'],
+                    ['25-29', '55%', '35%'],
+                    ['30-34', '73%', '73%'],
+                    ['>34', '85%', '88%']
+                ]
+            })
+        })}
 
         ${uiBuilder.createSection({
-        title: 'Reference',
-        icon: '📚',
-        content:
-            '<p>Knaus, W. A., Draper, E. A., Wagner, D. P., & Zimmerman, J. E. (1985). APACHE II: a severity of disease classification system. <em>Critical care medicine</em>, 13(10), 818-829.</p>'
-    })}
+            title: 'Reference',
+            icon: '📚',
+            content:
+                '<p>Knaus, W. A., Draper, E. A., Wagner, D. P., & Zimmerman, J. E. (1985). APACHE II: a severity of disease classification system. <em>Critical care medicine</em>, 13(10), 818-829.</p>'
+        })}
     `
 });

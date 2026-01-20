@@ -95,7 +95,7 @@ docker stats medcalcehr-app
 
 ```yaml
 ports:
-  - "3000:80"  # 改為 3000 端口
+    - '3000:80' # 改為 3000 端口
 ```
 
 或使用 Docker 命令：
@@ -118,30 +118,32 @@ docker-compose up -d --build
 ### 本地測試
 
 1. 啟動容器：
-   ```bash
-   docker-compose up -d
-   ```
+
+    ```bash
+    docker-compose up -d
+    ```
 
 2. 訪問 SMART Health IT Launcher：
-   - URL: https://launch.smarthealthit.org/
-   - App Launch URL: `http://localhost:8080/launch.html`
-   - 選擇測試患者並啟動
+    - URL: https://launch.smarthealthit.org/
+    - App Launch URL: `http://localhost:8080/launch.html`
+    - 選擇測試患者並啟動
 
 ### 生產環境
 
 如果部署到生產環境（例如有域名的服務器）：
 
 1. 更新 `nginx.conf` 中的 `server_name`：
-   ```nginx
-   server_name your-domain.com;
-   ```
+
+    ```nginx
+    server_name your-domain.com;
+    ```
 
 2. 配置 SSL/TLS（建議使用 Let's Encrypt）
 
 3. 在 SMART Launcher 中使用：
-   ```
-   https://your-domain.com/launch.html
-   ```
+    ```
+    https://your-domain.com/launch.html
+    ```
 
 ## 📊 健康檢查
 
@@ -224,16 +226,16 @@ docker run -d -p 8080:80 your-username/medcalcehr:latest
 ```yaml
 # docker-compose.yml
 services:
-  medcalcehr:
-    # ... 其他配置
-    deploy:
-      resources:
-        limits:
-          cpus: '0.5'
-          memory: 512M
-        reservations:
-          cpus: '0.25'
-          memory: 256M
+    medcalcehr:
+        # ... 其他配置
+        deploy:
+            resources:
+                limits:
+                    cpus: '0.5'
+                    memory: 512M
+                reservations:
+                    cpus: '0.25'
+                    memory: 256M
 ```
 
 ## 📈 監控
@@ -253,6 +255,7 @@ docker stats medcalcehr-app
 ## 🆘 支持
 
 如有問題，請：
+
 1. 查看容器日誌：`docker-compose logs -f`
 2. 檢查容器狀態：`docker-compose ps`
 3. 訪問 [GitHub Issues](https://github.com/Lusnaker0730/MEDCALCEHR/issues)
@@ -277,7 +280,3 @@ docker image prune -f
 應用現在運行在：**http://localhost:8080**
 
 享受使用 MEDCALCEHR！🏥
-
-
-
-

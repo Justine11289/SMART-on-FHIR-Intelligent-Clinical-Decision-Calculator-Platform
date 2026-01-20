@@ -45,7 +45,7 @@ const getMortality = (score: number) => {
     return { prob1yr: (prob1yr * 100).toFixed(1), prob3yr: (prob3yr * 100).toFixed(1) };
 };
 
-export const calculateMaggic: SimpleCalculateFn = (values) => {
+export const calculateMaggic: SimpleCalculateFn = values => {
     const getFloat = (key: string): number | null => {
         const val = values[key];
         if (val === null || val === undefined || val === '') return null;

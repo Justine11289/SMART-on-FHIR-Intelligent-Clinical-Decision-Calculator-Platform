@@ -59,7 +59,7 @@ export type {
     RadioFieldConfig,
     InputSection,
     ComplexFormulaCalculatorConfig,
-    CalculationResult,
+    CalculationResult
 } from '../../types/index.js';
 
 import type { FormulaSectionConfig } from '../../types/calculator-base.js';
@@ -139,7 +139,8 @@ function getValidationRuleForInput(input: NumberInputConfig): ValidationRule {
             : undefined);
 
     // Get default rule from type
-    const defaultRule: ValidationRule = ruleType && ValidationRules[ruleType] ? ValidationRules[ruleType] : {};
+    const defaultRule: ValidationRule =
+        ruleType && ValidationRules[ruleType] ? ValidationRules[ruleType] : {};
 
     // Merge: explicit input config takes precedence over default rules
     return {
@@ -179,10 +180,10 @@ function generateInputHTML(input: InputConfig): string {
             unit: unitToggle ? undefined : input.unit || input.standardUnit,
             unitToggle: unitToggle
                 ? {
-                    type: unitToggle.type,
-                    units: unitToggle.units,
-                    default: unitToggle.default
-                }
+                      type: unitToggle.type,
+                      units: unitToggle.units,
+                      default: unitToggle.default
+                  }
                 : undefined,
             required: input.required !== false
         });
@@ -481,9 +482,9 @@ export function createUnifiedFormulaCalculator(config: FormulaCalculatorConfig):
                 <div id="${config.id}-error-container"></div>
                 
                 ${uiBuilder.createResultBox({
-                id: `${config.id}-result`,
-                title: config.resultTitle || 'Results'
-            })}
+                    id: `${config.id}-result`,
+                    title: config.resultTitle || 'Results'
+                })}
 
                 ${formulaSection}
                 ${referencesHTML}
@@ -560,7 +561,9 @@ export function createUnifiedFormulaCalculator(config: FormulaCalculatorConfig):
                 }
 
                 // 添加對應的 class
-                inputEl.classList.add(status === 'error' ? 'validation-error' : 'validation-warning');
+                inputEl.classList.add(
+                    status === 'error' ? 'validation-error' : 'validation-warning'
+                );
 
                 // 創建或更新訊息
                 if (message) {
@@ -699,7 +702,9 @@ export function createUnifiedFormulaCalculator(config: FormulaCalculatorConfig):
                 // 更新每個欄位的 UI 狀態，同時檢查是否有任何錯誤
                 let hasFieldErrors = false;
                 Object.keys(validation.fieldStatus).forEach(fieldId => {
-                    const inputEl = container.querySelector(`[id="${fieldId}"]`) as HTMLInputElement;
+                    const inputEl = container.querySelector(
+                        `[id="${fieldId}"]`
+                    ) as HTMLInputElement;
                     if (!inputEl) return;
 
                     const status = validation.fieldStatus[fieldId];
@@ -750,7 +755,6 @@ export function createUnifiedFormulaCalculator(config: FormulaCalculatorConfig):
                     warnings: validation.warnings
                 };
             };
-
 
             /**
              * Simple 模式計算
@@ -1019,5 +1023,3 @@ export function createUnifiedFormulaCalculator(config: FormulaCalculatorConfig):
         }
     };
 }
-
-

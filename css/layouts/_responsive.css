@@ -109,7 +109,8 @@
     /* Calculator Page */
     .calculator-header {
         padding: var(--spacing-5);
-        margin: calc(-1 * var(--spacing-5)) calc(-1 * var(--spacing-5)) var(--spacing-5) calc(-1 * var(--spacing-5));
+        margin: calc(-1 * var(--spacing-5)) calc(-1 * var(--spacing-5)) var(--spacing-5)
+            calc(-1 * var(--spacing-5));
     }
 
     .calculator-header h3 {
@@ -250,4 +251,3 @@
         animation: none;
     }
 }
-

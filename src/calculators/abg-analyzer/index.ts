@@ -12,7 +12,8 @@ export const abgAnalyzer = createUnifiedFormulaCalculator({
     // Use the new infoAlert feature for clinical context
     infoAlert: uiBuilder.createAlert({
         type: 'warning',
-        message: '<strong>⚠️ Important</strong><br>This analyzer should not substitute for clinical context. Sodium, Chloride, and Albumin are required for accurate anion gap calculation.'
+        message:
+            '<strong>⚠️ Important</strong><br>This analyzer should not substitute for clinical context. Sodium, Chloride, and Albumin are required for accurate anion gap calculation.'
     }),
 
     sections: [
@@ -45,7 +46,11 @@ export const abgAnalyzer = createUnifiedFormulaCalculator({
                     id: 'hco3',
                     label: 'HCO₃⁻',
                     placeholder: 'e.g., 24',
-                    unitConfig: { type: 'electrolyte', units: ['mEq/L', 'mmol/L'], default: 'mEq/L' },
+                    unitConfig: {
+                        type: 'electrolyte',
+                        units: ['mEq/L', 'mmol/L'],
+                        default: 'mEq/L'
+                    },
                     validationType: 'bicarbonate',
                     loincCode: LOINC_CODES.HCO3, // 1960-4
                     required: true
@@ -61,7 +66,11 @@ export const abgAnalyzer = createUnifiedFormulaCalculator({
                     id: 'sodium',
                     label: 'Sodium (Na⁺)',
                     placeholder: 'e.g., 140',
-                    unitConfig: { type: 'electrolyte', units: ['mEq/L', 'mmol/L'], default: 'mEq/L' },
+                    unitConfig: {
+                        type: 'electrolyte',
+                        units: ['mEq/L', 'mmol/L'],
+                        default: 'mEq/L'
+                    },
                     validationType: 'sodium',
                     loincCode: LOINC_CODES.SODIUM,
                     standardUnit: 'mEq/L'
@@ -71,7 +80,11 @@ export const abgAnalyzer = createUnifiedFormulaCalculator({
                     id: 'chloride',
                     label: 'Chloride (Cl⁻)',
                     placeholder: 'e.g., 100',
-                    unitConfig: { type: 'electrolyte', units: ['mEq/L', 'mmol/L'], default: 'mEq/L' },
+                    unitConfig: {
+                        type: 'electrolyte',
+                        units: ['mEq/L', 'mmol/L'],
+                        default: 'mEq/L'
+                    },
                     validationType: 'chloride',
                     loincCode: LOINC_CODES.CHLORIDE,
                     standardUnit: 'mEq/L'
@@ -115,7 +128,10 @@ export const abgAnalyzer = createUnifiedFormulaCalculator({
             { score: '<0.4', interpretation: 'Pure normal anion gap acidosis' },
             { score: '0.4-0.8', interpretation: 'Mixed high and normal anion gap acidosis' },
             { score: '0.8-2.0', interpretation: 'Pure anion gap acidosis' },
-            { score: '>2.0', interpretation: 'High anion gap acidosis with pre-existing metabolic alkalosis' }
+            {
+                score: '>2.0',
+                interpretation: 'High anion gap acidosis with pre-existing metabolic alkalosis'
+            }
         ]
     },
 

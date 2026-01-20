@@ -56,8 +56,8 @@
 }
 
 /* Hide default radio input */
-.radio-option input[type="radio"],
-.ui-radio-option input[type="radio"] {
+.radio-option input[type='radio'],
+.ui-radio-option input[type='radio'] {
     position: absolute;
     opacity: 0;
     width: 0;
@@ -133,8 +133,8 @@
 }
 
 /* Hide default checkbox input */
-.checkbox-option input[type="checkbox"],
-.ui-checkbox-option input[type="checkbox"] {
+.checkbox-option input[type='checkbox'],
+.ui-checkbox-option input[type='checkbox'] {
     position: absolute;
     opacity: 0;
     width: 0;

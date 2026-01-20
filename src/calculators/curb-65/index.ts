@@ -11,7 +11,7 @@ import { fhirDataService } from '../../fhir-data-service.js';
 import { UnitConverter } from '../../unit-converter.js';
 import { uiBuilder } from '../../ui-builder.js';
 
-const config: ScoringCalculatorConfig = {
+export const curb65Config: ScoringCalculatorConfig = {
     inputType: 'yesno',
     id: 'curb-65',
     title: 'CURB-65 Score for Pneumonia Severity',
@@ -171,28 +171,28 @@ const config: ScoringCalculatorConfig = {
             score <= 1
                 ? 'Low Risk'
                 : score === 2
-                    ? 'Moderate Risk'
-                    : score === 3
-                        ? 'High Risk'
-                        : 'Very High Risk';
+                  ? 'Moderate Risk'
+                  : score === 3
+                    ? 'High Risk'
+                    : 'Very High Risk';
 
         return `
             ${uiBuilder.createResultItem({
-            label: 'Total Score',
-            value: score.toString(),
-            unit: '/ 5 points',
-            interpretation: riskLabel,
-            alertClass: alertClass
-        })}
+                label: 'Total Score',
+                value: score.toString(),
+                unit: '/ 5 points',
+                interpretation: riskLabel,
+                alertClass: alertClass
+            })}
             
             ${uiBuilder.createResultItem({
-            label: '30-Day Mortality Risk',
-            value: mortality
-        })}
+                label: '30-Day Mortality Risk',
+                value: mortality
+            })}
             ${uiBuilder.createAlert({
-            type: rec.level as 'success' | 'warning' | 'danger',
-            message: `<strong>Recommendation:</strong> ${rec.text}`
-        })}
+                type: rec.level as 'success' | 'warning' | 'danger',
+                message: `<strong>Recommendation:</strong> ${rec.text}`
+            })}
         `;
     },
 
@@ -261,4 +261,4 @@ const config: ScoringCalculatorConfig = {
 };
 
 // 創建並導出計算器
-export const curb65 = createScoringCalculator(config);
+export const curb65 = createScoringCalculator(curb65Config);

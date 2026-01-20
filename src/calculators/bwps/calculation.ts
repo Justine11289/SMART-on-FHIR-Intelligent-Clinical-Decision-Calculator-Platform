@@ -1,6 +1,6 @@
 import type { SimpleCalculateFn, FormulaResultItem } from '../../types/calculator-formula.js';
 
-export const calculateBwps: SimpleCalculateFn = (values) => {
+export const calculateBwps: SimpleCalculateFn = values => {
     let score = 0;
 
     // All inputs are Selects returning numeric strings or '0'.

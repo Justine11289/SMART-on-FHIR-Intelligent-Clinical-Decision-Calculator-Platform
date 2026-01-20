@@ -117,33 +117,35 @@ const config: FormulaCalculatorConfig = {
     },
     calculate: calculateNafldFibrosisScore,
 
-    customResultRenderer: (results) => {
+    customResultRenderer: results => {
         // We separate calculation results and alert message in calculation.ts
         // Item 0 is result, Item 1 is interpretation alert payload if present (Wait, calculation.ts returns full item)
         // Let's iterate result items.
         // If an item has alertPayload, render it as notification below.
 
         let alertHtml = '';
-        const items = results.map(r => {
-            if (r.label === 'Interpretation' && r.alertPayload) {
-                alertHtml = uiBuilder.createAlert(r.alertPayload);
-                return ''; // Don't show redundant item, or show it? original showed both result item (stage) AND alert.
-                // Original: Result Item (Interpretation: stage), then Alert (Interpretation: message).
-                // In calculation.ts:
-                // Item 0: Label: NAFLD Score, Interp: stage.
-                // Item 1: Label: Interpretation, Value: full message.
-                // Let's filter out Interpretation item for display as item, and just use it for the Alert HTML block.
-                return '';
-            }
+        const items = results
+            .map(r => {
+                if (r.label === 'Interpretation' && r.alertPayload) {
+                    alertHtml = uiBuilder.createAlert(r.alertPayload);
+                    return ''; // Don't show redundant item, or show it? original showed both result item (stage) AND alert.
+                    // Original: Result Item (Interpretation: stage), then Alert (Interpretation: message).
+                    // In calculation.ts:
+                    // Item 0: Label: NAFLD Score, Interp: stage.
+                    // Item 1: Label: Interpretation, Value: full message.
+                    // Let's filter out Interpretation item for display as item, and just use it for the Alert HTML block.
+                    return '';
+                }
 
-            return uiBuilder.createResultItem({
-                label: r.label,
-                value: r.value.toString(),
-                unit: r.unit,
-                interpretation: r.interpretation,
-                alertClass: r.alertClass ? `ui-alert-${r.alertClass}` : ''
-            });
-        }).join('');
+                return uiBuilder.createResultItem({
+                    label: r.label,
+                    value: r.value.toString(),
+                    unit: r.unit,
+                    interpretation: r.interpretation,
+                    alertClass: r.alertClass ? `ui-alert-${r.alertClass}` : ''
+                });
+            })
+            .join('');
 
         return items + alertHtml;
     },

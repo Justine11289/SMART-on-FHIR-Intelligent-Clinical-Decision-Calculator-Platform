@@ -1,0 +1,70 @@
+{
+  "resourceType": "Bundle",
+  "type": "collection",
+  "id": "critical-mods-patient-2026",
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "tw-test-patient-001",
+        "meta": {
+          "profile": ["https://twcore.mohw.gov.tw/ig/twcore/StructureDefinition/Patient-twcore"]
+        },
+        "identifier": [
+          {
+            "system": "http://www.moi.gov.tw/",
+            "value": "A123456789"
+          }
+        ],
+        "name": [{ "use": "official", "text": "陳國泰", "family": "陳", "given": ["國泰"] }],
+        "gender": "male",
+        "birthDate": "1960-05-15"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-creatinine-critical",
+        "status": "final",
+        "code": { "coding": [{ "system": "http://loinc.org", "code": "2160-0", "display": "Creatinine" }] },
+        "subject": { "reference": "Patient/tw-test-patient-001" },
+        "valueQuantity": { "value": 7.2, "unit": "mg/dL", "system": "http://unitsofmeasure.org", "code": "mg/dL" }
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-platelets-danger",
+        "status": "final",
+        "code": { "coding": [{ "system": "http://loinc.org", "code": "777-3", "display": "Platelets" }] },
+        "subject": { "reference": "Patient/tw-test-patient-001" },
+        "valueQuantity": { "value": 18, "unit": "10*3/uL", "system": "http://unitsofmeasure.org", "code": "10*3/uL" }
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-bilirubin-high",
+        "status": "final",
+        "code": { "coding": [{ "system": "http://loinc.org", "code": "1975-2", "display": "Bilirubin total" }] },
+        "subject": { "reference": "Patient/tw-test-patient-001" },
+        "valueQuantity": { "value": 15.5, "unit": "mg/dL", "system": "http://unitsofmeasure.org", "code": "mg/dL" }
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-gcs-severe",
+        "status": "final",
+        "code": { "coding": [{ "system": "http://loinc.org", "code": "9269-2" }] },
+        "subject": { "reference": "Patient/tw-test-patient-001" },
+        "valueQuantity": { "value": 5 },
+        "component": [
+          { "code": { "coding": [{ "system": "http://loinc.org", "code": "9267-6" }] }, "valueQuantity": { "value": 1 } },
+          { "code": { "coding": [{ "system": "http://loinc.org", "code": "9268-4" }] }, "valueQuantity": { "value": 2 } },
+          { "code": { "coding": [{ "system": "http://loinc.org", "code": "9270-0" }] }, "valueQuantity": { "value": 2 } }
+        ]
+      }
+    }
+  ]
+}

@@ -9,7 +9,13 @@ import {
     getMedicationRequests,
     calculateAge
 } from './utils.js';
-import { LOINC_CODES, SNOMED_CODES, getLoincName, getMeasurementType, isValidLoincCode } from './fhir-codes.js';
+import {
+    LOINC_CODES,
+    SNOMED_CODES,
+    getLoincName,
+    getMeasurementType,
+    isValidLoincCode
+} from './fhir-codes.js';
 import { getTextNameByLoinc } from './lab-name-mapping.js';
 // @ts-ignore - no type declarations
 import { fhirCache } from './cache-manager.js';
@@ -42,6 +48,7 @@ export interface Patient {
     birthDate?: string;
     gender?: string;
     name?: Array<{
+        use?: 'official' | 'usual' | 'temp' | 'nickname' | 'anonymous' | 'old' | 'maiden';
         given?: string[];
         family?: string;
         text?: string;
@@ -264,7 +271,10 @@ export class FHIRDataService {
 
             return this.processObservation(observation, code, options);
         } catch (error) {
-            console.error(`Error fetching observation ${code} (TextQuery: ${options.useTextQuery}):`, error);
+            console.error(
+                `Error fetching observation ${code} (TextQuery: ${options.useTextQuery}):`,
+                error
+            );
             return result;
         }
     }
@@ -446,10 +456,7 @@ export class FHIRDataService {
 
                 // Extract systolic BP
                 const sbpComp = bpPanel.component.find((c: any) =>
-                    c.code?.coding?.some(
-                        (coding: any) =>
-                            coding.code === LOINC_CODES.SYSTOLIC_BP
-                    )
+                    c.code?.coding?.some((coding: any) => coding.code === LOINC_CODES.SYSTOLIC_BP)
                 );
                 if (sbpComp?.valueQuantity?.value !== undefined) {
                     result.systolic = sbpComp.valueQuantity.value;
@@ -457,10 +464,7 @@ export class FHIRDataService {
 
                 // Extract diastolic BP
                 const dbpComp = bpPanel.component.find((c: any) =>
-                    c.code?.coding?.some(
-                        (coding: any) =>
-                            coding.code === LOINC_CODES.DIASTOLIC_BP
-                    )
+                    c.code?.coding?.some((coding: any) => coding.code === LOINC_CODES.DIASTOLIC_BP)
                 );
                 if (dbpComp?.valueQuantity?.value !== undefined) {
                     result.diastolic = dbpComp.valueQuantity.value;
@@ -580,9 +584,7 @@ export class FHIRDataService {
             // Special handling for Blood Pressure
             // FHIR often stores BP as a panel (85354-9), so querying for individual components might fail
             const bpFields = fields.filter(
-                f =>
-                    f.code === LOINC_CODES.SYSTOLIC_BP ||
-                    f.code === LOINC_CODES.DIASTOLIC_BP
+                f => f.code === LOINC_CODES.SYSTOLIC_BP || f.code === LOINC_CODES.DIASTOLIC_BP
             );
 
             const processedBPCodes: string[] = [];
@@ -796,6 +798,108 @@ export class FHIRDataService {
             return null;
         }
         return this.patient.gender.toLowerCase() === 'female' ? 'female' : 'male';
+    }
+
+    /**
+     * Get patient name with TWCORE IG support
+     * Prioritizes 'text' field for Chinese names (TWCORE format)
+     * Falls back to family + given for Western format
+     * @returns Patient name information or null
+     */
+    getPatientName(): {
+        display: string;
+        text?: string;
+        family?: string;
+        given?: string[];
+    } | null {
+        if (!this.patient?.name || this.patient.name.length === 0) {
+            return null;
+        }
+
+        // Find the official name first, or use the first name entry
+        const officialName = this.patient.name.find(n => n.use === 'official') || this.patient.name[0];
+
+        // TWCORE IG: Use 'text' field if available (Chinese full name)
+        if (officialName.text) {
+            return {
+                display: officialName.text,
+                text: officialName.text,
+                family: officialName.family,
+                given: officialName.given
+            };
+        }
+
+        // Western format fallback: family + given
+        const parts: string[] = [];
+        if (officialName.given && officialName.given.length > 0) {
+            parts.push(...officialName.given);
+        }
+        if (officialName.family) {
+            parts.push(officialName.family);
+        }
+
+        if (parts.length === 0) {
+            return null;
+        }
+
+        return {
+            display: parts.join(' '),
+            family: officialName.family,
+            given: officialName.given
+        };
+    }
+
+    /**
+     * Get patient display name as string
+     * Shorthand for getPatientName()?.display
+     * @returns Patient name string or null
+     */
+    getPatientDisplayName(): string | null {
+        return this.getPatientName()?.display || null;
+    }
+
+    /**
+     * Get patient birth date
+     * @returns Birth date as Date object, or null if not available
+     */
+    getPatientBirthDate(): Date | null {
+        if (!this.patient?.birthDate) {
+            return null;
+        }
+        return new Date(this.patient.birthDate);
+    }
+
+    /**
+     * Get patient birth date as ISO string (YYYY-MM-DD)
+     * @returns Birth date string or null
+     */
+    getPatientBirthDateString(): string | null {
+        return this.patient?.birthDate || null;
+    }
+
+    /**
+     * Get formatted patient demographics
+     * Combines name, age, gender, and birth date
+     */
+    getPatientDemographics(): {
+        name: string | null;
+        age: number | null;
+        gender: 'male' | 'female' | null;
+        birthDate: string | null;
+    } {
+        return {
+            name: this.getPatientDisplayName(),
+            age: this.getPatientAge(),
+            gender: this.getPatientGender(),
+            birthDate: this.getPatientBirthDateString()
+        };
+    }
+
+    getPatientNationalId(patient: any): string | null {
+        const twId = patient.identifier?.find(
+            (id: any) => id.system === "http://www.moi.gov.tw/"
+        );
+        return twId ? twId.value : null;
     }
 }
 

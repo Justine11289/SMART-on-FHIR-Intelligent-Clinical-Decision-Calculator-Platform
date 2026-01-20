@@ -17,38 +17,32 @@ const coefficientsTableHTML = uiBuilder.createSection({
     icon: '📊',
     content: `
         ${uiBuilder.createTable({
-        headers: ['Models', 'SEX-SHOCK', '', 'SEX-SHOCK<sub>light</sub>', ''],
-        rows: [
-            [
-                '<strong>Coefficients</strong>',
-                '<strong>Females</strong>',
-                '<strong>Males</strong>',
-                '<strong>Females</strong>',
-                '<strong>Males</strong>'
+            headers: ['Models', 'SEX-SHOCK', '', 'SEX-SHOCK<sub>light</sub>', ''],
+            rows: [
+                [
+                    '<strong>Coefficients</strong>',
+                    '<strong>Females</strong>',
+                    '<strong>Males</strong>',
+                    '<strong>Females</strong>',
+                    '<strong>Males</strong>'
+                ],
+                ['(Intercept)', '-7.0804', '-7.9666', '-7.1019', '-8.0009'],
+                ['CRP (mg/L)*', '0.0915', '0.0696', '0.0946', '0.0774'],
+                ['Creatinine (μmol/L)*', '0.6092', '0.6040', '0.6274', '0.6276'],
+                ['ST-segment elevation', '0.0328', '0.768', '0.0172', '0.7445'],
+                ['LVEF 35%-50%*', '-1.0953', '-1.2722', '-1.1636', '-1.2994'],
+                ['LVEF <50%*', '-1.9474', '-2.0153', '-2.0078', '-2.0677'],
+                ['Age >70 years', '0.1825', '0.2635', '0.2758', '0.2939'],
+                ['Presentation as cardiac arrest', '1.2567', '1.1459', '1.2132', '1.1394'],
+                ['Killip class III*', '1.0503', '0.6849', '1.1277', '0.7185'],
+                ['Heart rate >90/min', '0.2408', '0.5386', '0.2610', '0.5346'],
+                ['SBP <125 and PP <45 mmHg', '0.8192', '0.7062', '0.8429', '0.7071'],
+                ['Glycemia >10 mmol/L', '0.4019', '0.8375', '0.4223', '0.8176'],
+                ['Culprit lesion of the left main**', '0.6397', '0.9036', 'NA', 'NA'],
+                ['Post-PCI TIMI flow <3**', '0.7198', '0.4966', 'NA', 'NA']
             ],
-            ['(Intercept)', '-7.0804', '-7.9666', '-7.1019', '-8.0009'],
-            ['CRP (mg/L)*', '0.0915', '0.0696', '0.0946', '0.0774'],
-            ['Creatinine (μmol/L)*', '0.6092', '0.6040', '0.6274', '0.6276'],
-            ['ST-segment elevation', '0.0328', '0.768', '0.0172', '0.7445'],
-            ['LVEF 35%-50%*', '-1.0953', '-1.2722', '-1.1636', '-1.2994'],
-            ['LVEF <50%*', '-1.9474', '-2.0153', '-2.0078', '-2.0677'],
-            ['Age >70 years', '0.1825', '0.2635', '0.2758', '0.2939'],
-            [
-                'Presentation as cardiac arrest',
-                '1.2567',
-                '1.1459',
-                '1.2132',
-                '1.1394'
-            ],
-            ['Killip class III*', '1.0503', '0.6849', '1.1277', '0.7185'],
-            ['Heart rate >90/min', '0.2408', '0.5386', '0.2610', '0.5346'],
-            ['SBP <125 and PP <45 mmHg', '0.8192', '0.7062', '0.8429', '0.7071'],
-            ['Glycemia >10 mmol/L', '0.4019', '0.8375', '0.4223', '0.8176'],
-            ['Culprit lesion of the left main**', '0.6397', '0.9036', 'NA', 'NA'],
-            ['Post-PCI TIMI flow <3**', '0.7198', '0.4966', 'NA', 'NA']
-        ],
-        stickyFirstColumn: true
-    })}
+            stickyFirstColumn: true
+        })}
         <p class="table-note text-sm text-muted mt-10">
             *p=1, No=0<br>
             **Only required for SEX-SHOCK (full model). SEX-SHOCK<sub>light</sub> relies on non-PCI related variables only.<br>
@@ -63,22 +57,25 @@ const formulaHTML = uiBuilder.createSection({
     content: `
         <p class="mb-15">Equations are as follows (sex-stratified α coefficients are listed in the table below):</p>
         ${uiBuilder.createFormulaSection({
-        hideTitle: true,
-        items: [
-            {
-                label: 'SEX-SHOCK Score',
-                formula: 'Y = (Intercept) + α × log₂(CRP, mg/L + 1) + α × log₂(Creatinine, μmol/L) + α × ST-Segment elevation + α × LVEF 35%-50% + α × LVEF <50% + α × Age >70 years + α × Presentation as cardiac arrest + α × Killip class III + α × Heart rate >90/min + α × SBP <125 and PP <45 mmHg + α × Glycemia >10 mmol/L + α × Culprit lesion of the left main* + α × Post-PCI TIMI flow <3*'
-            },
-            {
-                label: 'SEX-SHOCK<sub>light</sub> Score',
-                formula: 'Y = (Intercept) + α × log₂(CRP, mg/L + 1) + α × log₂(Creatinine, μmol/L) + α × ST-Segment elevation + α × LVEF 35%-50% + α × LVEF <50% + α × Age >70 years + α × Presentation as cardiac arrest + α × Killip class III + α × Heart rate >90/min + α × SBP <125 and PP <45 mmHg + α × Glycemia >10 mmol/L'
-            },
-            {
-                label: 'Risk %',
-                formula: '<span class="formula-fraction"><span class="numerator">1</span><span class="denominator">1 + e<sup>−Y</sup></span></span> × 100'
-            }
-        ]
-    })}
+            hideTitle: true,
+            items: [
+                {
+                    label: 'SEX-SHOCK Score',
+                    formula:
+                        'Y = (Intercept) + α × log₂(CRP, mg/L + 1) + α × log₂(Creatinine, μmol/L) + α × ST-Segment elevation + α × LVEF 35%-50% + α × LVEF <50% + α × Age >70 years + α × Presentation as cardiac arrest + α × Killip class III + α × Heart rate >90/min + α × SBP <125 and PP <45 mmHg + α × Glycemia >10 mmol/L + α × Culprit lesion of the left main* + α × Post-PCI TIMI flow <3*'
+                },
+                {
+                    label: 'SEX-SHOCK<sub>light</sub> Score',
+                    formula:
+                        'Y = (Intercept) + α × log₂(CRP, mg/L + 1) + α × log₂(Creatinine, μmol/L) + α × ST-Segment elevation + α × LVEF 35%-50% + α × LVEF <50% + α × Age >70 years + α × Presentation as cardiac arrest + α × Killip class III + α × Heart rate >90/min + α × SBP <125 and PP <45 mmHg + α × Glycemia >10 mmol/L'
+                },
+                {
+                    label: 'Risk %',
+                    formula:
+                        '<span class="formula-fraction"><span class="numerator">1</span><span class="denominator">1 + e<sup>−Y</sup></span></span> × 100'
+                }
+            ]
+        })}
     `
 });
 
@@ -164,7 +161,7 @@ const config: FormulaCalculatorConfig = {
             fields: [
                 {
                     type: 'radio',
-                    id: 'sex-shock-pci', // Note: This input is in UI but not used in calculation as per original logic! 
+                    id: 'sex-shock-pci', // Note: This input is in UI but not used in calculation as per original logic!
                     // I will leave it here as it was in original.
                     label: 'PCI Not Performed',
                     options: [
@@ -258,7 +255,7 @@ const config: FormulaCalculatorConfig = {
 
         // Helper to set radio
         const setRadioValue = (id: string, value: string) => {
-            // In unified-formula, radio inputs use 'name' which is usually 'id' in config if distinct, 
+            // In unified-formula, radio inputs use 'name' which is usually 'id' in config if distinct,
             // or 'name' prop. In my config above, I replaced 'name' with 'id' property in InputConfig.
             // Unified calculator generates name="{id}" by default if name not specified.
             // So selector should be input[name="{id}"][value="{value}"]

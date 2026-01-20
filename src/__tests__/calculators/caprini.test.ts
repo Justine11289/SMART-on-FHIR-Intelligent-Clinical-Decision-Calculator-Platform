@@ -1,13 +1,12 @@
 /**
  * Caprini Score Calculator - SaMD Verification Tests
- * 
+ *
  * Formula: Sum of age points + risk factors.
  */
 
 import { calculateCaprini } from '../../calculators/caprini/calculation';
 
 describe('Caprini Score Calculator', () => {
-
     // ===========================================
     // TC-001: Standard Calculation Tests
     // ===========================================
@@ -16,7 +15,7 @@ describe('Caprini Score Calculator', () => {
     // Points = 0
     test('Minimal Risk Case', () => {
         const result = calculateCaprini({
-            'age': '0',
+            age: '0',
             'minor-surgery': '0'
             // assuming others 0 implicitly if calculation handles partial or I pass full mock.
             // Calculation.ts implementation loops Object.values.
@@ -36,8 +35,8 @@ describe('Caprini Score Calculator', () => {
     // Score = 3 + 2 + 3 = 8
     test('High Risk Case', () => {
         const result = calculateCaprini({
-            'age': '3',
-            'malignancy': '2',
+            age: '3',
+            malignancy: '2',
             'history-vte': '3',
             'minor-surgery': '0'
         });
@@ -62,9 +61,9 @@ describe('Caprini Score Calculator', () => {
         // Swollen legs (+1)
         // Total = 4 (Moderate Risk)
         const result = calculateCaprini({
-            'age': '1',
+            age: '1',
             'minor-surgery': '1',
-            'bmi': '1',
+            bmi: '1',
             'swollen-legs': '1'
         });
 

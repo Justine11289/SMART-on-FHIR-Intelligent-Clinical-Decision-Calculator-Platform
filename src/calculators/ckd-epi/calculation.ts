@@ -1,22 +1,22 @@
 ﻿/**
  * CKD-EPI GFR Calculator (2021 Race-Free Equation)
- * 
+ *
  * Formula:
  *   Female: 142 × min(Scr/0.7, 1)^(-0.241) × max(Scr/0.7, 1)^(-1.200) × 0.9938^Age × 1.012
  *   Male:   142 × min(Scr/0.9, 1)^(-0.302) × max(Scr/0.9, 1)^(-1.200) × 0.9938^Age
- * 
+ *
  * Where:
  *   Scr = serum creatinine (mg/dL)
  *   Age = patient age (years)
- * 
+ *
  * Reference:
- * Inker LA, et al. New Creatinine- and Cystatin C-Based Equations to Estimate GFR 
+ * Inker LA, et al. New Creatinine- and Cystatin C-Based Equations to Estimate GFR
  * without Race. N Engl J Med. 2021;385(19):1737-1749.
  */
 
 import type { SimpleCalculateFn, FormulaResultItem } from '../../types/calculator-formula.js';
 
-export const calculateCkdEpi: SimpleCalculateFn = (values) => {
+export const calculateCkdEpi: SimpleCalculateFn = values => {
     const age = Number(values['ckd-epi-age']);
     const creatinine = Number(values['ckd-epi-creatinine']);
     const gender = values['ckd-epi-gender'] as string;
@@ -84,4 +84,3 @@ export const calculateCkdEpi: SimpleCalculateFn = (values) => {
 
     return results;
 };
-

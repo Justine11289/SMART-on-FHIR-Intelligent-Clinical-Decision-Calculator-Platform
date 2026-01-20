@@ -20,10 +20,10 @@ export interface ValidationRule {
  * 驗證結果介面
  */
 export interface ValidationResult {
-    isValid: boolean;      // 紅區檢查結果
-    errors: string[];      // 紅區錯誤訊息
-    hasWarnings: boolean;  // 黃區檢查結果
-    warnings: string[];    // 黃區警告訊息
+    isValid: boolean; // 紅區檢查結果
+    errors: string[]; // 紅區錯誤訊息
+    hasWarnings: boolean; // 黃區檢查結果
+    warnings: string[]; // 黃區警告訊息
     fieldStatus: Record<string, 'valid' | 'warning' | 'error'>;
 }
 

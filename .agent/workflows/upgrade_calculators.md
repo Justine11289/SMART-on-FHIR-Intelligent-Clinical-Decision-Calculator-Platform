@@ -31,23 +31,26 @@ import { ValidationError, displayError, logError } from '../../errorHandler.js';
             units: ['kg', 'lbs'],
             defaultUnit: 'kg'
         }
-    })
+    });
     ```
 
 ## Step 2: Implement Validation Logic in `calculate`
 
 1.  **Clear Errors**: At the start of the `calculate` function, remove any existing error messages.
+
     ```javascript
     const existingError = container.querySelector('#calc-error');
     if (existingError) existingError.remove();
     ```
 
 2.  **Get Standard Values**: Use `UnitConverter.getStandardValue` to retrieve input values in the standard unit expected by the validation rules and calculation formula.
+
     ```javascript
     const weight = UnitConverter.getStandardValue(weightInput, 'kg');
     ```
 
 3.  **Validate**: Create an input object and a schema object mapping inputs to `ValidationRules`. call `validateCalculatorInput`.
+
     ```javascript
     const inputs = { weight };
     const schema = { weight: ValidationRules.weight };
@@ -64,7 +67,7 @@ import { ValidationError, displayError, logError } from '../../errorHandler.js';
 1.  **Try-Catch**: Wrap the calculation and result update logic in a `try-catch` block.
 2.  **Check Finite**: Ensure the calculated result is finite.
     ```javascript
-    if (!isFinite(result) || isNaN(result)) throw new Error("Calculation Error");
+    if (!isFinite(result) || isNaN(result)) throw new Error('Calculation Error');
     ```
 3.  **Display Error**: In the `catch` block, use `logError` and `displayError`.
     ```javascript
@@ -80,7 +83,7 @@ import { ValidationError, displayError, logError } from '../../errorHandler.js';
 ## Step 4: Update FHIR Integration
 
 1.  **Normalize Values**: When auto-populating from FHIR, use `UnitConverter.convert` if necessary to match the expected unit, or populate the raw value and let the user/`UnitConverter` handle the toggle (preferred if `unitToggle` is set up correctly, but ensure `getStandardValue` is used during calc). Or better, `UnitConverter` handles the displayed value if we just set `.value`? No, we set `.value` to what we have, but if we have a set unit, we might need to convert before setting if the toggle is fixed.
-    - *Best Practice*: Use `UnitConverter.setInputValue(inputElement, value, unit)` which will automatically handle unit checks and conversion if the UI unit differs from the FHIR unit.
+    - _Best Practice_: Use `UnitConverter.setInputValue(inputElement, value, unit)` which will automatically handle unit checks and conversion if the UI unit differs from the FHIR unit.
 
 ## Step 5: Testing
 

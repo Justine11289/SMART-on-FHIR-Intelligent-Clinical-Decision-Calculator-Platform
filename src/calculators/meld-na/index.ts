@@ -98,7 +98,7 @@ export const meldNa = createUnifiedFormulaCalculator({
         }
     ],
     calculate: meldNaCalculation,
-    customResultRenderer: (results) => {
+    customResultRenderer: results => {
         const res = results[0];
         if (!res) return '';
 
@@ -117,20 +117,20 @@ export const meldNa = createUnifiedFormulaCalculator({
 
         return `
             ${uiBuilder.createResultItem({
-            label: res.label,
-            value: res.value,
-            unit: res.unit,
-            interpretation: res.interpretation,
-            alertClass: res.alertClass ? `ui-alert-${res.alertClass}` : ''
-        })}
+                label: res.label,
+                value: res.value,
+                unit: res.unit,
+                interpretation: res.interpretation,
+                alertClass: res.alertClass ? `ui-alert-${res.alertClass}` : ''
+            })}
             
             ${breakdownHtml}
 
             ${uiBuilder.createAlert({
-            type: 'warning',
-            message:
-                '<strong>Clinical Note:</strong> Used for liver transplant priority allocation. Scores should be updated regularly as clinical status changes.'
-        })}
+                type: 'warning',
+                message:
+                    '<strong>Clinical Note:</strong> Used for liver transplant priority allocation. Scores should be updated regularly as clinical status changes.'
+            })}
         `;
     }
 });

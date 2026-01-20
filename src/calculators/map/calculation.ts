@@ -1,6 +1,6 @@
 ﻿import { SimpleCalculateFn } from '../../types/calculator-formula.js';
 
-export const calculateMAP: SimpleCalculateFn = (values) => {
+export const calculateMAP: SimpleCalculateFn = values => {
     const sbp = Number(values['map-sbp']);
     const dbp = Number(values['map-dbp']);
 

@@ -1,13 +1,12 @@
 /**
  * BWPS Calculator - SaMD Verification Tests
- * 
+ *
  * Formula: Sum of selects.
  */
 
 import { calculateBwps } from '../../calculators/bwps/calculation';
 
 describe('BWPS Calculator', () => {
-
     // ===========================================
     // TC-001: Standard Calculation Tests
     // ===========================================

@@ -1,31 +1,27 @@
 services:
-  medcalcehr:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: medcalcehr:latest
-    container_name: medcalcehr-app
-    ports:
-      - "8080:80"
-    restart: unless-stopped
-    environment:
-      - TZ=Asia/Taipei
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-    networks:
-      - medcalc-network
-    labels:
-      - "com.medcalcehr.description=Medical Calculator EHR Integration System"
-      - "com.medcalcehr.version=1.0.0"
+    medcalcehr:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: medcalcehr:latest
+        container_name: medcalcehr-app
+        ports:
+            - '8080:80'
+        restart: unless-stopped
+        environment:
+            - TZ=Asia/Taipei
+        healthcheck:
+            test: ['CMD', 'wget', '--quiet', '--tries=1', '--spider', 'http://localhost/']
+            interval: 30s
+            timeout: 10s
+            retries: 3
+            start_period: 40s
+        networks:
+            - medcalc-network
+        labels:
+            - 'com.medcalcehr.description=Medical Calculator EHR Integration System'
+            - 'com.medcalcehr.version=1.0.0'
 
 networks:
-  medcalc-network:
-    driver: bridge
-
-
-
-
+    medcalc-network:
+        driver: bridge

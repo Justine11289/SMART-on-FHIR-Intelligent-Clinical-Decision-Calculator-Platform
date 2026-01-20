@@ -10,9 +10,9 @@
  * JAMA Neurology, 74(12), 1419–1424.
  */
 
-import { createScoringCalculator } from '../shared/scoring-calculator.js';
+import { createScoringCalculator, ScoringCalculatorConfig } from '../shared/scoring-calculator.js';
 
-export const helps2bScore = createScoringCalculator({
+export const helps2bConfig: ScoringCalculatorConfig = {
     inputType: 'checkbox',
     id: '2helps2b',
     title: '2HELPS2B Score',
@@ -93,4 +93,6 @@ export const helps2bScore = createScoringCalculator({
     references: [
         'Struck, A. F., et al. (2017). Association of an Electroencephalography-Based Risk Score With Seizure Probability in Hospitalized Patients. <em>JAMA Neurology</em>, 74(12), 1419–1424.'
     ]
-});
+};
+
+export const helps2bScore = createScoringCalculator(helps2bConfig);

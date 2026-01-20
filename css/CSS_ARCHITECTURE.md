@@ -45,19 +45,20 @@ css/
 
 ### 建立的檔案
 
-| 檔案 | 大小 | 說明 |
-|------|------|------|
-| `components/_tables.css` | 6KB | 評分/解釋表格 |
-| `components/_search.css` | 3KB | 搜索框 |
-| `components/_reference.css` | 3.4KB | 參考文獻 |
-| `components/_formula.css` | 3.7KB | 公式區塊 |
-| `components/_calculator-list.css` | 3.1KB | 計算器列表 |
-| `pages/_index.css` | 2.9KB | 首頁 |
-| `pages/_growth-chart.css` | 9.8KB | 生長曲線 |
+| 檔案                              | 大小  | 說明          |
+| --------------------------------- | ----- | ------------- |
+| `components/_tables.css`          | 6KB   | 評分/解釋表格 |
+| `components/_search.css`          | 3KB   | 搜索框        |
+| `components/_reference.css`       | 3.4KB | 參考文獻      |
+| `components/_formula.css`         | 3.7KB | 公式區塊      |
+| `components/_calculator-list.css` | 3.1KB | 計算器列表    |
+| `pages/_index.css`                | 2.9KB | 首頁          |
+| `pages/_growth-chart.css`         | 9.8KB | 生長曲線      |
 
 ## 🎨 設計原則
 
 ### 1. ITCSS 分層架構
+
 ```
 Settings     → _variables.css
 Generic      → _reset.css
@@ -69,18 +70,26 @@ Utilities    → (在 main.css 中)
 ```
 
 ### 2. BEM 命名規範
+
 ```css
-.block {}
-.block__element {}
-.block--modifier {}
+.block {
+}
+.block__element {
+}
+.block--modifier {
+}
 
 /* 範例 */
-.ui-table {}
-.ui-table__header {}
-.ui-table__row--category {}
+.ui-table {
+}
+.ui-table__header {
+}
+.ui-table__row--category {
+}
 ```
 
 ### 3. CSS 變數命名
+
 ```css
 --color-*         /* 顏色 */
 --spacing-*       /* 間距 */
@@ -92,6 +101,7 @@ Utilities    → (在 main.css 中)
 ## 📚 組件類別參考
 
 ### 表格
+
 ```css
 .ui-scoring-table              /* 評分表格 */
 .ui-scoring-table__category    /* 分類標題行 */
@@ -103,6 +113,7 @@ Utilities    → (在 main.css 中)
 ```
 
 ### 計算器列表
+
 ```css
 .calculator-list               /* 列表容器 */
 .list-item                     /* 列表項目 */
@@ -112,6 +123,7 @@ Utilities    → (在 main.css 中)
 ```
 
 ### 搜索
+
 ```css
 .search-container              /* 搜索區塊 */
 #search-bar                    /* 搜索輸入框 */
@@ -120,6 +132,7 @@ Utilities    → (在 main.css 中)
 ```
 
 ### 參考文獻
+
 ```css
 .reference-box                 /* 參考文獻區塊 */
 .reference-citation            /* 引用文字 */
@@ -128,6 +141,7 @@ Utilities    → (在 main.css 中)
 ```
 
 ### 公式
+
 ```css
 .formula-section               /* 公式區塊 */
 .formula-box                   /* 公式框 */
@@ -138,12 +152,13 @@ Utilities    → (在 main.css 中)
 ## 🔧 使用方式
 
 ### HTML 引用
+
 ```html
 <!-- 推薦方式 -->
-<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/main.css" />
 
 <!-- 加入主題 (可選) -->
-<link rel="stylesheet" href="css/themes/tech-theme.css">
+<link rel="stylesheet" href="css/themes/tech-theme.css" />
 ```
 
 ## 📅 更新記錄

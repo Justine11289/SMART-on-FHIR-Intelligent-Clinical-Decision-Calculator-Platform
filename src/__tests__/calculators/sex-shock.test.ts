@@ -1,8 +1,8 @@
 /**
  * SEX-SHOCK Calculator - SaMD Verification Tests
- * 
+ *
  * Formula: SEX-SHOCK Risk Score
- * 
+ *
  * Clinical Thresholds:
  *   - Low Risk: < 5%
  *   - Moderate Risk: 5-15%
@@ -59,11 +59,11 @@ describe('SEX-SHOCK Calculator', () => {
             // Intercept: -7.0804
             // Sum: -7.0804 + 0.1825 + 1.2567 + 1.0503 + 0.8192 = -3.7717
             // Risk = 1 / (1 + exp(3.7717)) * 100
-            // exp(3.7717) ~ 43.45 
+            // exp(3.7717) ~ 43.45
             // Risk ~ 1/44.45 * 100 ~ 2.2% ... wait, still low?
 
             // Let's add more factors to get high risk.
-            // + Creatinine 5.0 mg/dL -> 5*88.4 = 442 umol/L. log2(442) ~ 8.78. 
+            // + Creatinine 5.0 mg/dL -> 5*88.4 = 442 umol/L. log2(442) ~ 8.78.
             // Coeff 0.6092 * 8.78 = 5.35
             // New Sum: -3.77 + 5.35 = +1.58
             // Risk = 1 / (1 + exp(-1.58)) * 100
@@ -77,7 +77,7 @@ describe('SEX-SHOCK Calculator', () => {
                 'sex-shock-killip': '1',
                 'sex-shock-bp': '1',
                 'sex-shock-creatinine': '5.0',
-                'sex-shock-lvef': '30',
+                'sex-shock-lvef': '30'
                 // default others 0
             });
 

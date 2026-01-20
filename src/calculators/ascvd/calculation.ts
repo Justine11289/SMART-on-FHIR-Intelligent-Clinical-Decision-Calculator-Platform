@@ -1,37 +1,110 @@
-﻿import type { SimpleCalculateFn, FormulaResultItem } from '../../types/calculator-formula.js';
+﻿/**
+ * ASCVD Risk Calculator - Pure Calculation Logic
+ *
+ * References:
+ * - 2013 ACC/AHA Pooled Cohort Equations (PCE)
+ * - Goff DC Jr, Lloyd-Jones DM, et al. Circulation. 2014;129:S49-S73.
+ */
+
 import { ValidationError } from '../../errorHandler.js';
 import type { AlertSeverity } from '../../types/index.js';
 
+// ==========================================
+// Exported Coefficients for SaMD Testing
+// ==========================================
+
 /**
- * Patient data interface for PCE calculation
+ * PCE Coefficients from 2013 ACC/AHA Guidelines
+ * Source: Goff DC Jr, et al. Circulation. 2014;129:S49-S73
  */
-export interface PCEPatient {
+export const PCE_COEFFICIENTS = {
+    whiteMale: {
+        lnAge: 12.344,
+        lnTC: 11.853,
+        lnAgeLnTC: -2.664,
+        lnHDL: -7.99,
+        lnAgeLnHDL: 1.769,
+        lnSBP_treated: 1.797,
+        lnSBP_untreated: 1.764,
+        smoker: 7.837,
+        lnAgeSmoker: -1.795,
+        diabetes: 0.658,
+        meanCoeff: 61.18,
+        baselineSurvival: 0.9144
+    },
+    aaMale: {
+        lnAge: 2.469,
+        lnTC: 0.302,
+        lnHDL: -0.307,
+        lnSBP_treated: 1.916,
+        lnSBP_untreated: 1.809,
+        smoker: 0.549,
+        diabetes: 0.645,
+        meanCoeff: 19.54,
+        baselineSurvival: 0.8954
+    },
+    whiteFemale: {
+        lnAge: -29.799,
+        lnAgeSq: 4.884,
+        lnTC: 13.54,
+        lnAgeLnTC: -3.114,
+        lnHDL: -13.578,
+        lnAgeLnHDL: 3.149,
+        lnSBP_treated: 2.019,
+        lnSBP_untreated: 1.957,
+        smoker: 7.574,
+        lnAgeSmoker: -1.665,
+        diabetes: 0.661,
+        meanCoeff: -29.18,
+        baselineSurvival: 0.9665
+    },
+    aaFemale: {
+        lnAge: 17.114,
+        lnTC: 0.94,
+        lnHDL: -18.92,
+        lnAgeLnHDL: 4.475,
+        lnSBP_treated: 29.291,
+        lnSBP_untreated: 27.82,
+        lnAgeLnSBP: -6.432,
+        smoker: 0.691,
+        diabetes: 0.874,
+        meanCoeff: 86.61,
+        baselineSurvival: 0.9533
+    }
+};
+
+// ==========================================
+// Interfaces
+// ==========================================
+
+export interface AscvdPatient {
     age: number;
-    tc: number;   // Total Cholesterol (mg/dL)
-    hdl: number;  // HDL Cholesterol (mg/dL)
-    sbp: number;  // Systolic BP (mmHg)
+    tc: number;
+    hdl: number;
+    sbp: number;
     isMale: boolean;
-    race: 'white' | 'aa' | 'other';  // aa = African American
+    race: 'white' | 'aa' | 'other';
     onHtnTx: boolean;
     isDiabetic: boolean;
     isSmoker: boolean;
 }
 
+export interface AscvdResult {
+    results: any[];
+    risk: number;
+    patient: AscvdPatient;
+}
+
+// ==========================================
+// Core Calculation Functions
+// ==========================================
+
 /**
- * Pooled Cohort Equations (PCE) Calculation
- * 
- * Formula source: 2013 ACC/AHA Guideline on the Assessment of Cardiovascular Risk
- * 
- * Uses race- and sex-specific coefficients to estimate 10-year ASCVD risk:
- *   - White Male
- *   - African American Male
- *   - White Female
- *   - African American Female
- * 
- * @param patient - PCEPatient object with required demographics and labs
+ * Pure function for PCE (Pooled Cohort Equations) Calculation
+ * @param patient - Patient data object
  * @returns 10-year ASCVD risk as percentage (0-100)
  */
-export function calculatePCE(patient: PCEPatient): number {
+export function calculatePCE(patient: AscvdPatient): number {
     const lnAge = Math.log(patient.age);
     const lnTC = Math.log(patient.tc);
     const lnHDL = Math.log(patient.hdl);
@@ -43,114 +116,96 @@ export function calculatePCE(patient: PCEPatient): number {
 
     if (patient.isMale) {
         if (patient.race === 'white' || patient.race === 'other') {
-            // White Male coefficients
-            individualSum = 12.344 * lnAge +
-                11.853 * lnTC -
-                2.664 * lnAge * lnTC -
-                7.99 * lnHDL +
-                1.769 * lnAge * lnHDL +
-                (patient.onHtnTx ? 1.797 : 1.764) * lnSBP +
-                7.837 * (patient.isSmoker ? 1 : 0) -
-                1.795 * lnAge * (patient.isSmoker ? 1 : 0) +
-                0.658 * (patient.isDiabetic ? 1 : 0);
-            meanValue = 61.18;
-            baselineSurvival = 0.9144;
+            const c = PCE_COEFFICIENTS.whiteMale;
+            individualSum =
+                c.lnAge * lnAge +
+                c.lnTC * lnTC +
+                c.lnAgeLnTC * lnAge * lnTC +
+                c.lnHDL * lnHDL +
+                c.lnAgeLnHDL * lnAge * lnHDL +
+                (patient.onHtnTx ? c.lnSBP_treated : c.lnSBP_untreated) * lnSBP +
+                c.smoker * (patient.isSmoker ? 1 : 0) +
+                c.lnAgeSmoker * lnAge * (patient.isSmoker ? 1 : 0) +
+                c.diabetes * (patient.isDiabetic ? 1 : 0);
+            meanValue = c.meanCoeff;
+            baselineSurvival = c.baselineSurvival;
         } else {
-            // African American Male coefficients
-            individualSum = 2.469 * lnAge +
-                0.302 * lnTC -
-                0.307 * lnHDL +
-                (patient.onHtnTx ? 1.916 : 1.809) * lnSBP +
-                0.549 * (patient.isSmoker ? 1 : 0) +
-                0.645 * (patient.isDiabetic ? 1 : 0);
-            meanValue = 19.54;
-            baselineSurvival = 0.8954;
+            // African American Male
+            const c = PCE_COEFFICIENTS.aaMale;
+            individualSum =
+                c.lnAge * lnAge +
+                c.lnTC * lnTC +
+                c.lnHDL * lnHDL +
+                (patient.onHtnTx ? c.lnSBP_treated : c.lnSBP_untreated) * lnSBP +
+                c.smoker * (patient.isSmoker ? 1 : 0) +
+                c.diabetes * (patient.isDiabetic ? 1 : 0);
+            meanValue = c.meanCoeff;
+            baselineSurvival = c.baselineSurvival;
         }
     } else {
         // Female
         if (patient.race === 'white' || patient.race === 'other') {
-            // White Female coefficients
-            individualSum = -29.799 * lnAge +
-                4.884 * lnAge * lnAge +
-                13.54 * lnTC -
-                3.114 * lnAge * lnTC -
-                13.578 * lnHDL +
-                3.149 * lnAge * lnHDL +
-                (patient.onHtnTx ? 2.019 * lnSBP : 1.957 * lnSBP) +
-                7.574 * (patient.isSmoker ? 1 : 0) -
-                1.665 * lnAge * (patient.isSmoker ? 1 : 0) +
-                0.661 * (patient.isDiabetic ? 1 : 0);
-            meanValue = -29.18;
-            baselineSurvival = 0.9665;
+            const c = PCE_COEFFICIENTS.whiteFemale;
+            individualSum =
+                c.lnAge * lnAge +
+                c.lnAgeSq * lnAge * lnAge +
+                c.lnTC * lnTC +
+                c.lnAgeLnTC * lnAge * lnTC +
+                c.lnHDL * lnHDL +
+                c.lnAgeLnHDL * lnAge * lnHDL +
+                (patient.onHtnTx ? c.lnSBP_treated : c.lnSBP_untreated) * lnSBP +
+                c.smoker * (patient.isSmoker ? 1 : 0) +
+                c.lnAgeSmoker * lnAge * (patient.isSmoker ? 1 : 0) +
+                c.diabetes * (patient.isDiabetic ? 1 : 0);
+            meanValue = c.meanCoeff;
+            baselineSurvival = c.baselineSurvival;
         } else {
-            // African American Female coefficients
-            individualSum = 17.114 * lnAge +
-                0.94 * lnTC -
-                18.92 * lnHDL +
-                4.475 * lnAge * lnHDL +
-                (patient.onHtnTx ? 29.291 : 27.82) * lnSBP -
-                6.432 * lnAge * lnSBP +
-                0.691 * (patient.isSmoker ? 1 : 0) +
-                0.874 * (patient.isDiabetic ? 1 : 0);
-            meanValue = 86.61;
-            baselineSurvival = 0.9533;
+            // African American Female
+            const c = PCE_COEFFICIENTS.aaFemale;
+            individualSum =
+                c.lnAge * lnAge +
+                c.lnTC * lnTC +
+                c.lnHDL * lnHDL +
+                c.lnAgeLnHDL * lnAge * lnHDL +
+                (patient.onHtnTx ? c.lnSBP_treated : c.lnSBP_untreated) * lnSBP +
+                c.lnAgeLnSBP * lnAge * lnSBP +
+                c.smoker * (patient.isSmoker ? 1 : 0) +
+                c.diabetes * (patient.isDiabetic ? 1 : 0);
+            meanValue = c.meanCoeff;
+            baselineSurvival = c.baselineSurvival;
         }
     }
+
     const risk = (1 - Math.pow(baselineSurvival, Math.exp(individualSum - meanValue))) * 100;
     return Math.max(0, Math.min(100, risk));
 }
 
-// Module-level state to share between calculate and therapy logic
-let currentBaselineRisk = 0;
-let currentPatientData: PCEPatient | null = null;
-
 /**
- * Get the current baseline risk (for therapy impact calculations)
- */
-export function getCurrentBaselineRisk(): number {
-    return currentBaselineRisk;
-}
-
-/**
- * Get the current patient data (for therapy impact calculations)
- */
-export function getCurrentPatientData(): PCEPatient | null {
-    return currentPatientData;
-}
-
-/**
- * ASCVD Risk Calculation Function
- * 
- * Estimates 10-year ASCVD risk using Pooled Cohort Equations (PCE)
- * Valid for ages 40-79 years
- * 
- * Reference: 2013 ACC/AHA Guideline on the Assessment of Cardiovascular Risk
- * 
+ * Main calculation function with validation
  * @param values - Input values from calculator form
- * @returns FormulaResultItem[] with risk assessment
+ * @returns AscvdResult object with risk, patient data, and formatted results
  */
-export const ascvdCalculation: SimpleCalculateFn = (values) => {
-    // Reset state
-    currentBaselineRisk = 0;
-    currentPatientData = null;
-
-    // 1. Check Known ASCVD (secondary prevention)
+export const ascvdCalculationPure = (values: Record<string, any>): AscvdResult => {
+    // 1. Check Known ASCVD
     if (values['known-ascvd']) {
-        const results: FormulaResultItem[] = [
-            {
-                label: '10-Year ASCVD Risk',
-                value: 'High Risk',
-                interpretation: 'Known Clinical ASCVD (History of MI, stroke, PAD)',
-                alertClass: 'danger' as AlertSeverity
-            },
-            {
-                label: 'Recommendation',
-                value: 'Secondary Prevention',
-                interpretation: 'High-intensity statin therapy is indicated.',
-                alertClass: 'warning' as AlertSeverity
-            }
-        ];
-        return results;
+        return {
+            risk: 0,
+            patient: {} as AscvdPatient,
+            results: [
+                {
+                    label: '10-Year ASCVD Risk',
+                    value: 'High Risk',
+                    interpretation: 'Known Clinical ASCVD (History of MI, stroke, PAD)',
+                    alertClass: 'danger' as AlertSeverity
+                },
+                {
+                    label: 'Recommendation',
+                    value: 'Secondary Prevention',
+                    interpretation: 'High-intensity statin therapy is indicated.',
+                    alertClass: 'warning' as AlertSeverity
+                }
+            ]
+        };
     }
 
     // 2. Validate Core Inputs
@@ -158,37 +213,39 @@ export const ascvdCalculation: SimpleCalculateFn = (values) => {
     const missing = requiredFields.filter(f => values[f] === undefined || values[f] === null);
 
     if (missing.length > 0) {
-        throw new ValidationError('Please complete all fields (Age, TC, HDL, SBP).', 'MISSING_DATA');
+        throw new ValidationError(
+            'Please complete all fields (Age, TC, HDL, SBP).',
+            'MISSING_DATA'
+        );
     }
 
-    const age = Number(values['ascvd-age']);
-    const tc = Number(values['ascvd-tc']);
-    const hdl = Number(values['ascvd-hdl']);
-    const sbp = Number(values['ascvd-sbp']);
+    const age = values['ascvd-age'];
+    const tc = values['ascvd-tc'];
+    const hdl = values['ascvd-hdl'];
+    const sbp = values['ascvd-sbp'];
 
     // Validate age range
     if (age < 40 || age > 79) {
         throw new ValidationError(`Valid for ages 40-79. Current age: ${age}.`, 'OUT_OF_RANGE');
     }
 
-    // Prepare Patient Object
-    const patient: PCEPatient = {
+    // 3. Prepare Patient Object
+    const patient: AscvdPatient = {
         age,
         tc,
         hdl,
         sbp,
         isMale: values['ascvd-gender'] !== 'female',
-        race: (values['ascvd-race'] as 'white' | 'aa' | 'other') || 'white',
+        race: values['ascvd-race'] || 'white',
         onHtnTx: values['ascvd-htn'] === 'yes',
         isDiabetic: values['ascvd-dm'] === 'yes',
         isSmoker: values['ascvd-smoker'] === 'yes'
     };
 
+    // 4. Calculate Risk
     const risk = calculatePCE(patient);
-    currentBaselineRisk = risk;
-    currentPatientData = patient;
 
-    // Interpret risk
+    // 5. Interpret Result
     let interpretation = '';
     let alertClass: AlertSeverity = 'info';
 
@@ -196,29 +253,33 @@ export const ascvdCalculation: SimpleCalculateFn = (values) => {
         interpretation = 'Low Risk (<5%). Emphasize lifestyle modifications.';
         alertClass = 'success';
     } else if (risk < 7.5) {
-        interpretation = 'Borderline Risk (5-7.4%). Discuss risk. Consider moderate-intensity statin.';
+        interpretation =
+            'Borderline Risk (5-7.4%). Discuss risk. Consider moderate-intensity statin.';
         alertClass = 'warning';
     } else if (risk < 20) {
         interpretation = 'Intermediate Risk (7.5-19.9%). Initiate moderate-intensity statin.';
         alertClass = 'warning';
     } else {
-        interpretation = 'High Risk (??0%). Initiate high-intensity statin.';
+        interpretation = 'High Risk (≥20%). Initiate high-intensity statin.';
         alertClass = 'danger';
     }
 
     if (patient.race === 'other') {
-        interpretation += '<br><small>Note: Risk for "Other" race may be over- or underestimated.</small>';
+        interpretation +=
+            '<br><small>Note: Risk for "Other" race may be over- or underestimated.</small>';
     }
 
-    const results: FormulaResultItem[] = [
-        {
-            label: '10-Year ASCVD Risk',
-            value: risk.toFixed(1),
-            unit: '%',
-            interpretation: interpretation,
-            alertClass: alertClass
-        }
-    ];
-
-    return results;
+    return {
+        risk,
+        patient,
+        results: [
+            {
+                label: '10-Year ASCVD Risk',
+                value: risk.toFixed(1),
+                unit: '%',
+                interpretation: interpretation,
+                alertClass: alertClass
+            }
+        ]
+    };
 };

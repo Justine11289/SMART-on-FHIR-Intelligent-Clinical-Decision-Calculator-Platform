@@ -1,13 +1,12 @@
 /**
  * GWTG-HF Calculator - SaMD Verification Tests
- * 
+ *
  * Formula: Sum of points from SBP, BUN, Na, Age, HR, COPD, Race.
  */
 
 import { calculateGwtgHf } from '../../calculators/gwtg-hf/calculation';
 
 describe('GWTG-HF Calculator', () => {
-
     // ===========================================
     // TC-001: Standard Calculation Tests
     // ===========================================
@@ -28,8 +27,8 @@ describe('GWTG-HF Calculator', () => {
             'gwtg-sodium': '130',
             'gwtg-age': '35',
             'gwtg-hr': '65',
-            'copd': '0',
-            'race': '0'
+            copd: '0',
+            race: '0'
         });
 
         expect(result).not.toBeNull();
@@ -57,8 +56,8 @@ describe('GWTG-HF Calculator', () => {
             'gwtg-sodium': '145',
             'gwtg-age': '85',
             'gwtg-hr': '120',
-            'copd': '2',
-            'race': '0'
+            copd: '2',
+            race: '0'
         });
 
         expect(result).not.toBeNull();

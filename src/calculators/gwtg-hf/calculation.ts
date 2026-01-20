@@ -56,9 +56,10 @@ const getMortality = (score: number): string => {
     return '>50%';
 };
 
-export const calculateGwtgHf: SimpleCalculateFn = (values) => {
+export const calculateGwtgHf: SimpleCalculateFn = values => {
     const parseInput = (val: string | number | boolean | undefined | null): number | null => {
-        if (val === undefined || val === null || val === '' || typeof val === 'boolean') return null;
+        if (val === undefined || val === null || val === '' || typeof val === 'boolean')
+            return null;
         const num = Number(val);
         return isNaN(num) ? null : num;
     };
@@ -91,11 +92,7 @@ export const calculateGwtgHf: SimpleCalculateFn = (values) => {
     let riskLevel = 'Low Risk';
     let alertType: 'success' | 'warning' | 'danger' = 'success';
 
-    if (
-        mortality.includes('>50%') ||
-        mortality.includes('40-50') ||
-        mortality.includes('30-40')
-    ) {
+    if (mortality.includes('>50%') || mortality.includes('40-50') || mortality.includes('30-40')) {
         riskLevel = 'High Risk';
         alertType = 'danger';
     } else if (

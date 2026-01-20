@@ -11,12 +11,12 @@ export const sodiumCorrectionConfig: FormulaCalculatorConfig = {
     infoAlert: `
         <h4>Correction Factor Selection:</h4>
         ${uiBuilder.createList({
-        items: [
-            '<strong>1.6:</strong> Standard factor (Hillier). For every 100 mg/dL glucose above 100.',
-            '<strong>2.4:</strong> Suggested by Katz for glucose > 400 mg/dL.'
-        ],
-        className: 'info-list'
-    })}
+            items: [
+                '<strong>1.6:</strong> Standard factor (Hillier). For every 100 mg/dL glucose above 100.',
+                '<strong>2.4:</strong> Suggested by Katz for glucose > 400 mg/dL.'
+            ],
+            className: 'info-list'
+        })}
     `,
     sections: [
         {
@@ -67,7 +67,8 @@ export const sodiumCorrectionConfig: FormulaCalculatorConfig = {
                         { value: '1.6', label: '1.6 (Standard/Hillier)', checked: true },
                         { value: '2.4', label: '2.4 (Katz, for severe hyperglycemia)' }
                     ],
-                    helpText: 'Katz et al. found a factor of 2.4 was more accurate when glucose > 400 mg/dL.'
+                    helpText:
+                        'Katz et al. found a factor of 2.4 was more accurate when glucose > 400 mg/dL.'
                 }
             ]
         }
@@ -79,36 +80,37 @@ export const sodiumCorrectionConfig: FormulaCalculatorConfig = {
         }
     ],
     calculate: calculateSodiumCorrection,
-    customResultRenderer: (results) => {
+    customResultRenderer: results => {
         const mainRes = results[0];
         const amountRes = results[1];
         if (!mainRes || !amountRes) return '';
 
         // Safe extraction of payload
-        const payload = mainRes.alertPayload as { glucose: number, factor: number } | undefined;
+        const payload = mainRes.alertPayload as { glucose: number; factor: number } | undefined;
         let alertHTML = '';
 
         if (payload && payload.factor === 1.6 && payload.glucose > 400) {
             alertHTML = uiBuilder.createAlert({
                 type: 'warning',
-                message: '<strong>Clinical Note:</strong> Glucose > 400 mg/dL. Consider using a correction factor of 2.4 (Katz et al).'
+                message:
+                    '<strong>Clinical Note:</strong> Glucose > 400 mg/dL. Consider using a correction factor of 2.4 (Katz et al).'
             });
         }
 
         return `
             ${uiBuilder.createResultItem({
-            label: mainRes.label,
-            value: mainRes.value.toString(),
-            unit: mainRes.unit,
-            interpretation: mainRes.interpretation,
-            alertClass: `ui-alert-${mainRes.alertClass}`
-        })}
+                label: mainRes.label,
+                value: mainRes.value.toString(),
+                unit: mainRes.unit,
+                interpretation: mainRes.interpretation,
+                alertClass: `ui-alert-${mainRes.alertClass}`
+            })}
 
             ${uiBuilder.createResultItem({
-            label: amountRes.label,
-            value: amountRes.value.toString(),
-            unit: amountRes.unit
-        })}
+                label: amountRes.label,
+                value: amountRes.value.toString(),
+                unit: amountRes.unit
+            })}
 
             ${alertHTML}
         `;

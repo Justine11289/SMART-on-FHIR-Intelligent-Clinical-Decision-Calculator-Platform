@@ -340,9 +340,8 @@ export interface MixedCalculationResult {
 }
 
 /** 混合輸入風險等級 */
-export interface MixedRiskLevel extends BaseRiskLevel {
-    /** 無額外欄位 */
-}
+/** 混合輸入風險等級 */
+export type MixedRiskLevel = BaseRiskLevel;
 
 /** 混合輸入 FHIR 數據需求 */
 export interface MixedFHIRDataRequirements {

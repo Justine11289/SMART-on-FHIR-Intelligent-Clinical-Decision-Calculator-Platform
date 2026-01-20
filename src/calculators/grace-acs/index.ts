@@ -5,7 +5,7 @@
  */
 
 import { createUnifiedFormulaCalculator } from '../shared/unified-formula-calculator.js';
-import { LOINC_CODES } from '../../fhir-codes.js';
+import { LOINC_CODES, SNOMED_CODES } from '../../fhir-codes.js';
 import { uiBuilder } from '../../ui-builder.js';
 import { fhirDataService } from '../../fhir-data-service.js';
 import { calculateGraceAcs } from './calculation.js';
@@ -16,6 +16,8 @@ const config: FormulaCalculatorConfig = {
     title: 'GRACE ACS Risk Score',
     description:
         'Estimates admission to 6 month mortality for patients with acute coronary syndrome.',
+
+    autoPopulateAge: 'grace-age',
 
     sections: [
         {
@@ -36,7 +38,8 @@ const config: FormulaCalculatorConfig = {
                     label: 'Heart Rate',
                     placeholder: 'Enter heart rate',
                     unit: 'bpm',
-                    validationType: 'heartRate'
+                    validationType: 'heartRate',
+                    loincCode: LOINC_CODES.HEART_RATE
                 },
                 {
                     type: 'number',
@@ -44,7 +47,8 @@ const config: FormulaCalculatorConfig = {
                     label: 'Systolic BP',
                     placeholder: 'Enter systolic BP',
                     unit: 'mmHg',
-                    validationType: 'systolicBP'
+                    validationType: 'systolicBP',
+                    loincCode: LOINC_CODES.SYSTOLIC_BP
                 },
                 {
                     type: 'number',
@@ -53,6 +57,8 @@ const config: FormulaCalculatorConfig = {
                     step: 0.1,
                     placeholder: 'Enter creatinine',
                     unit: 'mg/dL',
+                    validationType: 'creatinine',
+                    loincCode: LOINC_CODES.CREATININE,
                     unitToggle: {
                         type: 'creatinine',
                         units: ['mg/dL', 'µmol/L'],
@@ -80,6 +86,7 @@ const config: FormulaCalculatorConfig = {
                     type: 'radio',
                     id: 'grace-cardiac-arrest',
                     label: 'Cardiac Arrest at Admission',
+                    snomedCode: SNOMED_CODES.CARDIAC_ARREST,
                     options: [
                         { value: '0', label: 'No', checked: true },
                         { value: '39', label: 'Yes' }
@@ -131,7 +138,7 @@ const config: FormulaCalculatorConfig = {
 
     calculate: calculateGraceAcs,
 
-    customResultRenderer: (results) => {
+    customResultRenderer: results => {
         let html = '';
         results.forEach(item => {
             if (item.label === 'Interpretation' && item.alertPayload) {
@@ -161,13 +168,19 @@ const config: FormulaCalculatorConfig = {
             }
         };
 
+        const setRadio = (id: string, value: string) => {
+            const radio = container.querySelector(
+                `input[name="${id}"][value="${value}"]`
+            ) as HTMLInputElement;
+            if (radio) {
+                radio.checked = true;
+                radio.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        };
+
         if (client) {
             try {
-                // Age from patient using FHIRDataService
-                const age = fhirDataService.getPatientAge();
-                if (age !== null) {
-                    setValue('grace-age', age.toString());
-                }
+                // Age handled by autoPopulateAge
 
                 // Fetch all observations in parallel using FHIRDataService
                 const [hrResult, bpResult, creatResult] = await Promise.all([
@@ -200,6 +213,14 @@ const config: FormulaCalculatorConfig = {
 
                 if (creatResult.value !== null) {
                     setValue('grace-creatinine', creatResult.value.toFixed(2));
+                }
+
+                // Check for Cardiac Arrest / Shock
+                const hasCardiacArrest = await fhirDataService.hasCondition([
+                    SNOMED_CODES.CARDIAC_ARREST
+                ]);
+                if (hasCardiacArrest) {
+                    setRadio('grace-cardiac-arrest', '39');
                 }
             } catch (e) {
                 console.warn('Error fetching FHIR data for GRACE ACS', e);

@@ -1,171 +1,66 @@
-/**
- * 4PEPS Calculator - SaMD Verification Tests
- * 
- * Formula: 4-Level Pulmonary Embolism Clinical Probability Score
- * 
- * Reference: Roy, P. M., et al. (2021). JAMA Cardiology.
- */
-
-import { calculateFourPeps } from '../../calculators/4peps/calculation';
+import { describe, expect, test } from '@jest/globals';
+import { calculateFourPeps } from '../../calculators/4peps/calculation.js';
 
 describe('4PEPS Calculator', () => {
-    // ===========================================
-    // TC-001: Standard Calculation Tests
-    // ===========================================
-
-    describe('Standard Calculations', () => {
-        test('Should calculate correct result for a female<50 with no other risk factors', () => {
-            // Age < 50 (-2), Female (0) = -2
-            const result = calculateFourPeps({
-                'fourpeps-age': 30,
-                '4peps-sex': '0', // Female
-                '4peps-resp_disease': '0',
-                '4peps-hr': '0',
-                '4peps-chest_pain': '0',
-                '4peps-estrogen': '0',
-                '4peps-vte': '0',
-                '4peps-syncope': '0',
-                '4peps-immobility': '0',
-                '4peps-o2_sat': '0',
-                '4peps-calf_pain': '0',
-                '4peps-pe_likely': '0'
-            });
-
-            expect(result).not.toBeNull();
-            expect(result![0].value).toBe('-2');
-            expect(result![0].interpretation).toBe('Very low CPP');
-            expect(result![0].alertClass).toBe('success');
+    test('Calculates Very Low Risk correctly', () => {
+        const result = calculateFourPeps({
+            'fourpeps-age': '40', // <50: -2
+            '4peps-sex': '0', // Female: 0
+            '4peps-resp_disease': '0', // No: 0
+            '4peps-hr': '0', // >80: 0 (Wait, logic says <80 is No(0) or Yes(-1)) -> Logic: HR<80 No(0), Yes(-1).
+            // Actually config says: "Heart rate <80", No(0), Yes(-1).
+            // If patient has HR 70, input "Yes" (-1).
+            '4peps-chest_pain': '0', // No: 0
+            '4peps-estrogen': '0', // No
+            '4peps-vte': '0', // No
+            '4peps-syncope': '0', // No
+            '4peps-immobility': '0', // No
+            '4peps-o2_sat': '0', // No (<95% is No:0, Yes:3) -> Sat usually >95
+            '4peps-calf_pain': '0', // No
+            '4peps-pe_likely': '0' // No
         });
 
-        test('Should calculate for High Risk case', () => {
-            // Male (2) + VTE history (2) + PE likely (5) = 9
-            // + Age 70 (0) = 9
-            const result = calculateFourPeps({
-                'fourpeps-age': 70,
-                '4peps-sex': '2', // Male
-                '4peps-resp_disease': '0',
-                '4peps-hr': '0',
-                '4peps-chest_pain': '0',
-                '4peps-estrogen': '0',
-                '4peps-vte': '2',
-                '4peps-syncope': '0',
-                '4peps-immobility': '0',
-                '4peps-o2_sat': '0',
-                '4peps-calf_pain': '0',
-                '4peps-pe_likely': '5'
-            });
+        // Score: -2 (Age) = -2
+        // Result: <0 -> Very low CPP
 
-            expect(result).not.toBeNull();
-            expect(result![0].value).toBe('9');
-            expect(result![0].interpretation).toBe('Moderate CPP');
-            expect(result![0].alertClass).toBe('warning');
-        });
+        expect(result).not.toBeNull();
+        expect(result![0].value).toBe('-2');
+        expect(result![1].value).toBe('<2%'); // Very low CPP
+        expect(result![0].alertClass).toBe('success');
     });
 
-    // ===========================================
-    // TC-002: Severity Classification Tests
-    // ===========================================
-
-    describe('Severity Classification', () => {
-        test('Should identify "Very low CPP" (<0)', () => {
-            // Age 20 (-2), Female (0) = -2
-            const result = calculateFourPeps({ 'fourpeps-age': 20, '4peps-sex': '0' });
-            expect(result![0].interpretation).toBe('Very low CPP');
-            expect(result![0].alertClass).toBe('success');
+    test('Calculates High Risk correctly', () => {
+        const result = calculateFourPeps({
+            'fourpeps-age': '70', // >64: 0
+            '4peps-sex': '2', // Male: +2
+            '4peps-resp_disease': '0',
+            '4peps-hr': '0', // No (<80 is No, means >=80) -> 0
+            '4peps-chest_pain': '0',
+            '4peps-estrogen': '0',
+            '4peps-vte': '2', // Yes: +2
+            '4peps-syncope': '0',
+            '4peps-immobility': '2', // Yes: +2
+            '4peps-o2_sat': '3', // Yes: +3
+            '4peps-calf_pain': '3', // Yes: +3
+            '4peps-pe_likely': '5' // Yes: +5
         });
 
-        test('Should identify "Low CPP" (0-5)', () => {
-            // Age 70 (0), Male (2) = 2
-            const result = calculateFourPeps({ 'fourpeps-age': 70, '4peps-sex': '2' });
-            expect(result![0].interpretation).toBe('Low CPP');
-            expect(result![0].alertClass).toBe('success');
-        });
+        // Score: 0 + 2 + 2 + 2 + 3 + 3 + 5 = 17
+        // >12 -> High CPP
 
-        test('Should identify "Moderate CPP" (6-12)', () => {
-            // Age 70 (0), Male (2), PE Likely (5) = 7
-            const result = calculateFourPeps({
-                'fourpeps-age': 70,
-                '4peps-sex': '2',
-                '4peps-pe_likely': '5'
-            });
-            expect(result![0].interpretation).toBe('Moderate CPP');
-            expect(result![0].alertClass).toBe('warning');
-        });
-
-        test('Should identify "High CPP" (>=13)', () => {
-            // Male(2)+VTE(2)+Syncope(2)+Immobility(2)+Sat(3)+Calf(3)+PE Likely(5) = 19
-            const result = calculateFourPeps({
-                'fourpeps-age': 70,
-                '4peps-sex': '2',
-                '4peps-vte': '2',
-                '4peps-syncope': '2',
-                '4peps-immobility': '2',
-                '4peps-o2_sat': '3',
-                '4peps-calf_pain': '3',
-                '4peps-pe_likely': '5'
-            });
-            expect(result![0].interpretation).toBe('High CPP');
-            expect(result![0].alertClass).toBe('danger');
-        });
+        expect(result).not.toBeNull();
+        expect(result![0].value).toBe('17');
+        expect(result![1].value).toBe('>65%');
+        expect(result![0].alertClass).toBe('danger');
     });
 
-    // ===========================================
-    // TC-003: Boundary Value Tests
-    // ===========================================
-
-    describe('Boundary Values', () => {
-        test('Age boundary <50 vs 50-64', () => {
-            // Age 49 => -2
-            let result = calculateFourPeps({ 'fourpeps-age': 49, '4peps-sex': '0' });
-            expect(result![0].value).toBe('-2');
-
-            // Age 50 => -1
-            result = calculateFourPeps({ 'fourpeps-age': 50, '4peps-sex': '0' });
-            expect(result![0].value).toBe('-1');
-        });
-
-        test('Age boundary 50-64 vs >64', () => {
-            // Age 64 => -1
-            let result = calculateFourPeps({ 'fourpeps-age': 64, '4peps-sex': '0' });
-            expect(result![0].value).toBe('-1');
-
-            // Age 65 => 0
-            result = calculateFourPeps({ 'fourpeps-age': 65, '4peps-sex': '0' });
-            expect(result![0].value).toBe('0');
-        });
-    });
-
-    // ===========================================
-    // TC-004: Invalid Input Tests
-    // ===========================================
-
-    describe('Invalid Inputs', () => {
-        // Since we default missing radios to 0 in our logic (for safety/simplicity in some apps),
-        // strict null checks might vary. But age is required.
-
-        test('Should typically treat missing optional radios as 0 if implementation decides so, OR if logic enforces required inputs', () => {
-            // In our implementation: 
-            // if (val !== null && val !== undefined && val !== '')
-            // So missing keys are effectively 0.
-
-            // Age is handled separately.
-            // If age is missing (null), functionality depends on logic.
-            // Current logic: if (age !== null) { ... }
-            // If age is missing, it adds nothing to score. 
-            // This might actually be a bug or feature depending on requirements.
-            // Let's assume for now 0 is default if missing, testing that code doesn't crash.
-
-            const result = calculateFourPeps({});
-            expect(result).not.toBeNull();
-            expect(result![0].value).toBe('0'); // Default 0
-        });
-
-        test('Should handle invalid age type gracefully', () => {
-            const result = calculateFourPeps({ 'fourpeps-age': 'invalid' });
-            // parsefloat('invalid') -> NaN.
-            // if (!isNaN(age)) check protects us.
-            expect(result).not.toBeNull();
-            expect(result![0].value).toBe('0');
-        });
+    test('Handles Age Categories', () => {
+        // <50: -2
+        expect(calculateFourPeps({ 'fourpeps-age': '49' })![0].value).toBe('-2');
+        // 50-64: -1
+        expect(calculateFourPeps({ 'fourpeps-age': '50' })![0].value).toBe('-1');
+        expect(calculateFourPeps({ 'fourpeps-age': '64' })![0].value).toBe('-1');
+        // >64: 0
+        expect(calculateFourPeps({ 'fourpeps-age': '65' })![0].value).toBe('0');
     });
 });

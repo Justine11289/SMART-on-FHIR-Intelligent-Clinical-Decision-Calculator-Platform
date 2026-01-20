@@ -67,18 +67,18 @@ const html = uiBuilder.createCheckboxGroup({
     name: 'risk-factors',
     label: 'Risk Factors',
     options: [
-        { 
-            value: 'diabetes', 
+        {
+            value: 'diabetes',
             label: 'Diabetes',
             description: 'History of diabetes mellitus'
         },
-        { 
-            value: 'hypertension', 
+        {
+            value: 'hypertension',
             label: 'Hypertension',
             description: 'Blood pressure > 140/90 mmHg'
         },
-        { 
-            value: 'smoking', 
+        {
+            value: 'smoking',
             label: 'Current Smoker'
         }
     ]
@@ -182,13 +182,13 @@ const formHTML = uiBuilder.createForm({
 initialize: function (client, patient, container) {
     // 初始化所有動態組件（單位轉換、滑塊等）
     uiBuilder.initializeComponents(container);
-    
+
     // 綁定事件
     const inputs = container.querySelectorAll('.ui-input');
     inputs.forEach(input => {
         input.addEventListener('input', calculate);
     });
-    
+
     // ... 其他邏輯
 }
 ```
@@ -205,67 +205,69 @@ import { LOINC_CODES } from '../../fhir-codes.js';
 export const bmiCalculator = {
     id: 'bmi',
     title: 'BMI Calculator',
-    
+
     generateHTML: function () {
-        return uiBuilder.createForm({
-            fields: [
-                {
-                    type: 'section',
-                    title: '📏 Patient Measurements',
-                    icon: '📊'
-                },
-                {
-                    type: 'input',
-                    id: 'weight',
-                    label: 'Weight',
-                    type: 'number',
-                    placeholder: 'Enter weight',
-                    required: true,
-                    unitToggle: {
-                        type: 'weight',
-                        units: ['kg', 'lbs'],
-                        default: 'kg'
+        return (
+            uiBuilder.createForm({
+                fields: [
+                    {
+                        type: 'section',
+                        title: '📏 Patient Measurements',
+                        icon: '📊'
                     },
-                    helpText: 'Click button to switch between kg and lbs'
-                },
-                {
-                    type: 'input',
-                    id: 'height',
-                    label: 'Height',
-                    type: 'number',
-                    placeholder: 'Enter height',
-                    required: true,
-                    unitToggle: {
-                        type: 'height',
-                        units: ['cm', 'in'],
-                        default: 'cm'
+                    {
+                        type: 'input',
+                        id: 'weight',
+                        label: 'Weight',
+                        type: 'number',
+                        placeholder: 'Enter weight',
+                        required: true,
+                        unitToggle: {
+                            type: 'weight',
+                            units: ['kg', 'lbs'],
+                            default: 'kg'
+                        },
+                        helpText: 'Click button to switch between kg and lbs'
                     },
-                    helpText: 'Click button to switch between cm and inches'
-                }
-            ]
-        }) + `<div class="result-container" id="bmi-result" style="display:none;"></div>`;
+                    {
+                        type: 'input',
+                        id: 'height',
+                        label: 'Height',
+                        type: 'number',
+                        placeholder: 'Enter height',
+                        required: true,
+                        unitToggle: {
+                            type: 'height',
+                            units: ['cm', 'in'],
+                            default: 'cm'
+                        },
+                        helpText: 'Click button to switch between cm and inches'
+                    }
+                ]
+            }) + `<div class="result-container" id="bmi-result" style="display:none;"></div>`
+        );
     },
-    
+
     initialize: function (client, patient, container) {
         const resultEl = container.querySelector('#bmi-result');
-        
+
         // 初始化 UI 組件
         uiBuilder.initializeComponents(container);
-        
+
         // 獲取輸入元素
         const weightInput = container.querySelector('#weight');
         const heightInput = container.querySelector('#height');
-        
+
         // 計算函數
         const calculate = () => {
             // 使用 UnitConverter 獲取標準單位值
             const weight = UnitConverter.getStandardValue(weightInput, 'kg');
             const height = UnitConverter.getStandardValue(heightInput, 'cm');
-            
+
             if (weight && height) {
                 const heightM = height / 100; // cm to m
                 const bmi = weight / (heightM * heightM);
-                
+
                 resultEl.innerHTML = `
                     <div class="result-item">
                         <span class="label">BMI:</span>
@@ -275,11 +277,11 @@ export const bmiCalculator = {
                 resultEl.style.display = 'block';
             }
         };
-        
+
         // 綁定事件
         weightInput.addEventListener('input', calculate);
         heightInput.addEventListener('input', calculate);
-        
+
         // 從 FHIR 加載數據
         if (client && patient) {
             Promise.all([
@@ -306,6 +308,7 @@ export const bmiCalculator = {
 #### `createInput(options)`
 
 **參數:**
+
 - `id` (string): 元素 ID
 - `label` (string): 標籤文字
 - `type` (string): 輸入類型 ('number', 'text', 'email', 等)
@@ -318,6 +321,7 @@ export const bmiCalculator = {
 - `defaultValue` (any): 默認值
 
 **支持的單位類型 (unitToggle.type):**
+
 - `'weight'`: kg, lbs, g
 - `'height'`: cm, in, ft, m
 - `'temperature'`: C, F, K
@@ -329,39 +333,42 @@ export const bmiCalculator = {
 #### `createRadioGroup(options)`
 
 **參數:**
+
 - `name` (string): radio group 名稱
 - `label` (string): 組標籤
 - `required` (boolean): 是否必填
 - `options` (array): 選項數組
-  - `value`: 選項值
-  - `label`: 顯示文字
-  - `checked`: 是否默認選中
-  - `disabled`: 是否禁用
+    - `value`: 選項值
+    - `label`: 顯示文字
+    - `checked`: 是否默認選中
+    - `disabled`: 是否禁用
 - `helpText` (string): 幫助文字
 
 #### `createCheckboxGroup(options)`
 
 **參數:**
+
 - `name` (string): checkbox group 名稱
 - `label` (string): 組標籤
 - `options` (array): 選項數組
-  - `value`: 選項值
-  - `label`: 顯示文字
-  - `description`: 描述文字
-  - `checked`: 是否默認選中
-  - `disabled`: 是否禁用
+    - `value`: 選項值
+    - `label`: 顯示文字
+    - `description`: 描述文字
+    - `checked`: 是否默認選中
+    - `disabled`: 是否禁用
 - `helpText` (string): 幫助文字
 
 #### `createSelect(options)`
 
 **參數:**
+
 - `id` (string): 元素 ID
 - `label` (string): 標籤文字
 - `required` (boolean): 是否必填
 - `options` (array): 選項數組
-  - `value`: 選項值
-  - `label`: 顯示文字
-  - `selected`: 是否默認選中
+    - `value`: 選項值
+    - `label`: 顯示文字
+    - `selected`: 是否默認選中
 - `helpText` (string): 幫助文字
 
 ### 其他組件
@@ -371,6 +378,7 @@ export const bmiCalculator = {
 創建範圍滑塊
 
 **參數:**
+
 - `id`, `label`, `min`, `max`, `step`, `defaultValue`, `unit`, `showValue`
 
 #### `createSection(options)`
@@ -378,6 +386,7 @@ export const bmiCalculator = {
 創建分組容器
 
 **參數:**
+
 - `title` (string): 標題
 - `subtitle` (string): 副標題
 - `icon` (string): 圖標（emoji 或 HTML）
@@ -413,25 +422,27 @@ export const bmiCalculator = {
 ### 步驟
 
 1. **導入 uiBuilder**
-   ```javascript
-   import { uiBuilder } from '../../ui-builder.js';
-   ```
+
+    ```javascript
+    import { uiBuilder } from '../../ui-builder.js';
+    ```
 
 2. **替換 HTML 生成**
-   - 找到硬編碼的 HTML 模板
-   - 使用 `uiBuilder.create*()` 方法替換
+    - 找到硬編碼的 HTML 模板
+    - 使用 `uiBuilder.create*()` 方法替換
 
 3. **更新 initialize()**
-   - 添加 `uiBuilder.initializeComponents(container);`
-   - 移除手動的樣式切換代碼
+    - 添加 `uiBuilder.initializeComponents(container);`
+    - 移除手動的樣式切換代碼
 
 4. **測試**
-   - 確保所有功能正常
-   - 檢查單位轉換是否工作
+    - 確保所有功能正常
+    - 檢查單位轉換是否工作
 
 ### 遷移前後對比
 
 **Before:**
+
 ```javascript
 generateHTML: function () {
     return `
@@ -449,6 +460,7 @@ generateHTML: function () {
 ```
 
 **After:**
+
 ```javascript
 generateHTML: function () {
     return uiBuilder.createForm({
@@ -476,29 +488,31 @@ generateHTML: function () {
 ## 💡 最佳實踐
 
 1. **總是調用 initializeComponents()**
-   ```javascript
-   initialize: function (client, patient, container) {
-       uiBuilder.initializeComponents(container);
-       // ... 其他代碼
-   }
-   ```
+
+    ```javascript
+    initialize: function (client, patient, container) {
+        uiBuilder.initializeComponents(container);
+        // ... 其他代碼
+    }
+    ```
 
 2. **使用有意義的 ID 和 name**
-   - 使用描述性命名：`weight`, `height`, `systolic-bp`
-   - 為 radio/checkbox group 使用統一的 name
+    - 使用描述性命名：`weight`, `height`, `systolic-bp`
+    - 為 radio/checkbox group 使用統一的 name
 
 3. **提供幫助文字**
-   ```javascript
-   helpText: 'Normal range: 60-100 bpm'
-   ```
+
+    ```javascript
+    helpText: 'Normal range: 60-100 bpm';
+    ```
 
 4. **善用 unitToggle**
-   - 讓用戶可以使用他們習慣的單位
-   - 內部計算使用標準單位
+    - 讓用戶可以使用他們習慣的單位
+    - 內部計算使用標準單位
 
 5. **測試響應式設計**
-   - UI Builder 內建響應式支持
-   - 在不同螢幕尺寸測試
+    - UI Builder 內建響應式支持
+    - 在不同螢幕尺寸測試
 
 ## 🚀 下一步
 
@@ -509,6 +523,7 @@ generateHTML: function () {
 ## ❓ 常見問題
 
 **Q: 如何獲取有單位轉換的輸入值？**
+
 ```javascript
 import { UnitConverter } from '../../unit-converter.js';
 
@@ -523,4 +538,3 @@ const value = UnitConverter.getStandardValue(inputElement, 'kg');
 
 **Q: 如何驗證輸入？**
 配合 `js/validator.js` 使用，或使用 HTML5 的 `required`, `min`, `max` 等屬性。
-

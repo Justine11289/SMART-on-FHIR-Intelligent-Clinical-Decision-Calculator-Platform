@@ -1,6 +1,6 @@
 ﻿import { SimpleCalculateFn } from '../../types/calculator-formula.js';
 
-export const calculateFreeWaterDeficit: SimpleCalculateFn = (values) => {
+export const calculateFreeWaterDeficit: SimpleCalculateFn = values => {
     const weight = Number(values['fwd-weight']);
     const sodium = Number(values['fwd-sodium']);
     const genderType = values['fwd-gender'] as string;
@@ -42,7 +42,8 @@ export const calculateFreeWaterDeficit: SimpleCalculateFn = (values) => {
     } else {
         status = 'Hypernatremia';
         alertClass = 'danger';
-        alertMsg = 'Correction should be slow (e.g., over 48-72 hours) to avoid cerebral edema. Max rate ~0.5 mEq/L/hr.';
+        alertMsg =
+            'Correction should be slow (e.g., over 48-72 hours) to avoid cerebral edema. Max rate ~0.5 mEq/L/hr.';
     }
 
     return [

@@ -1,13 +1,12 @@
 /**
  * SCORE2-Diabetes Calculator - SaMD Verification Tests
- * 
+ *
  * Formula: SCORE2-Diabetes 10-year CVD Risk
  */
 
 import { calculateScore2Diabetes } from '../../calculators/score2-diabetes/calculation';
 
 describe('SCORE2-Diabetes Calculator', () => {
-
     // ===========================================
     // TC-001: Standard Calculation Tests
     // ===========================================
@@ -76,7 +75,10 @@ describe('SCORE2-Diabetes Calculator', () => {
             };
 
             const low = calculateScore2Diabetes({ ...baseInput, 'score2d-region': 'low' });
-            const veryHigh = calculateScore2Diabetes({ ...baseInput, 'score2d-region': 'very_high' });
+            const veryHigh = calculateScore2Diabetes({
+                ...baseInput,
+                'score2d-region': 'very_high'
+            });
 
             const vLow = parseFloat(low![0].value as string);
             const vHigh = parseFloat(veryHigh![0].value as string);

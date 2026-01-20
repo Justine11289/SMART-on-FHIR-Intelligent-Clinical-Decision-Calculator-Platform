@@ -1,7 +1,9 @@
 ﻿import { AlertSeverity } from '../../types/calculator-base.js';
 import { FormulaResultItem } from '../../types/calculator-formula.js';
 
-export function childPughCalculation(values: Record<string, number | string | boolean>): FormulaResultItem[] {
+export function childPughCalculation(
+    values: Record<string, number | string | boolean>
+): FormulaResultItem[] {
     const biliInput = values['bilirubin'];
     const albInput = values['albumin'];
     const inrInput = values['inr'];
@@ -53,15 +55,18 @@ export function childPughCalculation(values: Record<string, number | string | bo
 
     if (totalScore <= 6) {
         classification = 'Child Class A';
-        prognosis = 'Well-compensated disease - Good prognosis\nLife Expectancy: 15-20 years\nSurgical Mortality: 10%';
+        prognosis =
+            'Well-compensated disease - Good prognosis\nLife Expectancy: 15-20 years\nSurgical Mortality: 10%';
         alertClass = 'success';
     } else if (totalScore <= 9) {
         classification = 'Child Class B';
-        prognosis = 'Significant functional compromise - Moderate prognosis\nLife Expectancy: 4-14 years\nSurgical Mortality: 30%';
+        prognosis =
+            'Significant functional compromise - Moderate prognosis\nLife Expectancy: 4-14 years\nSurgical Mortality: 30%';
         alertClass = 'warning';
     } else {
         classification = 'Child Class C';
-        prognosis = 'Decompensated disease - Poor prognosis\nLife Expectancy: 1-3 years\nSurgical Mortality: 82%';
+        prognosis =
+            'Decompensated disease - Poor prognosis\nLife Expectancy: 1-3 years\nSurgical Mortality: 82%';
         alertClass = 'danger';
     }
 

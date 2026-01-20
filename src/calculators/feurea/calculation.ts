@@ -1,6 +1,6 @@
 ﻿import { SimpleCalculateFn } from '../../types/calculator-formula.js';
 
-export const calculateFEUrea: SimpleCalculateFn = (values) => {
+export const calculateFEUrea: SimpleCalculateFn = values => {
     const serumCr = Number(values['feurea-serum-cr']);
     const urineUrea = Number(values['feurea-urine-urea']);
     const serumUrea = Number(values['feurea-serum-urea']);
@@ -10,7 +10,7 @@ export const calculateFEUrea: SimpleCalculateFn = (values) => {
     if (serumUrea === 0 || urineCr === 0) return null; // Avoid division by zero
 
     // FEUrea = (Serum Cr * Urine Urea) / (Serum Urea * Urine Cr) * 100
-    const feurea = (serumCr * urineUrea) / (serumUrea * urineCr) * 100;
+    const feurea = ((serumCr * urineUrea) / (serumUrea * urineCr)) * 100;
 
     let interpretation = '';
     let alertClass: 'success' | 'warning' | 'danger' | 'info' = 'info';

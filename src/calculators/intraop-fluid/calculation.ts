@@ -1,11 +1,18 @@
 ﻿import type { SimpleCalculateFn, FormulaResultItem } from '../../types/calculator-formula.js';
 
-export const calculateIntraopFluid: SimpleCalculateFn = (values) => {
+export const calculateIntraopFluid: SimpleCalculateFn = values => {
     const weightKg = Number(values['ifd-weight']);
     const npoHours = Number(values['ifd-npo']);
     const traumaLevel = Number(values['ifd-trauma']);
 
-    if (!weightKg || !npoHours || !traumaLevel || isNaN(weightKg) || isNaN(npoHours) || isNaN(traumaLevel)) {
+    if (
+        !weightKg ||
+        !npoHours ||
+        !traumaLevel ||
+        isNaN(weightKg) ||
+        isNaN(npoHours) ||
+        isNaN(traumaLevel)
+    ) {
         return null;
     }
 
@@ -72,4 +79,3 @@ export const calculateIntraopFluid: SimpleCalculateFn = (values) => {
 
     return results;
 };
-

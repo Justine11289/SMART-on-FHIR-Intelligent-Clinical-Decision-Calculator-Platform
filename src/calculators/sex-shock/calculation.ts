@@ -51,7 +51,7 @@ const MALE_COEFFS: SexShockCoeffs = {
     timi: 0.4966
 };
 
-export const calculateSexShock: SimpleCalculateFn = (values) => {
+export const calculateSexShock: SimpleCalculateFn = values => {
     const getVal = (name: string): number => {
         const v = values[name];
         return typeof v === 'string' ? parseInt(v, 10) : typeof v === 'number' ? v : 0;
@@ -93,12 +93,12 @@ export const calculateSexShock: SimpleCalculateFn = (values) => {
     if (lvef === 55) {
         Y += coeffs.lvefLess50; // >50% (protective)  <-- Wait, logic in original was lvefLess50 for 55?
         // Let's check original logic carefully.
-        // Original: if (lvef === 55) Y += coeffs.lvefLess50; 
+        // Original: if (lvef === 55) Y += coeffs.lvefLess50;
         // Wait, 55 option label says "> 50%".
         // coeffs.lvefLess50 is -2.0153 (Male) / -1.9474 (Female).
         // If >50%, risk should be LOWER? The coefficient is negative, so risk decreases.
         // But the variable name "lvefLess50" implies <50%.
-        // Let's check the other one: 
+        // Let's check the other one:
         // if (lvef === 42.5) Y += coeffs.lvef35to50;
         // coeffs.lvef35to50 is -1.2722.
         // coeffs.lvefLess50 is -2.0153.

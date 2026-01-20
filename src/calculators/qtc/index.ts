@@ -10,13 +10,13 @@ export const qtc = createUnifiedFormulaCalculator({
     infoAlert: `
         <h4>QTc Normal Ranges:</h4>
         ${uiBuilder.createList({
-        items: [
-            '<strong>Men:</strong> < 450 ms',
-            '<strong>Women:</strong> < 460 ms',
-            '<strong>Prolonged:</strong> > 500 ms (High Risk)'
-        ],
-        className: 'info-list'
-    })}
+            items: [
+                '<strong>Men:</strong> < 450 ms',
+                '<strong>Women:</strong> < 460 ms',
+                '<strong>Prolonged:</strong> > 500 ms (High Risk)'
+            ],
+            className: 'info-list'
+        })}
         <p class="mt-5 text-sm">Select formula: Bazett (standard), Fridericia (better for high/low HR), Hodges, or Framingham.</p>
     `,
     sections: [
@@ -90,27 +90,27 @@ export const qtc = createUnifiedFormulaCalculator({
         { label: 'Framingham', formula: 'QT + 154(1-RR)' }
     ],
     calculate: qtcCalculation,
-    customResultRenderer: (results) => {
+    customResultRenderer: results => {
         const res = results[0];
         if (!res) return '';
 
-        const payload = res.alertPayload as { description: string, limit: number };
+        const payload = res.alertPayload as { description: string; limit: number };
         const description = payload.description;
         const alertClass = res.alertClass || 'info';
 
         return `
             ${uiBuilder.createResultItem({
-            label: res.label,
-            value: res.value.toString(),
-            unit: res.unit,
-            interpretation: res.interpretation,
-            alertClass: `ui-alert-${alertClass}`
-        })}
+                label: res.label,
+                value: res.value.toString(),
+                unit: res.unit,
+                interpretation: res.interpretation,
+                alertClass: `ui-alert-${alertClass}`
+            })}
 
             ${uiBuilder.createAlert({
-            type: alertClass as 'success' | 'warning' | 'danger' | 'info',
-            message: `<strong>${res.interpretation}</strong>: ${description}`
-        })}
+                type: alertClass as 'success' | 'warning' | 'danger' | 'info',
+                message: `<strong>${res.interpretation}</strong>: ${description}`
+            })}
         `;
     }
 });

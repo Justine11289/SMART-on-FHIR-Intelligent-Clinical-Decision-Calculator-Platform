@@ -8,28 +8,28 @@
 
 .btn,
 .ui-btn,
-button[type="submit"],
-button[type="button"],
+button[type='submit'],
+button[type='button'],
 .ui-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: var(--spacing-2);
-    
+
     height: var(--button-height);
     padding: var(--button-padding-y) var(--button-padding-x);
-    
+
     font-size: var(--font-size-base);
     font-weight: var(--font-weight-semibold);
     line-height: 1;
     text-align: center;
     white-space: nowrap;
-    
+
     background: var(--gradient-primary);
     color: var(--color-text-white);
     border: none;
     border-radius: var(--radius-lg);
-    
+
     cursor: pointer;
     transition: all var(--transition-normal);
     box-shadow: var(--shadow-md);
@@ -37,8 +37,8 @@ button[type="button"],
 
 .btn:hover,
 .ui-btn:hover,
-button[type="submit"]:hover,
-button[type="button"]:hover,
+button[type='submit']:hover,
+button[type='button']:hover,
 .ui-button:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-lg), var(--shadow-glow);
@@ -46,8 +46,8 @@ button[type="button"]:hover,
 
 .btn:active,
 .ui-btn:active,
-button[type="submit"]:active,
-button[type="button"]:active,
+button[type='submit']:active,
+button[type='button']:active,
 .ui-button:active {
     transform: translateY(0);
 }
@@ -199,4 +199,3 @@ button:disabled,
     transform: translateY(-3px);
     box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
 }
-

@@ -1,6 +1,6 @@
 import type { SimpleCalculateFn, FormulaResultItem } from '../../types/calculator-formula.js';
 
-export const calculateIsthDic: SimpleCalculateFn = (values) => {
+export const calculateIsthDic: SimpleCalculateFn = values => {
     const groups = ['isth-platelet', 'isth-fibrin_marker', 'isth-pt', 'isth-fibrinogen'];
     let score = 0;
     let hasValue = false;
@@ -13,12 +13,12 @@ export const calculateIsthDic: SimpleCalculateFn = (values) => {
         }
     }
 
-    // If no values selected, should we return 0 or empty? 
+    // If no values selected, should we return 0 or empty?
     // Usually ideally we wait for all, but scoring calculators often sum what is there.
     // However, for valid diagnosis, all fields needed?
     // Original code: if (val...) score += ...
     // It didn't validate all inputs presence explicitly in `calculate` function (Step 486 just looped).
-    // But UI usually requires selection. 
+    // But UI usually requires selection.
     // Let's assume valid if at least one is present or just return score.
 
     const scoreStr = score.toString();
@@ -30,7 +30,8 @@ export const calculateIsthDic: SimpleCalculateFn = (values) => {
         interpretation = 'Compatible with overt DIC. Repeat score daily.';
         alertType = 'danger';
     } else {
-        interpretation = 'Not suggestive of overt DIC. May be non-overt DIC. Repeat within 1-2 days.';
+        interpretation =
+            'Not suggestive of overt DIC. May be non-overt DIC. Repeat within 1-2 days.';
         alertType = 'success';
     }
 

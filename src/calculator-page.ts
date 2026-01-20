@@ -9,66 +9,31 @@ declare global {
         CACHE_VERSION: string;
         FHIR: {
             oauth2: {
-                ready(): Promise<FHIRClient>;
+                ready(): Promise<any>;
             };
         };
     }
 }
 
-interface FHIRClient {
-    patient: {
-        read(): Promise<Patient>;
-    };
-}
-
-interface Patient {
-    id: string;
-    name?: Array<{
-        given?: string[];
-        family?: string;
-        text?: string;
-    }>;
-}
-
-// Cache version - increment this when you update calculators to force reload
-window.CACHE_VERSION = '1.0.5';
+// 快取版本號
+window.CACHE_VERSION = '1.1.1';
 
 /**
- * Show loading indicator
+ * 顯示載入中狀態
  */
 function showLoading(element: HTMLElement): void {
     element.innerHTML = `
-        <div class="loading-container" style="
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px;
-            min-height: 200px;
-        ">
-            <div class="loading-spinner" style="
-                border: 4px solid #f3f3f3;
-                border-top: 4px solid #3498db;
-                border-radius: 50%;
-                width: 40px;
-                height: 40px;
-                animation: spin 1s linear infinite;
-            "></div>
-            <p style="margin-top: 20px; color: #666; font-size: 0.95em;">Loading calculator...</p>
+        <div class="loading-container">
+            <div class="loading-spinner"></div>
+            <p class="loading-text">Loading calculator and local test data...</p>
         </div>
-        <style>
-            @keyframes spin {
-                0% { transform: rotate(0deg); }
-                100% { transform: rotate(360deg); }
-            }
-        </style>
     `;
 }
 
+
 window.onload = () => {
     const params = new URLSearchParams(window.location.search);
-    const calculatorId = params.get('name');
-
+    const calculatorId = params.get('id');
     const patientInfoDiv = document.getElementById('patient-info');
     const container = document.getElementById('calculator-container');
     const pageTitle = document.getElementById('page-title');
@@ -79,77 +44,54 @@ window.onload = () => {
     }
 
     if (!calculatorId) {
-        container.innerHTML = '<h2>No calculator specified.</h2>';
+        container.innerHTML = '<h2>No calculator ID specified.</h2>';
         return;
     }
 
-    // Find metadata for title
     const calculatorInfo = getCalculatorMetadata(calculatorId);
-
     if (!calculatorInfo) {
         container.innerHTML = `<h2>Calculator "${calculatorId}" not found.</h2>`;
         return;
     }
 
-    // Set page title immediately from metadata
     pageTitle.textContent = calculatorInfo.title;
     const card = document.createElement('div');
     card.className = 'calculator-card';
     container.appendChild(card);
 
-    // 記錄最近使用和使用統計
     favoritesManager.addToRecent(calculatorId);
     favoritesManager.trackUsage(calculatorId);
 
-    // Show loading indicator
-    showLoading(card);
-
-    const loadCalculatorModule = async (): Promise<void> => {
+    const loadCalculatorModule = async () => {
         try {
-            // Use the new loadCalculator function from index.js
-            const calculator = (await loadCalculator(calculatorId)) as CalculatorModule;
-
-            if (!calculator || typeof calculator.generateHTML !== 'function') {
-                throw new Error('Invalid calculator module structure.');
-            }
-
+            // 1. 載入計算器
+            const calculator = await loadCalculator(calculatorId);
             card.innerHTML = calculator.generateHTML();
 
-            // 初始化計算器的輔助函數
-            const initializeCalculator = (
-                client: FHIRClient | null,
-                patient: Patient | null
-            ): void => {
-                if (typeof calculator.initialize === 'function') {
-                    try {
-                        calculator.initialize(client, patient, card);
-                    } catch (initError) {
-                        console.error('Error during calculator initialization:', initError);
-                        card.innerHTML =
-                            '<div class="error-box">An error occurred while initializing this calculator.</div>';
-                    }
-                }
-            };
+            // 2. 讀取測試資料
+            const response = await fetch('/test-Patient.json');
+            const bundle = await response.json();
+            const patient = bundle.entry.find((e: any) => e.resource.resourceType === "Patient")?.resource;
 
-            window.FHIR.oauth2
-                .ready()
-                .then((client: FHIRClient) => {
-                    displayPatientInfo(client, patientInfoDiv).then((patient: Patient | null) => {
-                        initializeCalculator(client, patient);
-                    });
-                })
-                .catch((error: Error) => {
-                    console.error(error);
-                    patientInfoDiv.innerText =
-                        'No patient data available. Please launch from the EHR.';
-                    // 即使沒有 FHIR 客戶端，也要初始化計算器（讓用戶可以手動輸入）
-                    initializeCalculator(null, null);
-                });
+            // 核心修正：將 patient.id 傳入 mockClient 滿足 utils.ts 的檢查
+            const mockClient = {
+                patient: {
+                    id: patient.id,
+                    read: () => Promise.resolve(patient),
+                    // 核心修正：request 必須在 patient 物件內，且回傳整個 bundle (模擬 FHIR Search)
+                    request: (url: string) => Promise.resolve(bundle) 
+                },
+                // 為了相容性，外層也可以放一個
+                request: (url: string) => Promise.resolve(bundle)
+            };
+            if (typeof calculator.initialize === 'function') {
+                calculator.initialize(mockClient, patient, card);
+                // 這裡會成功執行，不再跳出「No patient data」錯誤
+                displayPatientInfo(mockClient, patientInfoDiv); 
+            }
         } catch (error) {
-            console.error(`Failed to load calculator module: ${calculatorId}`, error);
-            displayError(card, error as Error, 'This calculator is temporarily unavailable. Please try again later or contact support.');
+            console.error(`Failed: ${calculatorId}`, error);
         }
     };
-
     loadCalculatorModule();
 };

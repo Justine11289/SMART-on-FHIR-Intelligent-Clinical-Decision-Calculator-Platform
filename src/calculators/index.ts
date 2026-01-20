@@ -9,7 +9,7 @@ export interface CalculatorMetadata {
 
 export interface CalculatorModule {
     generateHTML: () => string;
-    initialize?: (client: unknown, patient: unknown, container: HTMLElement) => void;
+    initialize?: (client: any, patient: any, container: HTMLElement) => void;
 }
 
 export type CategoryKey =
@@ -123,6 +123,11 @@ export const calculatorModules: CalculatorMetadata[] = [
         category: 'metabolic'
     },
     { id: 'ett', title: 'ETT Depth and Tidal Volume Calculator', category: 'respiratory' },
+    {
+        id: 'euroscore-ii',
+        title: 'EuroSCORE II for Cardiac Surgery Mortality',
+        category: 'cardiovascular'
+    },
     { id: 'fena', title: 'Fractional Excretion of Sodium (FENa)', category: 'renal' },
     { id: 'feurea', title: 'Fractional Excretion of Urea (FEUrea)', category: 'renal' },
     { id: 'fib-4', title: 'FIB-4 Score for Liver Fibrosis', category: 'gastroenterology' },
@@ -182,6 +187,11 @@ export const calculatorModules: CalculatorMetadata[] = [
     { id: 'nihss', title: 'NIH Stroke Scale (NIHSS)', category: 'neurology' },
     { id: 'padua-vte', title: 'Padua Prediction Score for VTE Risk', category: 'cardiovascular' },
     { id: 'pecarn', title: 'PECARN Head Trauma Rule for Children', category: 'pediatric' },
+    {
+        id: 'pediatric-bp',
+        title: 'Pediatric Blood Pressure Percentile',
+        category: 'pediatric'
+    },
     { id: 'perc', title: 'PERC Rule for Pulmonary Embolism', category: 'cardiovascular' },
     {
         id: 'phenytoin-correction',
@@ -243,17 +253,33 @@ export const calculatorModules: CalculatorMetadata[] = [
  * @param calculatorId - The calculator ID
  * @returns The calculator module
  */
+// src/calculators/index.ts
+// 修改 src/calculators/index.ts
 export async function loadCalculator(calculatorId: string): Promise<CalculatorModule> {
     try {
-        // Use timestamp for cache busting during development
         const version = Date.now();
+        // 動態載入編譯後的 JavaScript
         const module = await import(`/js/calculators/${calculatorId}/index.js?v=${version}`);
 
-        // Return the calculator object (usually the first export)
-        return module.default || (Object.values(module)[0] as CalculatorModule);
+        // 1. 優先嘗試取 default 匯出
+        if (module.default) {
+            return module.default;
+        }
+
+        // 2. 若無 default，遍歷所有匯出項，尋找第一個具有 generateHTML 方法的物件
+        const calculator = Object.values(module).find(
+            (val: any) => val && typeof val.generateHTML === 'function'
+        );
+
+        if (!calculator) {
+            console.error(`在模組中找不到有效的計算器物件: ${calculatorId}`, module);
+            throw new Error(`Invalid calculator module structure: ${calculatorId}`);
+        }
+
+        return calculator as CalculatorModule;
     } catch (error) {
-        console.error(`Failed to load calculator: ${calculatorId}`, error);
-        throw new Error(`Unable to load calculator module: ${calculatorId}`);
+        console.error(`載入計算器失敗: ${calculatorId}`, error);
+        throw error;
     }
 }
 

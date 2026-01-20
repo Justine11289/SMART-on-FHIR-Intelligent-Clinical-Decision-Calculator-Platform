@@ -1,15 +1,23 @@
 ﻿import { AlertSeverity } from '../../types/calculator-base.js';
 import { FormulaResultItem } from '../../types/calculator-formula.js';
 
-export function serumAnionGapCalculation(values: Record<string, number | string | boolean>): FormulaResultItem[] {
+export function serumAnionGapCalculation(
+    values: Record<string, number | string | boolean>
+): FormulaResultItem[] {
     const naInput = values['sag-na'];
     const clInput = values['sag-cl'];
     const hco3Input = values['sag-hco3'];
 
     if (
-        naInput === undefined || naInput === null || naInput === '' ||
-        clInput === undefined || clInput === null || clInput === '' ||
-        hco3Input === undefined || hco3Input === null || hco3Input === ''
+        naInput === undefined ||
+        naInput === null ||
+        naInput === '' ||
+        clInput === undefined ||
+        clInput === null ||
+        clInput === '' ||
+        hco3Input === undefined ||
+        hco3Input === null ||
+        hco3Input === ''
     ) {
         return [];
     }
@@ -32,7 +40,8 @@ export function serumAnionGapCalculation(values: Record<string, number | string 
     if (anionGap > 12) {
         interpretation = 'High Anion Gap';
         alertClass = 'danger';
-        alertMsg = 'Suggests metabolic acidosis (e.g., DKA, lactic acidosis, renal failure, toxic ingestions - MUDPILES).';
+        alertMsg =
+            'Suggests metabolic acidosis (e.g., DKA, lactic acidosis, renal failure, toxic ingestions - MUDPILES).';
     } else if (anionGap < 6) {
         interpretation = 'Low Anion Gap';
         alertClass = 'warning';
@@ -40,7 +49,8 @@ export function serumAnionGapCalculation(values: Record<string, number | string 
     } else {
         interpretation = 'Normal Anion Gap';
         alertClass = 'success';
-        alertMsg = 'Metabolic acidosis, if present, is likely non-anion gap (e.g., diarrhea, renal tubular acidosis).';
+        alertMsg =
+            'Metabolic acidosis, if present, is likely non-anion gap (e.g., diarrhea, renal tubular acidosis).';
     }
 
     return [

@@ -36,7 +36,8 @@ export const crcl = createUnifiedFormulaCalculator({
                     unit: 'years',
                     placeholder: 'e.g., 65',
                     validationType: 'age',
-                    min: 1, max: 120,
+                    min: 1,
+                    max: 120,
                     required: true
                 },
                 {
@@ -51,7 +52,8 @@ export const crcl = createUnifiedFormulaCalculator({
                     },
                     validationType: 'weight',
                     loincCode: LOINC_CODES.WEIGHT,
-                    min: 1, max: 300,
+                    min: 1,
+                    max: 300,
                     required: true
                 }
             ]
@@ -72,7 +74,8 @@ export const crcl = createUnifiedFormulaCalculator({
                     },
                     validationType: 'creatinine',
                     loincCode: LOINC_CODES.CREATININE,
-                    min: 0.1, max: 20,
+                    min: 0.1,
+                    max: 20,
                     required: true
                 }
             ]
@@ -91,7 +94,7 @@ export const crcl = createUnifiedFormulaCalculator({
         }
     ],
     calculate: crclCalculation,
-    customResultRenderer: (results) => {
+    customResultRenderer: results => {
         const res = results[0];
         if (!res) return '';
 
@@ -102,12 +105,12 @@ export const crcl = createUnifiedFormulaCalculator({
 
         return `
             ${uiBuilder.createResultItem({
-            label: res.label,
-            value: res.value,
-            unit: res.unit,
-            interpretation: res.interpretation,
-            alertClass: res.alertClass ? `ui-alert-${res.alertClass}` : ''
-        })}
+                label: res.label,
+                value: res.value,
+                unit: res.unit,
+                interpretation: res.interpretation,
+                alertClass: res.alertClass ? `ui-alert-${res.alertClass}` : ''
+            })}
             ${alertHtml}
         `;
     },
@@ -115,7 +118,9 @@ export const crcl = createUnifiedFormulaCalculator({
         if (client && patient) {
             const gender = (patient as any).gender;
             if (gender) {
-                const radio = container.querySelector(`input[name="gender"][value="${gender}"]`) as HTMLInputElement;
+                const radio = container.querySelector(
+                    `input[name="gender"][value="${gender}"]`
+                ) as HTMLInputElement;
                 if (radio) {
                     radio.checked = true;
                     radio.dispatchEvent(new Event('change'));

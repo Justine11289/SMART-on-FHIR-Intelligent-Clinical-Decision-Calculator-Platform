@@ -3,7 +3,6 @@ import { calculateMaintenanceFluids } from '../../calculators/maintenance-fluids
 
 describe('Maintenance Fluids Calculator', () => {
     describe('Calculation Logic (Holliday-Segar)', () => {
-
         test('First 10kg Range: 8kg', () => {
             const input = { 'weight-fluids': 8 };
             const result = calculateMaintenanceFluids(input);

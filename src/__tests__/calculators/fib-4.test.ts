@@ -19,7 +19,7 @@ describe('FIB-4 Calculator', () => {
 
     test('Should calculate High Risk correctly (> 2.67)', () => {
         // Age 60, AST 80, ALT 40, PLT 100
-        // Score = (60 * 80) / (100 * sqrt(40)) 
+        // Score = (60 * 80) / (100 * sqrt(40))
         // = 4800 / (100 * 6.3245) = 4800 / 632.45 = 7.589 -> 7.59
         const result = fib4Calculation({
             'fib4-age': 60,

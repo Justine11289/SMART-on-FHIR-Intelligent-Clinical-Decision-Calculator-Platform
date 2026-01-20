@@ -1,14 +1,20 @@
 ﻿/**
  * AHA PREVENT CVD Risk Calculation Logic
- * 
- * Predicts 10-year risk of cardiovascular disease based on the 
+ *
+ * Predicts 10-year risk of cardiovascular disease based on the
  * AHA PREVENT (Predicting Risk of cardiovascular disease EVENTs) equations.
- * 
- * Reference: Khan SS, et al. Development and Validation of the 
+ *
+ * Reference: Khan SS, et al. Development and Validation of the
  * American Heart Association's PREVENT Equations. Circulation. 2024.
  */
 
-import type { ComplexCalculationResult, GetValueFn, GetStdValueFn, GetCheckboxValueFn, GetRadioValueFn } from '../../types/calculator-formula.js';
+import type {
+    ComplexCalculationResult,
+    GetValueFn,
+    GetStdValueFn,
+    GetCheckboxValueFn,
+    GetRadioValueFn
+} from '../../types/calculator-formula.js';
 
 // ==========================================
 // PREVENT Coefficients (10-Year Total CVD Risk)
@@ -17,26 +23,26 @@ import type { ComplexCalculationResult, GetValueFn, GetStdValueFn, GetCheckboxVa
 
 export interface PreventCoeffs {
     // Variable transformations and their coefficients
-    cage: number;           // (age - 55) / 10
-    cnhdl: number;          // tc - hdl - 3.5
-    chdl: number;           // (hdl - 1.3) / 0.3
-    csbp: number;           // (min(SBP, 110) - 110) / 20
-    csbp2: number;          // (max(SBP, 110) - 130) / 20
-    diabetes: number;       // yes=1, no=0
-    smoker: number;         // yes=1, no=0
-    cegfr: number;          // (min(eGFR, 60) - 60) / -15
-    cegfr2: number;         // (max(eGFR, 60) - 90) / -15
-    antihtn: number;        // yes=1, no=0
-    statin: number;         // yes=1, no=0
+    cage: number; // (age - 55) / 10
+    cnhdl: number; // tc - hdl - 3.5
+    chdl: number; // (hdl - 1.3) / 0.3
+    csbp: number; // (min(SBP, 110) - 110) / 20
+    csbp2: number; // (max(SBP, 110) - 130) / 20
+    diabetes: number; // yes=1, no=0
+    smoker: number; // yes=1, no=0
+    cegfr: number; // (min(eGFR, 60) - 60) / -15
+    cegfr2: number; // (max(eGFR, 60) - 90) / -15
+    antihtn: number; // yes=1, no=0
+    statin: number; // yes=1, no=0
     // Interactions
-    csbp2_antihtn: number;  // csbp2 * antihtn
-    cnhdl_statin: number;   // cnhdl * statin
-    cage_cnhdl: number;     // cage * cnhdl
-    cage_chdl: number;      // cage * chdl
-    cage_csbp2: number;     // cage * csbp2
-    cage_diabetes: number;  // cage * diabetes
-    cage_smoker: number;    // cage * smoker
-    cage_cegfr: number;     // cage * cegfr
+    csbp2_antihtn: number; // csbp2 * antihtn
+    cnhdl_statin: number; // cnhdl * statin
+    cage_cnhdl: number; // cage * cnhdl
+    cage_chdl: number; // cage * chdl
+    cage_csbp2: number; // cage * csbp2
+    cage_diabetes: number; // cage * diabetes
+    cage_smoker: number; // cage * smoker
+    cage_cegfr: number; // cage * cegfr
     constant: number;
 }
 
@@ -92,10 +98,10 @@ export const preventCoefficients: { female: PreventCoeffs; male: PreventCoeffs }
  */
 export function calculateTransformedVariables(
     age: number,
-    tc: number,      // mmol/L
-    hdl: number,     // mmol/L
-    sbp: number,     // mmHg
-    egfr: number     // mL/min/1.73m²
+    tc: number, // mmol/L
+    hdl: number, // mmol/L
+    sbp: number, // mmHg
+    egfr: number // mL/min/1.73m²
 ): {
     cage: number;
     cnhdl: number;
@@ -177,10 +183,10 @@ export function calculateRiskPercentage(x: number): number {
 export function calculatePreventRisk(
     age: number,
     gender: 'male' | 'female',
-    tc: number,      // mmol/L
-    hdl: number,     // mmol/L
-    sbp: number,     // mmHg
-    egfr: number,    // mL/min/1.73m²
+    tc: number, // mmol/L
+    hdl: number, // mmol/L
+    sbp: number, // mmHg
+    egfr: number, // mL/min/1.73m²
     diabetes: boolean,
     smoker: boolean,
     antihtn: boolean,
@@ -218,7 +224,16 @@ export function preventCvdCalculation(
     }
 
     const riskVal = calculatePreventRisk(
-        age, gender, tc, hdl, sbp, egfr, diabetes, smoker, antihtn, statin
+        age,
+        gender,
+        tc,
+        hdl,
+        sbp,
+        egfr,
+        diabetes,
+        smoker,
+        antihtn,
+        statin
     );
 
     let riskCategory = '';

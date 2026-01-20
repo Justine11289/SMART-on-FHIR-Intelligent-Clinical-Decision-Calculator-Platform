@@ -252,7 +252,9 @@
         page-break-inside: avoid;
     }
 
-    h1, h2, h3 {
+    h1,
+    h2,
+    h3 {
         color: #333;
         -webkit-text-fill-color: initial;
     }
@@ -284,4 +286,3 @@
         transition-duration: 0.01ms !important;
     }
 }
-

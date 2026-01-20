@@ -116,7 +116,7 @@ const score2DiabetesData: Record<
     }
 };
 
-export const calculateScore2Diabetes: SimpleCalculateFn = (values) => {
+export const calculateScore2Diabetes: SimpleCalculateFn = values => {
     const getString = (key: string): string => (values[key] as string) || '';
     const getFloat = (key: string): number => {
         const val = values[key];
@@ -134,15 +134,24 @@ export const calculateScore2Diabetes: SimpleCalculateFn = (values) => {
     const egfr = getFloat('score2d-egfr');
 
     // Validation
-    if (!region || !sex || isNaN(age) || isNaN(sbp) || isNaN(tchol) || isNaN(hdl) || isNaN(hba1c) || isNaN(egfr)) {
+    if (
+        !region ||
+        !sex ||
+        isNaN(age) ||
+        isNaN(sbp) ||
+        isNaN(tchol) ||
+        isNaN(hdl) ||
+        isNaN(hba1c) ||
+        isNaN(egfr)
+    ) {
         return [];
     }
 
     if (age < 40 || age > 69) {
         // Will be handled by customResultRenderer alert usually, but here we return empty or special value?
         // Original logic returned null. We return empty array which means no result items.
-        // Or better, we return an item that indicates invalid age? 
-        // Logic says: "Will be handled by customResultRenderer". 
+        // Or better, we return an item that indicates invalid age?
+        // Logic says: "Will be handled by customResultRenderer".
         // But if we return empty array, customResultRenderer might not run if it depends on results?
         // Wait, unified calculator calls customResultRenderer with results array.
         // If results array is empty, customResultRenderer can still append alerts.

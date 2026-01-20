@@ -5,12 +5,9 @@
  * Diagnoses delirium in older patients.
  */
 
-import {
-    createScoringCalculator,
-    ScoringCalculatorConfig
-} from '../shared/scoring-calculator.js';
+import { createScoringCalculator, ScoringCalculatorConfig } from '../shared/scoring-calculator.js';
 
-const config: ScoringCalculatorConfig = {
+export const fourAsDeliriumConfig: ScoringCalculatorConfig = {
     id: '4as-delirium',
     title: "4 A's Test (4AT) for Delirium Screening",
     description:
@@ -139,4 +136,4 @@ const config: ScoringCalculatorConfig = {
     ]
 };
 
-export const fourAsDelirium = createScoringCalculator(config);
+export const fourAsDelirium = createScoringCalculator(fourAsDeliriumConfig);

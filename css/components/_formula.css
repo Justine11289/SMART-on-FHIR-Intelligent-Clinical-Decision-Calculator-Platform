@@ -16,7 +16,10 @@
 .formula-section {
     margin-top: 30px;
     padding: 25px;
-    background: var(--bg-formula-section, linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%));
+    background: var(
+        --bg-formula-section,
+        linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%)
+    );
     border: 2px solid var(--border-color, rgba(102, 126, 234, 0.1));
     border-radius: 16px;
     color: var(--text-primary, #2d3748);
@@ -150,7 +153,10 @@
 .calculator-notes {
     margin-top: 30px;
     padding: 25px;
-    background: var(--bg-surface, linear-gradient(135deg, rgba(248, 249, 250, 0.9) 0%, rgba(241, 245, 249, 0.9) 100%));
+    background: var(
+        --bg-surface,
+        linear-gradient(135deg, rgba(248, 249, 250, 0.9) 0%, rgba(241, 245, 249, 0.9) 100%)
+    );
     border-radius: 16px;
     border: 2px solid var(--border-color, rgba(102, 126, 234, 0.1));
     backdrop-filter: blur(10px);

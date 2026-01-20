@@ -6,8 +6,10 @@ import { serumOsmolalityCalculation, SerumOsmoBreakdown } from './calculation.js
 export const serumOsmolality = createUnifiedFormulaCalculator({
     id: 'serum-osmolality',
     title: 'Serum Osmolality/Osmolarity',
-    description: 'Calculates expected serum osmolarity, for comparison to measured osmolality to detect unmeasured compounds in the serum.',
-    infoAlert: '<h4>Normal Range:</h4><p>275-295 mOsm/kg</p>' +
+    description:
+        'Calculates expected serum osmolarity, for comparison to measured osmolality to detect unmeasured compounds in the serum.',
+    infoAlert:
+        '<h4>Normal Range:</h4><p>275-295 mOsm/kg</p>' +
         '<p class="mt-10"><strong>Osmolar Gap:</strong> Measured Osmolality - Calculated Osmolality</p>' +
         uiBuilder.createAlert({
             type: 'info',
@@ -84,30 +86,30 @@ export const serumOsmolality = createUnifiedFormulaCalculator({
         }
     ],
     calculate: serumOsmolalityCalculation,
-    customResultRenderer: (results) => {
+    customResultRenderer: results => {
         const res = results[0];
         if (!res) return '';
 
-        const payload = res.alertPayload as { breakdown: SerumOsmoBreakdown, alertMsg: string };
+        const payload = res.alertPayload as { breakdown: SerumOsmoBreakdown; alertMsg: string };
         const breakdown = payload.breakdown;
         const alertMsg = payload.alertMsg;
         const alertClass = res.alertClass || 'info';
 
         return `
             ${uiBuilder.createResultItem({
-            label: res.label,
-            value: res.value,
-            unit: res.unit,
-            interpretation: res.interpretation,
-            alertClass: `ui-alert-${alertClass}`
-        })}
+                label: res.label,
+                value: res.value,
+                unit: res.unit,
+                interpretation: res.interpretation,
+                alertClass: `ui-alert-${alertClass}`
+            })}
             ${uiBuilder.createAlert({
-            type: alertClass as 'success' | 'warning' | 'info',
-            message: alertMsg
-        })}
+                type: alertClass as 'success' | 'warning' | 'info',
+                message: alertMsg
+            })}
             ${uiBuilder.createSection({
-            title: 'Calculation Breakdown',
-            content: `
+                title: 'Calculation Breakdown',
+                content: `
                     <div class="text-sm text-muted">
                         <div>2 × Na: ${breakdown.naTerm}</div>
                         <div>Glucose / 18: ${breakdown.glucoseTerm}</div>
@@ -115,7 +117,7 @@ export const serumOsmolality = createUnifiedFormulaCalculator({
                         ${breakdown.ethanolTerm > 0 ? `<div>Ethanol / 4.6: ${breakdown.ethanolTerm}</div>` : ''}
                     </div>
                 `
-        })}
+            })}
         `;
     }
 });

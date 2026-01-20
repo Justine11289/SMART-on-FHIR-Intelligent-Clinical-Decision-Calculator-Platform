@@ -10,7 +10,7 @@ export interface LDLResult {
     trigValue: number;
 }
 
-export const calculateLDL: SimpleCalculateFn = (values) => {
+export const calculateLDL: SimpleCalculateFn = values => {
     const tcVal = Number(values['ldl-tc']);
     const hdlVal = Number(values['ldl-hdl']);
     const trigVal = Number(values['ldl-trig']);

@@ -1,14 +1,13 @@
 /**
  * Gupta MICA Calculator - SaMD Verification Tests
- * 
- * Formula: Cardiac risk, % = [1/(1+e^-x)] × 100 
+ *
+ * Formula: Cardiac risk, % = [1/(1+e^-x)] × 100
  * x = -5.25 + sum of selected variables
  */
 
 import { calculateGuptaMica } from '../../calculators/gupta-mica/calculation';
 
 describe('Gupta MICA Calculator', () => {
-
     // ===========================================
     // TC-001: Standard Calculation Tests
     // ===========================================
@@ -25,7 +24,7 @@ describe('Gupta MICA Calculator', () => {
 
     // x = -5.25 + 0.8 + 0 + (-6.17) + 0 + 0 = -10.62
     // Risk = 1 / (1 + e^10.62) = small
-    // Test says default ASA is -6.17 if empty? calculation.ts: 
+    // Test says default ASA is -6.17 if empty? calculation.ts:
     // const asaClass = parseFloat((values['mica-asa'] as string) || '-6.17');
 
     test('Low Risk Case', () => {

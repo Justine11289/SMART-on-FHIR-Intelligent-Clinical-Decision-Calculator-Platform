@@ -1,25 +1,28 @@
 /**
  * tPA Dosing for Acute Stroke Calculator - SaMD Verification Tests
- * 
+ *
  * Formula:
  *   Total Dose = 0.9 mg/kg (Maximum 90 mg)
  *   Bolus Dose = 10% of total dose
  *   Infusion Dose = 90% of total dose
- * 
+ *
  * Eligibility:
  *   Time from symptom onset ≤ 4.5 hours for IV tPA
- * 
+ *
  * Reference:
  * NINDS rt-PA Stroke Study Group. N Engl J Med. 1995;333(24):1581-1587.
  */
 
-import { calculateTpaDosingStroke, TpaStrokeResult } from '../../calculators/tpa-dosing-stroke/calculation.js';
+import {
+    calculateTpaDosingStroke,
+    TpaStrokeResult
+} from '../../calculators/tpa-dosing-stroke/calculation.js';
 
 describe('tPA Dosing for Acute Stroke Calculator', () => {
     // ===========================================
     // TC-001: Standard Calculation Tests
     // ===========================================
-    
+
     describe('Standard Calculations', () => {
         test('Should calculate correct doses for 70 kg patient', () => {
             const result = calculateTpaDosingStroke({
@@ -52,7 +55,7 @@ describe('tPA Dosing for Acute Stroke Calculator', () => {
     // ===========================================
     // TC-002: Eligibility Tests
     // ===========================================
-    
+
     describe('Eligibility', () => {
         test('Should be eligible when onset ≤ 4.5 hours', () => {
             const testCases = [0, 1, 2, 3, 4, 4.5];
@@ -63,7 +66,9 @@ describe('tPA Dosing for Acute Stroke Calculator', () => {
                     'tpa-stroke-onset': onset
                 });
 
-                const eligibility = result!.find(r => r.label === 'Eligibility Status') as TpaStrokeResult;
+                const eligibility = result!.find(
+                    r => r.label === 'Eligibility Status'
+                ) as TpaStrokeResult;
                 expect(eligibility?.eligibilityStatus).toBe('eligible');
                 expect(eligibility?.alertClass).toBe('success');
             });
@@ -78,7 +83,9 @@ describe('tPA Dosing for Acute Stroke Calculator', () => {
                     'tpa-stroke-onset': onset
                 });
 
-                const eligibility = result!.find(r => r.label === 'Eligibility Status') as TpaStrokeResult;
+                const eligibility = result!.find(
+                    r => r.label === 'Eligibility Status'
+                ) as TpaStrokeResult;
                 expect(eligibility?.eligibilityStatus).toBe('ineligible');
                 expect(eligibility?.alertClass).toBe('danger');
             });
@@ -89,7 +96,9 @@ describe('tPA Dosing for Acute Stroke Calculator', () => {
                 'tpa-stroke-weight': 70
             });
 
-            const eligibility = result!.find(r => r.label === 'Eligibility Status') as TpaStrokeResult;
+            const eligibility = result!.find(
+                r => r.label === 'Eligibility Status'
+            ) as TpaStrokeResult;
             expect(eligibility?.eligibilityStatus).toBe('unknown');
             expect(eligibility?.alertClass).toBe('warning');
         });
@@ -100,7 +109,9 @@ describe('tPA Dosing for Acute Stroke Calculator', () => {
                 'tpa-stroke-onset': 4.5
             });
 
-            const eligibility = result!.find(r => r.label === 'Eligibility Status') as TpaStrokeResult;
+            const eligibility = result!.find(
+                r => r.label === 'Eligibility Status'
+            ) as TpaStrokeResult;
             expect(eligibility?.eligibilityStatus).toBe('eligible');
         });
     });
@@ -108,7 +119,7 @@ describe('tPA Dosing for Acute Stroke Calculator', () => {
     // ===========================================
     // TC-003: Maximum Dose Cap Tests
     // ===========================================
-    
+
     describe('Maximum Dose Cap', () => {
         test('Should cap total dose at 90 mg for weight > 100 kg', () => {
             const result = calculateTpaDosingStroke({
@@ -137,7 +148,7 @@ describe('tPA Dosing for Acute Stroke Calculator', () => {
     // ===========================================
     // TC-004: Dose Ratio Tests
     // ===========================================
-    
+
     describe('Dose Ratios', () => {
         test('Bolus should be exactly 10% of total', () => {
             const result = calculateTpaDosingStroke({
@@ -146,7 +157,9 @@ describe('tPA Dosing for Acute Stroke Calculator', () => {
             });
 
             const total = parseFloat(result!.find(r => r.label === 'Total Dose')?.value as string);
-            const bolus = parseFloat(result!.find(r => r.label === 'Step 1: IV Bolus')?.value as string);
+            const bolus = parseFloat(
+                result!.find(r => r.label === 'Step 1: IV Bolus')?.value as string
+            );
 
             expect(bolus).toBeCloseTo(total * 0.1, 1);
         });
@@ -158,7 +171,9 @@ describe('tPA Dosing for Acute Stroke Calculator', () => {
             });
 
             const total = parseFloat(result!.find(r => r.label === 'Total Dose')?.value as string);
-            const infusion = parseFloat(result!.find(r => r.label === 'Step 2: Continuous Infusion')?.value as string);
+            const infusion = parseFloat(
+                result!.find(r => r.label === 'Step 2: Continuous Infusion')?.value as string
+            );
 
             expect(infusion).toBeCloseTo(total * 0.9, 1);
         });
@@ -167,7 +182,7 @@ describe('tPA Dosing for Acute Stroke Calculator', () => {
     // ===========================================
     // TC-005: Invalid Input Tests
     // ===========================================
-    
+
     describe('Invalid Inputs', () => {
         test('Should return null for zero weight', () => {
             const result = calculateTpaDosingStroke({
@@ -199,7 +214,7 @@ describe('tPA Dosing for Acute Stroke Calculator', () => {
     // ===========================================
     // TC-006: Golden Dataset Verification
     // ===========================================
-    
+
     describe('Golden Dataset', () => {
         const goldenDataset = [
             // weight, onset, total, bolus, infusion, eligible
@@ -208,7 +223,7 @@ describe('tPA Dosing for Acute Stroke Calculator', () => {
             { w: 90, o: 4, total: 81.0, bolus: 8.1, infusion: 72.9, eligible: true },
             { w: 100, o: 4.5, total: 90.0, bolus: 9.0, infusion: 81.0, eligible: true },
             { w: 110, o: 2, total: 90.0, bolus: 9.0, infusion: 81.0, eligible: true },
-            { w: 70, o: 5, total: 63.0, bolus: 6.3, infusion: 56.7, eligible: false },
+            { w: 70, o: 5, total: 63.0, bolus: 6.3, infusion: 56.7, eligible: false }
         ];
 
         goldenDataset.forEach((data, index) => {
@@ -220,12 +235,22 @@ describe('tPA Dosing for Acute Stroke Calculator', () => {
 
                 expect(result).not.toBeNull();
 
-                const eligibility = result!.find(r => r.label === 'Eligibility Status') as TpaStrokeResult;
-                expect(eligibility?.eligibilityStatus).toBe(data.eligible ? 'eligible' : 'ineligible');
+                const eligibility = result!.find(
+                    r => r.label === 'Eligibility Status'
+                ) as TpaStrokeResult;
+                expect(eligibility?.eligibilityStatus).toBe(
+                    data.eligible ? 'eligible' : 'ineligible'
+                );
 
-                const total = parseFloat(result!.find(r => r.label === 'Total Dose')?.value as string);
-                const bolus = parseFloat(result!.find(r => r.label === 'Step 1: IV Bolus')?.value as string);
-                const infusion = parseFloat(result!.find(r => r.label === 'Step 2: Continuous Infusion')?.value as string);
+                const total = parseFloat(
+                    result!.find(r => r.label === 'Total Dose')?.value as string
+                );
+                const bolus = parseFloat(
+                    result!.find(r => r.label === 'Step 1: IV Bolus')?.value as string
+                );
+                const infusion = parseFloat(
+                    result!.find(r => r.label === 'Step 2: Continuous Infusion')?.value as string
+                );
 
                 expect(total).toBeCloseTo(data.total, 1);
                 expect(bolus).toBeCloseTo(data.bolus, 1);
@@ -234,4 +259,3 @@ describe('tPA Dosing for Acute Stroke Calculator', () => {
         });
     });
 });
-

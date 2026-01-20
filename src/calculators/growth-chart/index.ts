@@ -63,16 +63,16 @@ export const growthChart: CalculatorModule = {
                     </div>
                     <div class="chart-summary" id="bmi-summary"></div>
                     ${uiBuilder.createAlert({
-            type: 'info',
-            message:
-                '<strong>Note:</strong> BMI patterns in infants are normal - BMI typically peaks around 8-12 months, then decreases until age 5-6 years (adiposity rebound).'
-        })}
+                        type: 'info',
+                        message:
+                            '<strong>Note:</strong> BMI patterns in infants are normal - BMI typically peaks around 8-12 months, then decreases until age 5-6 years (adiposity rebound).'
+                    })}
                 </div>
             </div>
 
             ${uiBuilder.createSection({
-            title: 'Chart Information',
-            content: `
+                title: 'Chart Information',
+                content: `
                     <ul>
                         <li><strong>Reference:</strong> CDC Growth Charts (2000)</li>
                         <li><strong>Age Range:</strong> Birth to 36 months</li>
@@ -81,11 +81,11 @@ export const growthChart: CalculatorModule = {
                         <li><strong>Normal Range:</strong> Between P5 and P95 (green shaded area)</li>
                     </ul>
                 `
-        })}
+            })}
 
             ${uiBuilder.createSection({
-            title: 'Clinical Interpretation Guidelines',
-            content: `
+                title: 'Clinical Interpretation Guidelines',
+                content: `
                     <div class="interpretation-grid">
                         <div class="interpretation-item">
                             <strong>Normal Growth:</strong>
@@ -105,7 +105,7 @@ export const growthChart: CalculatorModule = {
                         </div>
                     </div>
                 `
-        })}
+            })}
         `;
     },
     initialize: function (client, patient, container) {

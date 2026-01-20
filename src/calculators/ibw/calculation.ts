@@ -1,6 +1,6 @@
 ﻿import type { SimpleCalculateFn, FormulaResultItem } from '../../types/calculator-formula.js';
 
-export const calculateIBW: SimpleCalculateFn = (values) => {
+export const calculateIBW: SimpleCalculateFn = values => {
     const heightCm = Number(values['ibw-height']);
     const actualWeight = Number(values['ibw-actual']);
     const gender = values['ibw-gender'] as string;

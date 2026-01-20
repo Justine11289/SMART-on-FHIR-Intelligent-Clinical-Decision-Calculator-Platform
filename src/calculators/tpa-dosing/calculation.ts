@@ -1,20 +1,20 @@
 ﻿/**
  * tPA (Alteplase) Dosing Calculator for Ischemic Stroke
- * 
+ *
  * Formula:
  *   Total Dose = 0.9 mg/kg (Maximum 90 mg)
  *   Bolus Dose = 10% of total dose (over 1 minute)
  *   Infusion Dose = 90% of total dose (over 60 minutes)
- * 
+ *
  * Note: If weight > 100 kg, max total dose is 90 mg
- * 
+ *
  * Reference:
  * NINDS rt-PA Stroke Study Group. N Engl J Med. 1995;333(24):1581-1587.
  */
 
 import type { SimpleCalculateFn, FormulaResultItem } from '../../types/calculator-formula.js';
 
-export const calculateTpaDosing: SimpleCalculateFn = (values) => {
+export const calculateTpaDosing: SimpleCalculateFn = values => {
     const weight = Number(values['tpa-weight']);
 
     if (!weight || isNaN(weight) || weight <= 0) {
@@ -53,4 +53,3 @@ export const calculateTpaDosing: SimpleCalculateFn = (values) => {
 
     return results;
 };
-

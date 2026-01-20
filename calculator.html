@@ -1,49 +1,59 @@
 <!doctype html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <!-- Security Headers -->
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="default-src 'self' https://cdn.jsdelivr.net https://launch.smarthealthit.org https://*.smarthealthit.org https://*.cerner.com; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; img-src 'self' data: https:; connect-src 'self' https://cdn.jsdelivr.net https://launch.smarthealthit.org https://*.smarthealthit.org https://*.cerner.com; frame-ancestors 'none'; upgrade-insecure-requests;"
+        />
+        <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+        <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+        <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()" />
 
-    <!-- Security Headers -->
-    <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self' https://cdn.jsdelivr.net https://launch.smarthealthit.org https://*.smarthealthit.org; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://cdn.jsdelivr.net https://launch.smarthealthit.org https://*.smarthealthit.org;" />
-    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-    <!-- X-Frame-Options removed - can only be set via HTTP header, not meta tag -->
-    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
-    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()" />
+        <title>CGMH EHRCALC on FHIR - Calculator</title>
+        <meta name="description" content="Medical calculator with FHIR EHR integration" />
+        <link
+            rel="icon"
+            href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚕️</text></svg>"
+        />
+        <!-- 新的模組化 CSS 結構 -->
+        <link rel="stylesheet" href="css/main.css" />
+        <!-- 深色科技主題（通過 data-theme 屬性啟用） -->
+        <link rel="stylesheet" href="css/themes/tech-theme.css" />
+    </head>
 
-    <title>CGMH EHRCALC on FHIR - Calculator</title>
-    <meta name="description" content="Medical calculator with FHIR EHR integration" />
-    <link rel="icon"
-        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚕️</text></svg>" />
-    <!-- 新的模組化 CSS 結構 -->
-    <link rel="stylesheet" href="css/main.css" />
-    <!-- 深色科技主題（通過 data-theme 屬性啟用） -->
-    <link rel="stylesheet" href="css/themes/tech-theme.css" />
-</head>
-
-<body>
-    <div class="container">
-        <div class="header-top">
-            <a href="index.html" class="back-link">&larr; Back to Calculator List</a>
-            <h1 id="page-title">CGMH EHRCALC on FHIR</h1>
-            <button id="theme-toggle" class="theme-toggle-btn" title="Toggle Theme">
-                <span class="theme-icon">🌙</span>
-            </button>
+    <body>
+        <div class="container">
+            <div class="header-top">
+                <a href="index.html" class="back-link">&larr; Back to Calculator List</a>
+                <h1 id="page-title">CGMH EHRCALC on FHIR</h1>
+                <button id="theme-toggle" class="theme-toggle-btn" title="Toggle Theme">
+                    <span class="theme-icon">🌙</span>
+                </button>
+            </div>
+            
+            <hr />
+            <div id="calculator-container">
+                <div id="patient-info">Loading patient data...</div>
+                <div id="calculator-card"></div>
+            </div>
         </div>
-        <div id="patient-info">Loading patient data...</div>
-        <hr />
-        <div id="calculator-container">
-            <!-- The specific calculator will be rendered here -->
-        </div>
-    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/fhirclient/build/fhir-client.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script type="module" src="js/theme-toggle.js"></script>
-    <script type="module" src="js/calculator-page.js"></script>
-</body>
-
+        <script
+            src="https://cdn.jsdelivr.net/npm/fhirclient@2.6.3/build/fhir-client.js"
+            integrity="sha384-dGS6R4ht5hVL6tx4pQCGGEFJV/rS1ywziGTuH/fJeDtWoS4YQJeAaF1qu2/0ZXkk"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1"
+            integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ"
+            crossorigin="anonymous"
+        ></script>
+        <script type="module" src="js/theme-toggle.js"></script>
+        <script type="module" src="js/calculator-page.js?v=1.1.1"></script>
+    </body>
 </html>

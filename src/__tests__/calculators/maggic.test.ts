@@ -1,13 +1,12 @@
 /**
  * MAGGIC Risk Score Calculator - SaMD Verification Tests
- * 
+ *
  * Formula involves linear predictor and survival probability.
  */
 
 import { calculateMaggic } from '../../calculators/maggic/calculation';
 
 describe('MAGGIC Risk Calculator', () => {
-
     // ===========================================
     // TC-001: Standard Calculation Tests
     // ===========================================
@@ -53,7 +52,7 @@ describe('MAGGIC Risk Calculator', () => {
     // BMI 32 (-1), Smoker Yes (+1)
     // EF 25 (-1.25), SBP 100 (-2.0)
     // Creatinine 1.5 (+1 from categories? Wait, logic:
-    // Creatinine logic: 
+    // Creatinine logic:
     // <=0.9: 0
     // 0.9-1.3: 1
     // 1.3-2.2: 3   <-- 1.5 falls here

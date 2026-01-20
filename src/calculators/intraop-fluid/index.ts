@@ -8,13 +8,17 @@ export const intraopFluidConfig: FormulaCalculatorConfig = {
     id: 'intraop-fluid',
     title: 'Intraoperative Fluid Dosing in Adult Patients',
     description: 'Doses IV fluids intraoperatively.',
-    infoAlert: uiBuilder.createAlert({
-        type: 'warning',
-        message: '<strong>IMPORTANT:</strong> This dosing tool is intended to assist with calculation, not to provide comprehensive or definitive drug information. Always double-check dosing.'
-    }) + uiBuilder.createAlert({
-        type: 'info',
-        message: '<strong>INSTRUCTIONS:</strong> Use in patients undergoing surgery who weigh >10 kg and do not have conditions that could otherwise result in fluid overload such as heart failure, COPD, or kidney failure on dialysis.'
-    }),
+    infoAlert:
+        uiBuilder.createAlert({
+            type: 'warning',
+            message:
+                '<strong>IMPORTANT:</strong> This dosing tool is intended to assist with calculation, not to provide comprehensive or definitive drug information. Always double-check dosing.'
+        }) +
+        uiBuilder.createAlert({
+            type: 'info',
+            message:
+                '<strong>INSTRUCTIONS:</strong> Use in patients undergoing surgery who weigh >10 kg and do not have conditions that could otherwise result in fluid overload such as heart failure, COPD, or kidney failure on dialysis.'
+        }),
     sections: [
         {
             title: 'Patient Parameters',
@@ -52,7 +56,10 @@ export const intraopFluidConfig: FormulaCalculatorConfig = {
                     id: 'ifd-trauma',
                     label: 'Estimated severity of trauma to tissue',
                     options: [
-                        { value: '4', label: 'Minimal (e.g. hernia repair, laparoscopy) (4 mL/kg/hr)' },
+                        {
+                            value: '4',
+                            label: 'Minimal (e.g. hernia repair, laparoscopy) (4 mL/kg/hr)'
+                        },
                         { value: '6', label: 'Moderate (e.g. open cholecystectomy) (6 mL/kg/hr)' },
                         { value: '8', label: 'Severe (e.g. bowel resection) (8 mL/kg/hr)' }
                     ]
@@ -73,8 +80,16 @@ export const intraopFluidConfig: FormulaCalculatorConfig = {
         ${uiBuilder.createTable({
             headers: ['Severity', 'Example', 'Fluid Loss'],
             rows: [
-                ['Minimal', 'e.g. hernia repair, laparoscopy', '2-4 mL/kg/hr (calculator uses 4 mL/kg/hr)'],
-                ['Moderate', 'e.g. open cholecystectomy, open appendectomy', '4-6 mL/kg/hr (calculator uses 6 mL/kg/hr)'],
+                [
+                    'Minimal',
+                    'e.g. hernia repair, laparoscopy',
+                    '2-4 mL/kg/hr (calculator uses 4 mL/kg/hr)'
+                ],
+                [
+                    'Moderate',
+                    'e.g. open cholecystectomy, open appendectomy',
+                    '4-6 mL/kg/hr (calculator uses 6 mL/kg/hr)'
+                ],
                 ['Severe', 'e.g. bowel resection', '6-8 mL/kg/hr (calculator uses 8 mL/kg/hr)']
             ],
             stickyFirstColumn: true

@@ -1,7 +1,6 @@
 import { bmiBsaCalculation } from '../../calculators/bmi-bsa/calculation.js';
 
 describe('Body Surface Area (BSA) & BMI Calculator (SaMD Protocol Verification)', () => {
-
     // Phase 2: Technical Verification (Golden Dataset & Boundary Analysis)
 
     test('TC-001: Standard Calculation (Normal Physiological Values)', () => {

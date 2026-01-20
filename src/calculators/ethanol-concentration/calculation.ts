@@ -1,6 +1,6 @@
 ﻿import type { SimpleCalculateFn, FormulaResultItem } from '../../types/calculator-formula.js';
 
-export const calculateEthanolConcentration: SimpleCalculateFn = (values) => {
+export const calculateEthanolConcentration: SimpleCalculateFn = values => {
     const volumeMl = Number(values['eth-amount']);
     const abv = Number(values['eth-abv']);
     const weightKg = Number(values['eth-weight']);
@@ -51,4 +51,3 @@ export const calculateEthanolConcentration: SimpleCalculateFn = (values) => {
 
     return results;
 };
-

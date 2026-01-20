@@ -7,20 +7,20 @@ import { LOINC_CODES, SNOMED_CODES } from '../../fhir-codes.js';
 
 // Baseline event rates (from eTable 5)
 export const BASELINE_RATES = {
-    BLEEDING: 0.057,  // 5.7% for BARC 3-5 at 1 year
-    ISCHEMIC: 0.053   // 5.3% for MI/ST at 1 year
+    BLEEDING: 0.057, // 5.7% for BARC 3-5 at 1 year
+    ISCHEMIC: 0.053 // 5.3% for MI/ST at 1 year
 };
 
 // Mortality hazard ratios after events
 export const MORTALITY_HR = {
-    MI_ST: 6.1,       // HR for death after MI/ST
-    BARC_3_5: 3.7     // HR for death after BARC 3-5 bleeding
+    MI_ST: 6.1, // HR for death after MI/ST
+    BARC_3_5: 3.7 // HR for death after BARC 3-5 bleeding
 };
 
 // Trade-off line slopes
 export const TRADE_OFF_SLOPES = {
     EQUAL: 1.0,
-    MORTALITY_WEIGHTED: MORTALITY_HR.MI_ST / MORTALITY_HR.BARC_3_5  // ~1.65
+    MORTALITY_WEIGHTED: MORTALITY_HR.MI_ST / MORTALITY_HR.BARC_3_5 // ~1.65
 };
 
 // Risk factor definitions with hazard ratios
@@ -46,7 +46,7 @@ export const RISK_FACTORS: RiskFactor[] = [
     {
         id: 'age_65',
         label: 'Age ≥ 65 years',
-        bleedingHR: 1.50,
+        bleedingHR: 1.5,
         ischemicHR: null,
         type: 'condition'
     },
@@ -56,7 +56,7 @@ export const RISK_FACTORS: RiskFactor[] = [
         id: 'hb_lt_11',
         label: 'Hemoglobin < 11 g/dL',
         bleedingHR: 3.99,
-        ischemicHR: 1.50,
+        ischemicHR: 1.5,
         type: 'lab',
         group: 'hemoglobin',
         loincCode: LOINC_CODES.HEMOGLOBIN,
@@ -97,7 +97,7 @@ export const RISK_FACTORS: RiskFactor[] = [
         id: 'egfr_30_59',
         label: 'eGFR 30-59 mL/min',
         bleedingHR: 0.99,
-        ischemicHR: 1.30,
+        ischemicHR: 1.3,
         type: 'lab',
         group: 'egfr',
         loincCode: LOINC_CODES.EGFR,
@@ -168,7 +168,7 @@ export const RISK_FACTORS: RiskFactor[] = [
         id: 'complex_pci',
         label: 'Complex PCI procedure',
         bleedingHR: 1.32,
-        ischemicHR: 1.50,
+        ischemicHR: 1.5,
         type: 'manual'
     },
     {
@@ -181,7 +181,7 @@ export const RISK_FACTORS: RiskFactor[] = [
     {
         id: 'oac_discharge',
         label: 'OAC at discharge',
-        bleedingHR: 2.00,
+        bleedingHR: 2.0,
         ischemicHR: null,
         type: 'manual'
     }
@@ -224,7 +224,10 @@ export function calculateIschemicRisk(selectedFactorIds: string[]): number {
 /**
  * Determine risk zone based on bleeding and ischemic risks
  */
-export function determineRiskZone(bleedingRisk: number, ischemicRisk: number): {
+export function determineRiskZone(
+    bleedingRisk: number,
+    ischemicRisk: number
+): {
     zone: 'ischemic_dominant' | 'equivalent' | 'bleeding_dominant';
     recommendation: string;
     color: string;
@@ -242,13 +245,15 @@ export function determineRiskZone(bleedingRisk: number, ischemicRisk: number): {
     } else if (ischemicRisk >= mortalityWeightedLine) {
         return {
             zone: 'equivalent',
-            recommendation: 'Risks are roughly equivalent considering mortality impact. Individualized decision needed.',
+            recommendation:
+                'Risks are roughly equivalent considering mortality impact. Individualized decision needed.',
             color: '#6b7280' // gray
         };
     } else {
         return {
             zone: 'bleeding_dominant',
-            recommendation: 'Bleeding risk dominates when considering associated mortality. Consider shortened DAPT duration (1-3 months).',
+            recommendation:
+                'Bleeding risk dominates when considering associated mortality. Consider shortened DAPT duration (1-3 months).',
             color: '#f97316' // orange
         };
     }

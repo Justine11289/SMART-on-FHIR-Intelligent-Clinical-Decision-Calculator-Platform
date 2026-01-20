@@ -1,4 +1,4 @@
-import { createScoringCalculator } from '../shared/scoring-calculator.js';
+import { createScoringCalculator, ScoringCalculatorConfig } from '../shared/scoring-calculator.js';
 import { LOINC_CODES } from '../../fhir-codes.js';
 import { uiBuilder } from '../../ui-builder.js';
 import { fhirDataService } from '../../fhir-data-service.js';
@@ -8,7 +8,7 @@ const riskMap = [
     86.6, 90.6
 ];
 
-export const actionIcu = createScoringCalculator({
+export const actionIcuConfig: ScoringCalculatorConfig = {
     id: 'action-icu',
     title: 'ACTION ICU Score for Intensive Care in NSTEMI',
     description:
@@ -94,54 +94,35 @@ export const actionIcu = createScoringCalculator({
     interpretationInfo: `
         <div class="ui-section formula-section">
             <div class="ui-section-title">📐 Scoring Formula</div>
-            <div class="ui-table-wrapper">
-                <table class="ui-table">
-                    <thead>
-                        <tr>
-                            <th>Variable</th>
-                            <th class="text-center">0 points</th>
-                            <th class="text-center">1 point</th>
-                            <th class="text-center">2 points</th>
-                            <th class="text-center">3 points</th>
-                            <th class="text-center">5 points</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>Age, years</td><td class="text-center">&lt;70</td><td class="text-center">≥70</td><td class="text-center">—</td><td class="text-center">—</td><td class="text-center">—</td></tr>
-                        <tr><td>Serum creatinine, mg/dL</td><td class="text-center">&lt;1.1</td><td class="text-center">≥1.1</td><td class="text-center">—</td><td class="text-center">—</td><td class="text-center">—</td></tr>
-                        <tr><td>Heart rate, bpm</td><td class="text-center">&lt;85</td><td class="text-center">85-100</td><td class="text-center">—</td><td class="text-center">≥100</td><td class="text-center">—</td></tr>
-                        <tr><td>Systolic BP, mmHg</td><td class="text-center">≥145</td><td class="text-center">125-145</td><td class="text-center">—</td><td class="text-center">&lt;125</td><td class="text-center">—</td></tr>
-                        <tr><td>Troponin ratio (×ULN)</td><td class="text-center">&lt;12</td><td class="text-center">—</td><td class="text-center">≥12</td><td class="text-center">—</td><td class="text-center">—</td></tr>
-                        <tr><td>Heart failure signs/symptoms</td><td class="text-center">No</td><td class="text-center">—</td><td class="text-center">—</td><td class="text-center">—</td><td class="text-center">Yes</td></tr>
-                        <tr><td>ST depression on EKG</td><td class="text-center">No</td><td class="text-center">Yes</td><td class="text-center">—</td><td class="text-center">—</td><td class="text-center">—</td></tr>
-                        <tr><td>Prior revascularization</td><td class="text-center">Yes</td><td class="text-center">No</td><td class="text-center">—</td><td class="text-center">—</td><td class="text-center">—</td></tr>
-                    </tbody>
-                </table>
-            </div>
+            ${uiBuilder.createTable({
+                headers: ['Variable', '0 points', '1 point', '2 points', '3 points', '5 points'],
+                rows: [
+                    ['Age, years', '<70', '≥70', '—', '—', '—'],
+                    ['Serum creatinine, mg/dL', '<1.1', '≥1.1', '—', '—', '—'],
+                    ['Heart rate, bpm', '<85', '85-100', '—', '≥100', '—'],
+                    ['Systolic BP, mmHg', '≥145', '125-145', '—', '<125', '—'],
+                    ['Troponin ratio (×ULN)', '<12', '—', '≥12', '—', '—'],
+                    ['Heart failure signs/symptoms', 'No', '—', '—', '—', 'Yes'],
+                    ['ST depression on EKG', 'No', 'Yes', '—', '—', '—'],
+                    ['Prior revascularization', 'Yes', 'No', '—', '—', '—']
+                ],
+                className: 'text-center-cells' // Assuming we need to center cells, or rely on default styling. uiBuilder tables usually left align first col, others auto.
+                // The original had specific text-center classes. uiBuilder might not support per-cell classes easily in standard mode without 'className' applied to table or 'createTable' enhancements.
+                // But let's stick to standard uiBuilder table.
+            })}
             
             <div class="ui-section-title mt-20">📊 Risk of Complications Requiring ICU Care</div>
-            <div class="ui-table-wrapper">
-                <table class="ui-table">
-                    <thead>
-                        <tr>
-                            <th class="text-center">Score</th>
-                            <th class="text-center">Risk %</th>
-                            <th class="text-center">Score</th>
-                            <th class="text-center">Risk %</th>
-                            <th class="text-center">Score</th>
-                            <th class="text-center">Risk %</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td class="text-center">0</td><td class="text-center">3.4%</td><td class="text-center">6</td><td class="text-center">16.7%</td><td class="text-center">12</td><td class="text-center">55.4%</td></tr>
-                        <tr><td class="text-center">1</td><td class="text-center">4.8%</td><td class="text-center">7</td><td class="text-center">21.7%</td><td class="text-center">13</td><td class="text-center">62.7%</td></tr>
-                        <tr><td class="text-center">2</td><td class="text-center">6.7%</td><td class="text-center">8</td><td class="text-center">27.5%</td><td class="text-center">14</td><td class="text-center">69.6%</td></tr>
-                        <tr><td class="text-center">3</td><td class="text-center">9.2%</td><td class="text-center">9</td><td class="text-center">33.9%</td><td class="text-center">15</td><td class="text-center">76.0%</td></tr>
-                        <tr><td class="text-center">4</td><td class="text-center">12.5%</td><td class="text-center">10</td><td class="text-center">40.8%</td><td class="text-center">16</td><td class="text-center">81.7%</td></tr>
-                        <tr><td class="text-center">5</td><td class="text-center">16.7%</td><td class="text-center">11</td><td class="text-center">48.0%</td><td class="text-center">&gt;14</td><td class="text-center">≥39.3%</td></tr>
-                    </tbody>
-                </table>
-            </div>
+            ${uiBuilder.createTable({
+                headers: ['Score', 'Risk %', 'Score', 'Risk %', 'Score', 'Risk %'],
+                rows: [
+                    ['0', '3.4%', '6', '16.7%', '12', '55.4%'],
+                    ['1', '4.8%', '7', '21.7%', '13', '62.7%'],
+                    ['2', '6.7%', '8', '27.5%', '14', '69.6%'],
+                    ['3', '9.2%', '9', '33.9%', '15', '76.0%'],
+                    ['4', '12.5%', '10', '40.8%', '16', '81.7%'],
+                    ['5', '16.7%', '11', '48.0%', '>14', '≥39.3%']
+                ]
+            })}
             
             <p class="footnote-item mt-15">
                 *Cardiac arrest, shock, high-grade atrioventricular block, respiratory failure, stroke, or death during index admission.
@@ -163,23 +144,23 @@ export const actionIcu = createScoringCalculator({
 
         return `
             ${uiBuilder.createResultItem({
-            label: 'Total Score',
-            value: score.toString(),
-            unit: 'points',
-            interpretation: riskLevel,
-            alertClass: `ui-alert-${alertType}`
-        })}
+                label: 'Total Score',
+                value: score.toString(),
+                unit: 'points',
+                interpretation: riskLevel,
+                alertClass: `ui-alert-${alertType}`
+            })}
             ${uiBuilder.createResultItem({
-            label: 'ICU Risk',
-            value: riskPercent.toFixed(1),
-            unit: '%',
-            alertClass: `ui-alert-${alertType}`
-        })}
+                label: 'ICU Risk',
+                value: riskPercent.toFixed(1),
+                unit: '%',
+                alertClass: `ui-alert-${alertType}`
+            })}
             ${uiBuilder.createAlert({
-            type: alertType,
-            message:
-                '<strong>Interpretation:</strong> Risk of complications requiring ICU care (cardiac arrest, shock, high-grade AV block, respiratory failure, stroke, death).'
-        })}
+                type: alertType,
+                message:
+                    '<strong>Interpretation:</strong> Risk of complications requiring ICU care (cardiac arrest, shock, high-grade AV block, respiratory failure, stroke, death).'
+            })}
         `;
     },
     customInitialize: (
@@ -266,4 +247,6 @@ export const actionIcu = createScoringCalculator({
 
         calculate();
     }
-});
+};
+
+export const actionIcu = createScoringCalculator(actionIcuConfig);

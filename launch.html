@@ -1,35 +1,28 @@
 <!doctype html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <!-- Security Headers -->
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="default-src 'self' https://cdn.jsdelivr.net https://launch.smarthealthit.org https://*.smarthealthit.org https://*.cerner.com; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; img-src 'self' data: https:; connect-src 'self' https://cdn.jsdelivr.net https://launch.smarthealthit.org https://*.smarthealthit.org https://*.cerner.com; frame-ancestors 'none'; upgrade-insecure-requests;"
+        />
+        <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+        <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+        <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()" />
 
-    <!-- Security Headers -->
-    <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self' https://cdn.jsdelivr.net https://launch.smarthealthit.org https://*.smarthealthit.org; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://cdn.jsdelivr.net https://launch.smarthealthit.org https://*.smarthealthit.org;" />
-    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-    <!-- X-Frame-Options removed - can only be set via HTTP header, not meta tag -->
-    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
-    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()" />
+        <title>CGMH EHRCALC on FHIR</title>
+    </head>
 
-    <title>CGMH EHRCALC on FHIR</title>
-</head>
-
-<body>
-    <script src="https://cdn.jsdelivr.net/npm/fhirclient/build/fhir-client.js"></script>
-    <script>
-        FHIR.oauth2.authorize({
-            // The client_id below is a sample public client for a SMART sandbox.
-            // You can create your own client at https://smarthealthit.org/
-            client_id: 'my-app',
-            // Provide a default issuer for standalone testing
-            iss: 'https://launch.smarthealthit.org/v/r4/fhir',
-            scope: 'openid fhirUser launch/patient patient/Patient.read patient/Observation.read online_access',
-            redirect_uri: './index.html'
-        });
-    </script>
-</body>
-
+    <body>
+        <script
+            src="https://cdn.jsdelivr.net/npm/fhirclient@2.6.3/build/fhir-client.js"
+            integrity="sha384-dGS6R4ht5hVL6tx4pQCGGEFJV/rS1ywziGTuH/fJeDtWoS4YQJeAaF1qu2/0ZXkk"
+            crossorigin="anonymous"
+        ></script>
+        <script src="js/fhir-launch.js"></script>
+    </body>
 </html>

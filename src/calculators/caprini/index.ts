@@ -69,7 +69,10 @@ const sections = [
 ];
 
 // Helper to generate input configs for risk factors
-const generateRiskInputs = (factors: { id: string; label: string }[], points: number): InputConfig[] => {
+const generateRiskInputs = (
+    factors: { id: string; label: string }[],
+    points: number
+): InputConfig[] => {
     return factors.map(f => ({
         type: 'radio',
         id: f.id,
@@ -129,27 +132,9 @@ const config: FormulaCalculatorConfig = {
                 'Pneumatic compression ± stockings',
                 'During hospitalization'
             ],
-            [
-                '5–6',
-                'High',
-                '1.8%',
-                'Pneumatic compression AND Heparin/LMWH',
-                '7–10 days total'
-            ],
-            [
-                '7–8',
-                'High',
-                '4.0%',
-                'Pneumatic compression AND Heparin/LMWH',
-                '7–10 days total'
-            ],
-            [
-                '≥9',
-                'Highest',
-                '10.7%',
-                'Pneumatic compression AND Heparin/LMWH',
-                '30 days total'
-            ]
+            ['5–6', 'High', '1.8%', 'Pneumatic compression AND Heparin/LMWH', '7–10 days total'],
+            ['7–8', 'High', '4.0%', 'Pneumatic compression AND Heparin/LMWH', '7–10 days total'],
+            ['≥9', 'Highest', '10.7%', 'Pneumatic compression AND Heparin/LMWH', '30 days total']
         ],
         footnotes: [
             '*Percent represents VTE risk without prophylaxis. From Bahl 2010.',
@@ -159,7 +144,7 @@ const config: FormulaCalculatorConfig = {
 
     calculate: calculateCaprini,
 
-    customResultRenderer: (results) => {
+    customResultRenderer: results => {
         let html = '';
         results.forEach(item => {
             if (item.label === 'Recommendation' && item.alertPayload) {

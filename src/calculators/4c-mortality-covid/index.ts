@@ -1,9 +1,9 @@
-import { createScoringCalculator } from '../shared/scoring-calculator.js';
+import { createScoringCalculator, ScoringCalculatorConfig } from '../shared/scoring-calculator.js';
 import { LOINC_CODES } from '../../fhir-codes.js';
 import { uiBuilder } from '../../ui-builder.js';
 import { fhirDataService } from '../../fhir-data-service.js';
 
-export const fourCMortalityCovid = createScoringCalculator({
+export const fourCMortalityCovidConfig: ScoringCalculatorConfig = {
     id: '4c-mortality-covid',
     title: '4C Mortality Score for COVID-19',
     description: 'Predicts in-hospital mortality in patients admitted with COVID-19.',
@@ -146,18 +146,18 @@ export const fourCMortalityCovid = createScoringCalculator({
 
         return `
             ${uiBuilder.createResultItem({
-            label: 'Total 4C Score',
-            value: score.toString(),
-            unit: 'points',
-            interpretation: riskGroup,
-            alertClass: alertClass
-        })}
+                label: 'Total 4C Score',
+                value: score.toString(),
+                unit: 'points',
+                interpretation: riskGroup,
+                alertClass: alertClass
+            })}
             ${uiBuilder.createResultItem({
-            label: 'Estimated In-Hospital Mortality',
-            value: mortality,
-            unit: '',
-            alertClass: alertClass
-        })}
+                label: 'Estimated In-Hospital Mortality',
+                value: mortality,
+                unit: '',
+                alertClass: alertClass
+            })}
         `;
     },
     formulaSection: {
@@ -339,4 +339,6 @@ export const fourCMortalityCovid = createScoringCalculator({
 
         calculate();
     }
-});
+};
+
+export const fourCMortalityCovid = createScoringCalculator(fourCMortalityCovidConfig);

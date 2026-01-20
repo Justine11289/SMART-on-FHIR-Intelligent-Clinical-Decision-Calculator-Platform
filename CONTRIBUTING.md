@@ -23,32 +23,36 @@
 ### 设置步骤
 
 1. **Fork 仓库**
-   ```bash
-   # 访问 https://github.com/Lusnaker0730/MEDCALCEHR
-   # 点击 Fork 按钮
-   ```
+
+    ```bash
+    # 访问 https://github.com/Lusnaker0730/MEDCALCEHR
+    # 点击 Fork 按钮
+    ```
 
 2. **克隆您的 Fork**
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/MEDCALCEHR.git
-   cd MEDCALCEHR
-   ```
+
+    ```bash
+    git clone https://github.com/YOUR_USERNAME/MEDCALCEHR.git
+    cd MEDCALCEHR
+    ```
 
 3. **安装依赖**
-   ```bash
-   npm install
-   ```
+
+    ```bash
+    npm install
+    ```
 
 4. **运行开发服务器**
-   ```bash
-   npm start
-   # 访问 http://localhost:8000
-   ```
+
+    ```bash
+    npm start
+    # 访问 http://localhost:8000
+    ```
 
 5. **运行测试**
-   ```bash
-   npm test
-   ```
+    ```bash
+    npm test
+    ```
 
 ---
 
@@ -173,30 +177,35 @@ git push origin feature/my-new-calculator
 1. 访问您的 Fork 页面
 2. 点击 "New Pull Request"
 3. 填写 PR 描述:
-   - 简要说明更改内容
-   - 列出相关的 issue 编号
-   - 添加测试说明
-   - 附上截图（如果是 UI 更改）
+    - 简要说明更改内容
+    - 列出相关的 issue 编号
+    - 添加测试说明
+    - 附上截图（如果是 UI 更改）
 
 ### PR 描述模板
 
 ```markdown
 ## 📝 更改描述
+
 简要描述此 PR 的内容...
 
 ## 🎯 相关 Issue
+
 Closes #123
 
 ## ✅ 测试清单
+
 - [ ] 单元测试通过
 - [ ] 手动测试通过
 - [ ] 代码已格式化
 - [ ] 文档已更新
 
 ## 📸 截图
+
 （如适用）
 
 ## 💭 额外备注
+
 （如有其他需要说明的内容）
 ```
 
@@ -224,8 +233,8 @@ export const myCalculator = {
     id: 'my-calculator',
     title: 'My Calculator Name',
     description: 'Brief description of what this calculator does',
-    
-    generateHTML: function() {
+
+    generateHTML: function () {
         return `
             <h3>${this.title}</h3>
             <p class="description">${this.description}</p>
@@ -245,17 +254,17 @@ export const myCalculator = {
             </div>
         `;
     },
-    
-    initialize: function(client, patient, container) {
+
+    initialize: function (client, patient, container) {
         const ageInput = container.querySelector('#my-calc-age');
         const resultEl = container.querySelector('#my-calc-result');
         const calculateBtn = container.querySelector('#calculate-my-calc');
-        
+
         // 自动填充患者数据
         if (patient && patient.birthDate) {
             ageInput.value = calculateAge(patient.birthDate);
         }
-        
+
         // 计算逻辑
         calculateBtn.addEventListener('click', () => {
             try {
@@ -264,18 +273,15 @@ export const myCalculator = {
                 const validation = validateCalculatorInput(input, {
                     age: ValidationRules.age
                 });
-                
+
                 if (!validation.isValid) {
-                    throw new CalculatorError(
-                        validation.errors.join(', '),
-                        'VALIDATION_ERROR'
-                    );
+                    throw new CalculatorError(validation.errors.join(', '), 'VALIDATION_ERROR');
                 }
-                
+
                 // 执行计算
                 const age = parseInt(ageInput.value);
                 const result = age * 2; // 示例计算
-                
+
                 // 显示结果
                 resultEl.innerHTML = `
                     <div class="result-item">
@@ -284,7 +290,6 @@ export const myCalculator = {
                     </div>
                 `;
                 resultEl.style.display = 'block';
-                
             } catch (error) {
                 displayError(resultEl, error);
             }
@@ -311,8 +316,7 @@ export const calculatorModules = [
 ```javascript
 const calculatorMap = {
     // ...existing calculators...
-    'my-calculator': () => import('./calculators/my-calculator/index.js')
-        .then(m => m.myCalculator)
+    'my-calculator': () => import('./calculators/my-calculator/index.js').then(m => m.myCalculator)
 };
 ```
 
@@ -333,6 +337,7 @@ describe('My Calculator', () => {
 ### 6. 添加文档
 
 如果计算器有特殊的临床意义，添加：
+
 - 参考文献（`.nbib` 或 `.ris` 文件）
 - 参考图片（`.png` 或 `.jpg` 文件）
 
@@ -381,8 +386,8 @@ describe('My Calculator', () => {
 ## 📞 联系方式
 
 如有任何问题，请：
+
 - 创建 GitHub Issue
 - 发送邮件至: [your-email@example.com]
 
 感谢您的贡献！🎉
-

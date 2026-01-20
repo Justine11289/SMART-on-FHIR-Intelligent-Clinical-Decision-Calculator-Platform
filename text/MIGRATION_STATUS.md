@@ -1,9 +1,11 @@
 # 計算器遷移狀態報告
+
 生成時間: 2025-12-21 08:50
 
 ## ✅ 已完成遷移
 
 ### 本批次完成（14個）：
+
 1. ✅ growth-chart - Pediatric Growth Chart
 2. ✅ nafld-fibrosis-score - NAFLD Fibrosis Score
 3. ✅ nihss - NIH Stroke Scale
@@ -20,11 +22,13 @@
 14. ✅ steroid-conversion - Steroid Conversion Calculator
 
 ### 之前完成（部分列出）：
+
 - gupta-mica, mdrd-gfr, mews, maintenance-fluids, gwtg-hf
 - hscore, isth-dic, maggic, mme
 - charlson, child-pugh, ciwa-ar, ckd-epi, cpis, etc.
 
 ## ⏳ 剩餘待遷移（0個）
+
 所有計算器模組皆已完成 TypeScript 遷移。
 
 ## 📊 進度統計
@@ -43,6 +47,7 @@
 ## 📝 成果總結
 
 所有計算器均已成功遷移至 TypeScript，並整合了：
+
 - **統一 UI**: 使用 `uiBuilder` 標準化介面
 - **FHIR 整合**: 使用 `createStalenessTracker` 追蹤數據過期狀態
 - **型別安全**: 完整的 TypeScript 型別定義

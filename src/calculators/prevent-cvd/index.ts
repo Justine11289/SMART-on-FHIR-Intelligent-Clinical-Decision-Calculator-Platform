@@ -3,8 +3,8 @@
  *
  * Uses Unified Formula Calculator factory function.
  * Predicts 10-year risk of total cardiovascular disease.
- * 
- * Reference: Khan SS, et al. Development and Validation of the 
+ *
+ * Reference: Khan SS, et al. Development and Validation of the
  * American Heart Association's PREVENT Equations. Circulation. 2024.
  */
 
@@ -30,7 +30,14 @@ export const preventCVD = createUnifiedFormulaCalculator({
             title: 'Patient Characteristics',
             icon: '👤',
             fields: [
-                { id: 'prevent-age', label: 'Age', unit: 'years', min: 30, max: 79, validationType: 'age' },
+                {
+                    id: 'prevent-age',
+                    label: 'Age',
+                    unit: 'years',
+                    min: 30,
+                    max: 79,
+                    validationType: 'age'
+                },
                 {
                     type: 'radio',
                     id: 'prevent-gender',
@@ -50,7 +57,12 @@ export const preventCVD = createUnifiedFormulaCalculator({
             title: 'Clinical Measurements',
             icon: '🩺',
             fields: [
-                { id: 'prevent-sbp', label: 'Systolic BP', unit: 'mmHg', validationType: 'systolicBP' },
+                {
+                    id: 'prevent-sbp',
+                    label: 'Systolic BP',
+                    unit: 'mmHg',
+                    validationType: 'systolicBP'
+                },
                 {
                     id: 'prevent-cholesterol',
                     label: 'Total Cholesterol',
@@ -60,7 +72,8 @@ export const preventCVD = createUnifiedFormulaCalculator({
                         units: ['mmol/L', 'mg/dL'],
                         default: 'mmol/L'
                     },
-                    validationType: 'totalCholesterol'
+                    validationType: 'totalCholesterol',
+                    loincCode: LOINC_CODES.TOTAL_CHOLESTEROL
                 },
                 {
                     id: 'prevent-hdl',
@@ -71,9 +84,16 @@ export const preventCVD = createUnifiedFormulaCalculator({
                         units: ['mmol/L', 'mg/dL'],
                         default: 'mmol/L'
                     },
-                    validationType: 'hdl'
+                    validationType: 'hdl',
+                    loincCode: LOINC_CODES.HDL_CHOLESTEROL
                 },
-                { id: 'prevent-egfr', label: 'eGFR', unit: 'mL/min/1.73m²', validationType: 'egfr' }
+                {
+                    id: 'prevent-egfr',
+                    label: 'eGFR',
+                    unit: 'mL/min/1.73m²',
+                    validationType: 'egfr',
+                    loincCode: LOINC_CODES.EGFR
+                }
             ]
         }
     ],
@@ -85,7 +105,8 @@ export const preventCVD = createUnifiedFormulaCalculator({
     formulaSection: {
         show: true,
         title: 'PREVENT EQUATIONS FORMULA',
-        calculationNote: 'The model coefficients to calculate 10-year total CVD risk are as follows:',
+        calculationNote:
+            'The model coefficients to calculate 10-year total CVD risk are as follows:',
         tableHeaders: ['Variable', 'Transformation', 'Female', 'Male'],
         rows: [
             ['Age, years', 'cage = (age − 55)/10', '0.7939', '0.7689'],
@@ -117,7 +138,7 @@ export const preventCVD = createUnifiedFormulaCalculator({
     },
 
     references: [
-        'Khan SS, Matsushita K, Sang Y, et al. Development and Validation of the American Heart Association\'s PREVENT Equations. <em>Circulation</em>. 2024;149(6):430-449.',
+        "Khan SS, Matsushita K, Sang Y, et al. Development and Validation of the American Heart Association's PREVENT Equations. <em>Circulation</em>. 2024;149(6):430-449.",
         'Predicting Risk of cardiovascular disease EVENTs (PREVENT) Calculator. <a href="https://professional.heart.org/en/guidelines-and-statements/prevent-calculator" target="_blank">AHA Professional Heart</a>'
     ],
 

@@ -1,19 +1,22 @@
 import { uiBuilder } from '../../ui-builder.js';
 import { createUnifiedFormulaCalculator } from '../shared/unified-formula-calculator.js';
 import { calculateHOMAIR } from './calculation.js';
+import { LOINC_CODES } from '../../fhir-codes.js';
 import type { FormulaCalculatorConfig } from '../../types/calculator-formula.js';
 
 export const homaIrConfig: FormulaCalculatorConfig = {
     id: 'homa-ir',
     title: 'HOMA-IR (Homeostatic Model Assessment for Insulin Resistance)',
     description: 'Approximates insulin resistance.',
-    infoAlert: `<strong>Interpretation:</strong>` + uiBuilder.createList({
-        items: [
-            '<strong>< 1.9:</strong> Optimal insulin sensitivity',
-            '<strong>1.9 - 2.9:</strong> Early insulin resistance is likely',
-            '<strong>> 2.9:</strong> High likelihood of insulin resistance'
-        ]
-    }),
+    infoAlert:
+        `<strong>Interpretation:</strong>` +
+        uiBuilder.createList({
+            items: [
+                '<strong>< 1.9:</strong> Optimal insulin sensitivity',
+                '<strong>1.9 - 2.9:</strong> Early insulin resistance is likely',
+                '<strong>> 2.9:</strong> High likelihood of insulin resistance'
+            ]
+        }),
     sections: [
         {
             title: 'Parameters',
@@ -30,7 +33,7 @@ export const homaIrConfig: FormulaCalculatorConfig = {
                         default: 'mg/dL'
                     },
                     validationType: 'glucose',
-                    loincCode: '2339-0',
+                    loincCode: LOINC_CODES.FASTING_GLUCOSE,
                     standardUnit: 'mg/dL',
                     required: true
                 },
@@ -45,7 +48,7 @@ export const homaIrConfig: FormulaCalculatorConfig = {
                         default: 'µU/mL'
                     },
                     validationType: 'insulin',
-                    loincCode: '20448-7',
+                    loincCode: LOINC_CODES.INSULIN_LEVEL,
                     standardUnit: 'µU/mL',
                     required: true
                 }
@@ -55,7 +58,8 @@ export const homaIrConfig: FormulaCalculatorConfig = {
     formulas: [
         {
             label: 'HOMA-IR',
-            formula: '<span class="formula-fraction"><span class="numerator">Fasting Glucose (mg/dL) × Fasting Insulin (µU/mL)</span><span class="denominator">405</span></span>'
+            formula:
+                '<span class="formula-fraction"><span class="numerator">Fasting Glucose (mg/dL) × Fasting Insulin (µU/mL)</span><span class="denominator">405</span></span>'
         }
     ],
     calculate: calculateHOMAIR

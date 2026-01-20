@@ -27,6 +27,7 @@ js/                             # 編譯輸出目錄 (tsconfig.json outDir)
 ## 🔧 常用指令
 
 ### 編譯 TypeScript
+
 ```bash
 npm run build:ts
 # 或
@@ -34,6 +35,7 @@ npx tsc -p tsconfig.json
 ```
 
 ### 清理編譯產物
+
 ```bash
 npm run clean:ts
 # 或
@@ -41,6 +43,7 @@ powershell -ExecutionPolicy Bypass -File clean-ts-output.ps1
 ```
 
 ### 重新編譯 (清理+編譯)
+
 ```bash
 npm run rebuild:ts
 ```
@@ -52,22 +55,22 @@ npm run rebuild:ts
 以下檔案是手動編寫的，**不是編譯產物**：
 
 1. **`src/*.d.ts`** - 類型宣告檔案
-   - `src/ui-builder.d.ts`
-   - `src/fhir-codes.d.ts`
-   - `src/utils.d.ts`
-   - `src/validator.d.ts`
-   - `src/errorHandler.d.ts`
-   - `src/unit-converter.d.ts`
-   - `src/data-staleness.d.ts`
-   - `src/fhir-data-service.d.ts`
+    - `src/ui-builder.d.ts`
+    - `src/fhir-codes.d.ts`
+    - `src/utils.d.ts`
+    - `src/validator.d.ts`
+    - `src/errorHandler.d.ts`
+    - `src/unit-converter.d.ts`
+    - `src/data-staleness.d.ts`
+    - `src/fhir-data-service.d.ts`
 
-2. **`src/**/calculation.js`** - 輔助計算檔案
-   - `src/calculators/ethanol-concentration/calculation.js`
-   - `src/calculators/intraop-fluid/calculation.js`
-   - `src/calculators/nafld-fibrosis-score/calculation.js`
+2. **`src/**/calculation.js`\*\* - 輔助計算檔案
+    - `src/calculators/ethanol-concentration/calculation.js`
+    - `src/calculators/intraop-fluid/calculation.js`
+    - `src/calculators/nafld-fibrosis-score/calculation.js`
 
-3. **`src/**/cdc-data.js`** - 資料檔案
-   - `src/calculators/growth-chart/cdc-data.js`
+3. **`src/**/cdc-data.js`\*\* - 資料檔案
+    - `src/calculators/growth-chart/cdc-data.js`
 
 ### 可安全清理的檔案
 

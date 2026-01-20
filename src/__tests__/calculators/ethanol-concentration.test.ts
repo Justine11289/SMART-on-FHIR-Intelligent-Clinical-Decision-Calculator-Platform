@@ -1,13 +1,13 @@
 /**
  * Ethanol Concentration Calculator - SaMD Verification Tests
- * 
+ *
  * Formula: Concentration (mg/dL) = (Grams × 1000) / (Weight × Vd × 10)
  * Where:
  *   - Grams of Alcohol = Volume (mL) × (ABV% / 100) × 0.789
  *   - Vd (Volume of Distribution): Male = 0.68 L/kg, Female = 0.55 L/kg
- * 
+ *
  * Reference: Standard pharmacokinetic ethanol calculations
- * 
+ *
  * Clinical Thresholds:
  *   - < 80 mg/dL: Below Legal Limit (success)
  *   - 80-299 mg/dL: Above Legal Limit (warning)
@@ -21,14 +21,14 @@ describe('Ethanol Concentration Calculator', () => {
     // ===========================================
     // TC-001: Standard Calculation Tests
     // ===========================================
-    
+
     describe('Standard Calculations', () => {
         test('Should calculate correct concentration for Male (standard drink)', () => {
             // 1.5 fl oz (44.36 mL) of 40% ABV whiskey, 70 kg male
             // Grams = 44.36 * 0.4 * 0.789 = 14.0 g
             // Concentration = (14.0 * 1000) / (70 * 0.68 * 10) = 14000 / 476 = 29.4 mg/dL
             const result = calculateEthanolConcentration({
-                'eth-amount': 44.36,  // mL (after conversion from fl oz)
+                'eth-amount': 44.36, // mL (after conversion from fl oz)
                 'eth-abv': 40,
                 'eth-weight': 70,
                 'eth-gender': 'male'
@@ -76,7 +76,7 @@ describe('Ethanol Concentration Calculator', () => {
     // ===========================================
     // TC-002: Severity Classification Tests
     // ===========================================
-    
+
     describe('Severity Classification', () => {
         test('Should identify "Above Legal Limit" (80-299 mg/dL)', () => {
             // High volume to exceed legal limit
@@ -141,7 +141,7 @@ describe('Ethanol Concentration Calculator', () => {
     // ===========================================
     // TC-003: Boundary Value Tests
     // ===========================================
-    
+
     describe('Boundary Values', () => {
         test('Should handle minimum valid inputs', () => {
             const result = calculateEthanolConcentration({
@@ -176,7 +176,7 @@ describe('Ethanol Concentration Calculator', () => {
     // ===========================================
     // TC-004: Invalid Input Tests
     // ===========================================
-    
+
     describe('Invalid Inputs', () => {
         test('Should return null for zero volume', () => {
             const result = calculateEthanolConcentration({
@@ -234,15 +234,15 @@ describe('Ethanol Concentration Calculator', () => {
     // ===========================================
     // TC-005: Golden Dataset Verification
     // ===========================================
-    
+
     describe('Golden Dataset', () => {
         const goldenDataset = [
             // volume, abv, weight, gender, expectedConcentration
             { v: 44.36, abv: 40, w: 70, g: 'male', expected: 29 },
             { v: 44.36, abv: 40, w: 70, g: 'female', expected: 36 },
             { v: 355, abv: 5, w: 70, g: 'male', expected: 29 },
-            { v: 710, abv: 5, w: 70, g: 'male', expected: 59 },  // 2 beers
-            { v: 150, abv: 12, w: 60, g: 'female', expected: 43 }, // wine
+            { v: 710, abv: 5, w: 70, g: 'male', expected: 59 }, // 2 beers
+            { v: 150, abv: 12, w: 60, g: 'female', expected: 43 } // wine
         ];
 
         goldenDataset.forEach((data, index) => {
@@ -260,4 +260,3 @@ describe('Ethanol Concentration Calculator', () => {
         });
     });
 });
-

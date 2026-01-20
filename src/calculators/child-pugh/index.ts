@@ -7,14 +7,16 @@ export const childPugh = createUnifiedFormulaCalculator({
     id: 'child-pugh',
     title: 'Child-Pugh Score for Cirrhosis Mortality',
     description: 'Estimates cirrhosis severity and prognosis.',
-    infoAlert: '<h4>Child-Pugh Classification:</h4>' + uiBuilder.createList({
-        items: [
-            '<strong>Class A (5-6 points):</strong> Good prognosis',
-            '<strong>Class B (7-9 points):</strong> Moderate prognosis',
-            '<strong>Class C (10-15 points):</strong> Poor prognosis'
-        ],
-        className: 'info-list'
-    }),
+    infoAlert:
+        '<h4>Child-Pugh Classification:</h4>' +
+        uiBuilder.createList({
+            items: [
+                '<strong>Class A (5-6 points):</strong> Good prognosis',
+                '<strong>Class B (7-9 points):</strong> Moderate prognosis',
+                '<strong>Class C (10-15 points):</strong> Poor prognosis'
+            ],
+            className: 'info-list'
+        }),
     sections: [
         {
             title: 'Laboratory Parameters',
@@ -103,7 +105,7 @@ export const childPugh = createUnifiedFormulaCalculator({
         }
     ],
     calculate: childPughCalculation,
-    customResultRenderer: (results) => {
+    customResultRenderer: results => {
         const res = results[0];
         if (!res) return '';
 
@@ -113,17 +115,17 @@ export const childPugh = createUnifiedFormulaCalculator({
 
         return `
             ${uiBuilder.createResultItem({
-            label: res.label,
-            value: res.value.toString(),
-            unit: res.unit,
-            interpretation: res.interpretation,
-            alertClass: `ui-alert-${alertClass}`
-        })}
+                label: res.label,
+                value: res.value.toString(),
+                unit: res.unit,
+                interpretation: res.interpretation,
+                alertClass: `ui-alert-${alertClass}`
+            })}
             
             ${uiBuilder.createAlert({
-            type: alertClass as 'info' | 'success' | 'warning' | 'danger',
-            message: `<strong>Prognosis:</strong><br>${prognosis.replace(/\n/g, '<br>')}`
-        })}
+                type: alertClass as 'info' | 'success' | 'warning' | 'danger',
+                message: `<strong>Prognosis:</strong><br>${prognosis.replace(/\n/g, '<br>')}`
+            })}
         `;
     }
 });

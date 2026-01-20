@@ -7,14 +7,17 @@ export const serumAnionGap = createUnifiedFormulaCalculator({
     id: 'serum-anion-gap',
     title: 'Serum Anion Gap',
     description: 'Evaluates states of metabolic acidosis.',
-    infoAlert: '<h4>Interpretation:</h4>' + uiBuilder.createList({
-        items: [
-            '<strong>Normal Range:</strong> 6-12 mEq/L',
-            '<strong>High (>12):</strong> High Anion Gap Metabolic Acidosis (MUDPILES)',
-            '<strong>Low (<6):</strong> Uncommon, possible lab error or hypoalbuminemia'
-        ],
-        className: 'info-list'
-    }) + '<p class="mt-10"><strong>Note:</strong> For every 1 g/dL decrease in albumin below 4 g/dL, add 2.5 mEq/L to the anion gap (corrected gap).</p>',
+    infoAlert:
+        '<h4>Interpretation:</h4>' +
+        uiBuilder.createList({
+            items: [
+                '<strong>Normal Range:</strong> 6-12 mEq/L',
+                '<strong>High (>12):</strong> High Anion Gap Metabolic Acidosis (MUDPILES)',
+                '<strong>Low (<6):</strong> Uncommon, possible lab error or hypoalbuminemia'
+            ],
+            className: 'info-list'
+        }) +
+        '<p class="mt-10"><strong>Note:</strong> For every 1 g/dL decrease in albumin below 4 g/dL, add 2.5 mEq/L to the anion gap (corrected gap).</p>',
     sections: [
         {
             title: 'Electrolytes',
@@ -71,11 +74,12 @@ export const serumAnionGap = createUnifiedFormulaCalculator({
     formulas: [
         {
             label: 'Formulas',
-            formula: '<ol class="info-list" style="list-style-type: decimal; padding-left: 20px;"><li><strong>Anion Gap</strong> = Na − (Cl + HCO3⁻)</li></ol>'
+            formula:
+                '<ol class="info-list" style="list-style-type: decimal; padding-left: 20px;"><li><strong>Anion Gap</strong> = Na − (Cl + HCO3⁻)</li></ol>'
         }
     ],
     calculate: serumAnionGapCalculation,
-    customResultRenderer: (results) => {
+    customResultRenderer: results => {
         const res = results[0];
         if (!res) return '';
 
@@ -85,16 +89,16 @@ export const serumAnionGap = createUnifiedFormulaCalculator({
 
         return `
             ${uiBuilder.createResultItem({
-            label: res.label,
-            value: res.value,
-            unit: res.unit,
-            interpretation: res.interpretation,
-            alertClass: `ui-alert-${alertClass}`
-        })}
+                label: res.label,
+                value: res.value,
+                unit: res.unit,
+                interpretation: res.interpretation,
+                alertClass: `ui-alert-${alertClass}`
+            })}
             ${uiBuilder.createAlert({
-            type: alertClass as 'success' | 'warning' | 'danger' | 'info',
-            message: alertMsg
-        })}
+                type: alertClass as 'success' | 'warning' | 'danger' | 'info',
+                message: alertMsg
+            })}
         `;
     }
 });

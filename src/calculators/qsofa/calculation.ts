@@ -1,14 +1,19 @@
 ﻿import { AlertSeverity } from '../../types/calculator-base.js';
 import { FormulaResultItem } from '../../types/calculator-formula.js';
 
-export function qsofaCalculation(values: Record<string, number | string | boolean>): FormulaResultItem[] {
+export function qsofaCalculation(
+    values: Record<string, number | string | boolean>
+): FormulaResultItem[] {
     const rrInput = values['rr'];
     const sbpInput = values['sbp'];
     const gcsInput = values['gcs'];
     const amsInput = values['ams'];
 
     if (
-        (rrInput === undefined && sbpInput === undefined && gcsInput === undefined && amsInput === undefined)
+        rrInput === undefined &&
+        sbpInput === undefined &&
+        gcsInput === undefined &&
+        amsInput === undefined
     ) {
         return [];
     }

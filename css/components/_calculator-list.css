@@ -19,7 +19,6 @@
 
 /* 確保大螢幕時至少可以排四個 (如果容器夠寬) */
 @media (min-width: 1400px) {
-
     .calculator-list,
     #calculator-list {
         grid-template-columns: repeat(4, 1fr);
@@ -171,7 +170,6 @@
    =================== */
 
 @keyframes pulse {
-
     0%,
     100% {
         opacity: 1;

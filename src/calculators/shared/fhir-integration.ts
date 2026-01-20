@@ -29,6 +29,8 @@ export interface FHIRAutoPopulateConfig {
     targetUnit?: string;
     /** 小數位數 */
     decimals?: number;
+    /** 最大快取時間（小時） */
+    maxAgeHours?: number;
     /** 值轉換函數 */
     transform?: (value: number) => number;
 }

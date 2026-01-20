@@ -1,6 +1,6 @@
 ﻿import { SimpleCalculateFn } from '../../types/calculator-formula.js';
 
-export const calculateFENa: SimpleCalculateFn = (values) => {
+export const calculateFENa: SimpleCalculateFn = values => {
     const uNa = Number(values['fena-urine-na']);
     const sNa = Number(values['fena-serum-na']);
     const uCr = Number(values['fena-urine-creat']);
@@ -10,7 +10,7 @@ export const calculateFENa: SimpleCalculateFn = (values) => {
     if (sNa === 0 || uCr === 0) return null; // Avoid division by zero
 
     // FENa = (Urine Na / Serum Na) / (Urine Cr / Serum Cr) * 100
-    const fena = (uNa / sNa) / (uCr / sCr) * 100;
+    const fena = (uNa / sNa / (uCr / sCr)) * 100;
 
     let interpretation = '';
     let alertClass: 'success' | 'warning' | 'danger' | 'info' = 'info';

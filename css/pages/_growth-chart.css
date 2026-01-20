@@ -18,7 +18,10 @@
 }
 
 .info-card {
-    background: var(--bg-card, linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%));
+    background: var(
+        --bg-card,
+        linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%)
+    );
     border: 2px solid var(--border-color-light, rgba(102, 126, 234, 0.1));
     border-radius: 16px;
     padding: 20px;
@@ -160,7 +163,10 @@
    =================== */
 
 .clinical-interpretation {
-    background: var(--bg-card, linear-gradient(135deg, rgba(248, 249, 250, 0.9) 0%, rgba(241, 245, 249, 0.9) 100%));
+    background: var(
+        --bg-card,
+        linear-gradient(135deg, rgba(248, 249, 250, 0.9) 0%, rgba(241, 245, 249, 0.9) 100%)
+    );
     border: 2px solid var(--border-color-light, rgba(102, 126, 234, 0.1));
     border-radius: 16px;
     padding: 25px;
@@ -226,7 +232,10 @@
    =================== */
 
 .percentile-reference {
-    background: var(--bg-card, linear-gradient(135deg, rgba(248, 249, 250, 0.9) 0%, rgba(241, 245, 249, 0.9) 100%));
+    background: var(
+        --bg-card,
+        linear-gradient(135deg, rgba(248, 249, 250, 0.9) 0%, rgba(241, 245, 249, 0.9) 100%)
+    );
     border: 2px solid var(--border-color-light, rgba(102, 126, 234, 0.1));
     border-radius: 16px;
     padding: 25px;
@@ -323,7 +332,10 @@
    =================== */
 
 .growth-velocity-section {
-    background: var(--bg-card, linear-gradient(135deg, rgba(248, 249, 250, 0.9) 0%, rgba(241, 245, 249, 0.9) 100%));
+    background: var(
+        --bg-card,
+        linear-gradient(135deg, rgba(248, 249, 250, 0.9) 0%, rgba(241, 245, 249, 0.9) 100%)
+    );
     border: 2px solid var(--border-color-light, rgba(102, 126, 234, 0.1));
     border-radius: 16px;
     padding: 25px;
@@ -396,7 +408,10 @@
 .no-growth-data {
     text-align: center;
     padding: 40px;
-    background: var(--bg-warning-light, linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(245, 158, 11, 0.1) 100%));
+    background: var(
+        --bg-warning-light,
+        linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(245, 158, 11, 0.1) 100%)
+    );
     border: 2px solid var(--border-warning, rgba(251, 191, 36, 0.3));
     border-radius: 16px;
     margin: 20px 0;

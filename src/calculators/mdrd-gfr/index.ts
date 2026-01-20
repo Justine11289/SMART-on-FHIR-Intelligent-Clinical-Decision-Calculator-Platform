@@ -7,10 +7,12 @@ import type { FormulaCalculatorConfig } from '../../types/calculator-formula.js'
 export const mdrdGfrConfig: FormulaCalculatorConfig = {
     id: 'mdrd-gfr',
     title: 'MDRD GFR Equation',
-    description: 'Estimates GFR using the MDRD equation. Note: CKD-EPI is now preferred for most patients.',
+    description:
+        'Estimates GFR using the MDRD equation. Note: CKD-EPI is now preferred for most patients.',
     infoAlert: uiBuilder.createAlert({
         type: 'info',
-        message: '<strong>Note:</strong> MDRD is less accurate at higher GFR values (>60). Consider using CKD-EPI for general use.'
+        message:
+            '<strong>Note:</strong> MDRD is less accurate at higher GFR values (>60). Consider using CKD-EPI for general use.'
     }),
     inputs: [
         {
@@ -61,28 +63,29 @@ export const mdrdGfrConfig: FormulaCalculatorConfig = {
     calculate: calculateMDRD,
     autoPopulateAge: 'mdrd-age',
     autoPopulateGender: 'mdrd-gender',
-    customResultRenderer: (results) => {
+    customResultRenderer: results => {
         const res = results[0];
         if (!res) return '';
 
         let note = '';
         if (res.alertClass === 'success') note = 'Normal or mildly decreased kidney function.';
         else if (res.alertClass === 'warning') note = 'Moderate reduction. Monitor closely.';
-        else if (res.alertClass === 'danger') note = 'Severe reduction or kidney failure. Immediate attention required.';
+        else if (res.alertClass === 'danger')
+            note = 'Severe reduction or kidney failure. Immediate attention required.';
 
         return `
             ${uiBuilder.createResultItem({
-            label: res.label,
-            value: res.value.toString(),
-            unit: res.unit,
-            interpretation: res.interpretation,
-            alertClass: `ui-alert-${res.alertClass}`
-        })}
+                label: res.label,
+                value: res.value.toString(),
+                unit: res.unit,
+                interpretation: res.interpretation,
+                alertClass: `ui-alert-${res.alertClass}`
+            })}
             
             ${uiBuilder.createAlert({
-            type: res.alertClass === 'success' ? 'info' : res.alertClass as any,
-            message: note
-        })}
+                type: res.alertClass === 'success' ? 'info' : (res.alertClass as any),
+                message: note
+            })}
         `;
     }
 };

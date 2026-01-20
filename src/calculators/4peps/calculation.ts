@@ -1,12 +1,17 @@
 import type { SimpleCalculateFn, FormulaResultItem } from '../../types/calculator-formula.js';
 
-export const calculateFourPeps: SimpleCalculateFn = (values) => {
+export const calculateFourPeps: SimpleCalculateFn = values => {
     let score = 0;
 
     // Age scoring
     // Note: unified calculator passes values as strings or numbers, so we parse safely
     const ageVal = values['fourpeps-age'];
-    const age = typeof ageVal === 'string' ? parseFloat(ageVal) : (typeof ageVal === 'number' ? ageVal : null);
+    const age =
+        typeof ageVal === 'string'
+            ? parseFloat(ageVal)
+            : typeof ageVal === 'number'
+              ? ageVal
+              : null;
 
     if (age !== null && !isNaN(age)) {
         if (age < 50) {
@@ -58,8 +63,7 @@ export const calculateFourPeps: SimpleCalculateFn = (values) => {
         probability = '20-65%';
         riskLevel = 'Moderate CPP';
         alertType = 'warning';
-        recommendation =
-            'PE can be ruled out if D-dimer level <0.5 µg/mL OR <(age x 0.01) µg/mL.';
+        recommendation = 'PE can be ruled out if D-dimer level <0.5 µg/mL OR <(age x 0.01) µg/mL.';
     } else {
         probability = '>65%';
         riskLevel = 'High CPP';

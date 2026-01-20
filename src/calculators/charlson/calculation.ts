@@ -1,6 +1,6 @@
 import type { SimpleCalculateFn, FormulaResultItem } from '../../types/calculator-formula.js';
 
-export const calculateCharlson: SimpleCalculateFn = (values) => {
+export const calculateCharlson: SimpleCalculateFn = values => {
     let score = 0;
 
     // All inputs are radios returning '0' or points (e.g. '1', '2', '3', '6').

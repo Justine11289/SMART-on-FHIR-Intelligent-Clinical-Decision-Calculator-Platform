@@ -3,7 +3,7 @@ import { serumOsmolalityCalculation } from '../../calculators/serum-osmolality/c
 describe('Serum Osmolality Calculator', () => {
     test('Should calculate standard values correctly', () => {
         // Na 140, Glucose 100, BUN 15, Ethanol 0
-        // 2*140 + 100/18 + 15/2.8 + 0 
+        // 2*140 + 100/18 + 15/2.8 + 0
         // 280 + 5.55 + 5.36 + 0 = 290.91
         const result = serumOsmolalityCalculation({
             'osmo-na': 140,
@@ -67,7 +67,7 @@ describe('Serum Osmolality Calculator', () => {
         const result = serumOsmolalityCalculation({
             'osmo-na': 140,
             'osmo-glucose': 180, // /18 = 10
-            'osmo-bun': 28,      // /2.8 = 10
+            'osmo-bun': 28, // /2.8 = 10
             'osmo-ethanol': 0
         });
 

@@ -35,12 +35,12 @@
    Base Input Styles
    =================== */
 
-input[type="text"],
-input[type="number"],
-input[type="email"],
-input[type="password"],
-input[type="date"],
-input[type="search"],
+input[type='text'],
+input[type='number'],
+input[type='email'],
+input[type='password'],
+input[type='date'],
+input[type='search'],
 textarea,
 select,
 .ui-input,
@@ -48,15 +48,15 @@ select,
     width: 100%;
     height: var(--input-height);
     padding: var(--input-padding-y) var(--input-padding-x);
-    
+
     font-size: var(--font-size-base);
     font-family: inherit;
     color: var(--color-text-primary);
-    
+
     background: var(--color-bg-input);
     border: var(--input-border-width) solid var(--color-border);
     border-radius: var(--radius-lg);
-    
+
     transition: all var(--transition-fast);
 }
 
@@ -122,7 +122,7 @@ select {
     right: var(--spacing-4);
     top: 50%;
     transform: translateY(-50%);
-    
+
     color: var(--color-text-muted);
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-medium);
@@ -237,7 +237,7 @@ input.validation-warning:focus,
    Range Slider
    =================== */
 
-input[type="range"],
+input[type='range'],
 .ui-range-slider {
     -webkit-appearance: none;
     width: 100%;
@@ -247,7 +247,7 @@ input[type="range"],
     outline: none;
 }
 
-input[type="range"]::-webkit-slider-thumb {
+input[type='range']::-webkit-slider-thumb {
     -webkit-appearance: none;
     width: 24px;
     height: 24px;
@@ -257,7 +257,7 @@ input[type="range"]::-webkit-slider-thumb {
     box-shadow: var(--shadow-md);
 }
 
-input[type="range"]::-moz-range-thumb {
+input[type='range']::-moz-range-thumb {
     width: 24px;
     height: 24px;
     border-radius: var(--radius-full);
@@ -279,4 +279,3 @@ input[type="range"]::-moz-range-thumb {
     font-weight: var(--font-weight-semibold);
     color: var(--color-primary);
 }
-

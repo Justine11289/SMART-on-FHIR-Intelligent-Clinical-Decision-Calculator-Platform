@@ -4,7 +4,7 @@
  * 使用 Radio Group 工廠函數重構
  */
 
-import { createScoringCalculator } from '../shared/scoring-calculator.js';
+import { createScoringCalculator, ScoringCalculatorConfig } from '../shared/scoring-calculator.js';
 import { uiBuilder } from '../../ui-builder.js';
 
 // GAD-7 問題列表
@@ -26,7 +26,7 @@ const frequencyOptions = [
     { value: '3', label: 'Nearly every day (+3)' }
 ];
 
-export const gad7 = createScoringCalculator({
+export const gad7Config: ScoringCalculatorConfig = {
     id: 'gad-7',
     title: 'GAD-7 (General Anxiety Disorder-7)',
     description: 'Screens for generalized anxiety disorder and monitors treatment response.',
@@ -140,17 +140,23 @@ export const gad7 = createScoringCalculator({
 
         return `
             ${uiBuilder.createResultItem({
-            label: 'Total Score',
-            value: score.toString(),
-            unit: '/ 21 points',
-            interpretation: severity,
-            alertClass: alertClass
-        })}
+                label: 'Total Score',
+                value: score.toString(),
+                unit: '/ 21 points',
+                interpretation: severity,
+                alertClass: alertClass
+            })}
             
             ${uiBuilder.createAlert({
-            type: alertClass.replace('ui-alert-', '') as 'success' | 'info' | 'warning' | 'danger',
-            message: `<strong>Recommendation:</strong> ${recommendation}`
-        })}
+                type: alertClass.replace('ui-alert-', '') as
+                    | 'success'
+                    | 'info'
+                    | 'warning'
+                    | 'danger',
+                message: `<strong>Recommendation:</strong> ${recommendation}`
+            })}
         `;
     }
-});
+};
+
+export const gad7 = createScoringCalculator(gad7Config);

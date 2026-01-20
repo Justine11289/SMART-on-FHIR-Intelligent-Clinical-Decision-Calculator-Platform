@@ -1,11 +1,13 @@
 ﻿import { AlertSeverity } from '../../types/calculator-base.js';
 import { FormulaResultItem } from '../../types/calculator-formula.js';
 
-export function qtcCalculation(values: Record<string, number | string | boolean>): FormulaResultItem[] {
+export function qtcCalculation(
+    values: Record<string, number | string | boolean>
+): FormulaResultItem[] {
     const qtInput = values['qt'];
     const hrInput = values['hr'];
-    const gender = values['gender'] as string || 'male'; // default male if not specified
-    const formulaType = values['formula'] as string || 'bazett';
+    const gender = (values['gender'] as string) || 'male'; // default male if not specified
+    const formulaType = (values['formula'] as string) || 'bazett';
 
     if (qtInput === undefined || hrInput === undefined) return [];
 

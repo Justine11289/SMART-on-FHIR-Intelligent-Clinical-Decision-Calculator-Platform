@@ -29,7 +29,7 @@ function sortCalculators(
             return sorted.sort((a, b) => b.title.localeCompare(a.title));
         case 'recently-added':
             return sorted.reverse();
-        case 'most-used':
+        case 'most-used': {
             // Sort by usage stats
             const usage = favoritesManager.getUsage();
             return sorted.sort((a, b) => {
@@ -37,6 +37,7 @@ function sortCalculators(
                 const countB = usage[b.id] || 0;
                 return countB - countA;
             });
+        }
         default:
             return sorted;
     }
@@ -55,16 +56,18 @@ function filterCalculators(
 
     // Filter by special filters
     switch (filterType) {
-        case 'favorites':
+        case 'favorites': {
             const favorites = favoritesManager.getFavorites();
             filtered = filtered.filter(calc => favorites.includes(calc.id));
             break;
-        case 'recent':
+        }
+        case 'recent': {
             const recent = favoritesManager.getRecent();
             filtered = recent
                 .map(id => calculators.find(calc => calc.id === id))
                 .filter((calc): calc is CalculatorMetadata => calc !== undefined);
             return filtered; // Keep order for recent
+        }
         case 'all':
         default:
             // No special filter
@@ -102,7 +105,7 @@ function renderCalculatorList(calculators: CalculatorMetadata[], container: HTML
 
     calculators.forEach(calc => {
         const link = document.createElement('a');
-        link.href = `calculator.html?name=${calc.id}`;
+        link.href = `calculator.html?id=${calc.id}`;
         link.className = 'list-item';
 
         // Content area
@@ -169,7 +172,7 @@ function updateStats(total: number, showing: number): void {
 /**
  * Main program
  */
-window.onload = () => {
+window.onload = async () => { // 加入 async 關鍵字
     // Get DOM elements
     const patientInfoEl = document.getElementById('patient-info');
     const calculatorListEl = document.getElementById('calculator-list');
@@ -183,38 +186,60 @@ window.onload = () => {
         return;
     }
 
-    // Type narrowing - these are guaranteed to be non-null after the check above
     const patientInfoDiv = patientInfoEl;
     const calculatorListDiv = calculatorListEl;
     const searchBar = searchBarEl;
     const sortSelect = sortSelectEl;
     const categorySelect = categorySelectEl;
 
-    // State variables
+    // 狀態變數
     let currentSortType: SortType = 'a-z';
     let currentFilterType: FilterType = 'all';
     let currentCategory: string = 'all';
 
-    /**
-     * Update display
-     */
+    // ========== 核心修正：模擬載入本地測試資料 ==========
+    try {
+        console.log("Index page is fetching local test data...");
+        const response = await fetch('/test-Patient.json'); // 現在可以使用 await 了
+        if (!response.ok) throw new Error('test-Patient.json not found');
+        
+        const bundle = await response.json();
+        const patient = bundle.entry.find((e: any) => e.resource.resourceType === "Patient")?.resource;
+
+        // 建立符合 utils.ts 檢查邏輯的 mockClient
+        const mockClient = {
+            patient: {
+                id: patient.id, // 傳入 ID 解決 "No patient data" 錯誤
+                read: () => Promise.resolve(patient)
+            },
+            request: (url: string) => Promise.resolve(bundle)
+        };
+
+        // 顯示包含 TW Core IG 標籤的病患資訊
+        displayPatientInfo(mockClient, patientInfoDiv);
+        console.log("Index page loaded local patient data successfully");
+
+    } catch (error) {
+        console.warn("Failed to load mock data, checking for FHIR session:", error);
+        displayPatientInfo(null, patientInfoDiv);
+        
+        // 若本地無資料，才嘗試原有的 SMART 流程
+        if (typeof window.FHIR !== 'undefined') {
+            window.FHIR.oauth2.ready()
+                .then(async (client: any) => {
+                    displayPatientInfo(client, patientInfoDiv!);
+                    // ... 原有的 Practitioner 處理邏輯 ...
+                })
+                .catch(() => console.log('FHIR client not ready.'));
+        }
+    }
+
+    // 渲染清單與設定事件監聽器 (保持不變)
     function updateDisplay(): void {
         const searchTerm = searchBar.value;
-
-        // Filter and sort
-        const filtered = filterCalculators(
-            calculatorModules,
-            currentFilterType,
-            currentCategory,
-            searchTerm
-        );
-
+        const filtered = filterCalculators(calculatorModules, currentFilterType, currentCategory, searchTerm);
         const sorted = sortCalculators(filtered, currentSortType);
-
-        // Render
         renderCalculatorList(sorted, calculatorListDiv);
-
-        // Update stats
         updateStats(calculatorModules.length, sorted.length);
     }
 
@@ -269,17 +294,26 @@ window.onload = () => {
                     const practitionerNameEl = document.getElementById('practitioner-name');
                     const practitionerInfoEl = document.getElementById('practitioner-info');
 
-                    if (user && (user.resourceType === 'Practitioner' || user.resourceType === 'PractitionerRole')) {
+                    if (
+                        user &&
+                        (user.resourceType === 'Practitioner' ||
+                            user.resourceType === 'PractitionerRole')
+                    ) {
                         let name = 'Unknown Practitioner';
 
                         if (user.resourceType === 'Practitioner') {
-                            name = user.name?.[0]?.text ||
+                            name =
+                                user.name?.[0]?.text ||
                                 `${user.name?.[0]?.family || ''} ${user.name?.[0]?.given?.join(' ') || ''}`.trim();
-                        } else if (user.resourceType === 'PractitionerRole' && user.practitioner?.display) {
+                        } else if (
+                            user.resourceType === 'PractitionerRole' &&
+                            user.practitioner?.display
+                        ) {
                             name = user.practitioner.display;
                         }
 
-                        if (practitionerNameEl) practitionerNameEl.textContent = name || 'Practitioner';
+                        if (practitionerNameEl)
+                            practitionerNameEl.textContent = name || 'Practitioner';
                         if (practitionerInfoEl) practitionerInfoEl.style.display = 'flex';
 
                         // Set Practitioner ID for favorites
@@ -332,7 +366,6 @@ window.onload = () => {
 
     // ========== Search Function ==========
     searchBar.addEventListener('input', updateDisplay);
-    
 
     // ========== Sort Function ==========
     sortSelect.addEventListener('change', (e: Event) => {

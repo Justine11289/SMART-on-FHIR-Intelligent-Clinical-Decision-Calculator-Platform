@@ -35,7 +35,9 @@
     white-space: nowrap;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    transition:
+        opacity 0.3s ease,
+        transform 0.3s ease;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     z-index: 1000;
 }
@@ -81,7 +83,6 @@
 }
 
 @keyframes fhir-pulse {
-
     0%,
     100% {
         opacity: 1;

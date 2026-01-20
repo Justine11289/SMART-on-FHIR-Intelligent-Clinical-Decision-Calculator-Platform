@@ -5,10 +5,10 @@
  * Assesses neonates 1 and 5 minutes after birth.
  */
 
-import { createScoringCalculator } from '../shared/scoring-calculator.js';
+import { createScoringCalculator, ScoringCalculatorConfig } from '../shared/scoring-calculator.js';
 import { uiBuilder } from '../../ui-builder.js';
 
-export const apgarScore = createScoringCalculator({
+export const apgarConfig: ScoringCalculatorConfig = {
     id: 'apgar',
     title: 'APGAR Score',
     description: 'Assesses neonates 1 and 5 minutes after birth.',
@@ -153,19 +153,21 @@ export const apgarScore = createScoringCalculator({
 
         return `
             ${uiBuilder.createResultItem({
-            label: 'Total APGAR Score',
-            value: score.toString(),
-            unit: '/ 10 points',
-            interpretation: riskLevel.label,
-            alertClass: `ui-alert-${riskLevel.severity}`
-        })}
+                label: 'Total APGAR Score',
+                value: score.toString(),
+                unit: '/ 10 points',
+                interpretation: riskLevel.label,
+                alertClass: `ui-alert-${riskLevel.severity}`
+            })}
             <div class="result-item mt-10 component-breakdown">
                 ${breakdownHTML}
             </div>
             ${uiBuilder.createAlert({
-            type: riskLevel.severity,
-            message: `<strong>Recommendation:</strong> ${interpretation}`
-        })}
+                type: riskLevel.severity,
+                message: `<strong>Recommendation:</strong> ${interpretation}`
+            })}
         `;
     }
-});
+};
+
+export const apgarScore = createScoringCalculator(apgarConfig);

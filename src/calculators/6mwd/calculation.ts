@@ -1,6 +1,6 @@
 ﻿import type { SimpleCalculateFn, FormulaResultItem } from '../../types/calculator-formula.js';
 
-export const calculate6MWD: SimpleCalculateFn = (values) => {
+export const calculate6MWD: SimpleCalculateFn = values => {
     const age = Number(values['mwd6-age']);
     const heightCm = Number(values['mwd6-height']);
     const weightKg = Number(values['mwd6-weight']);
@@ -50,4 +50,3 @@ export const calculate6MWD: SimpleCalculateFn = (values) => {
 
     return results;
 };
-

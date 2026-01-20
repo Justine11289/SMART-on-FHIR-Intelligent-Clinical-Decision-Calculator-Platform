@@ -7,17 +7,20 @@ import type { FormulaCalculatorConfig } from '../../types/calculator-formula.js'
 export const freeWaterDeficitConfig: FormulaCalculatorConfig = {
     id: 'free-water-deficit',
     title: 'Free Water Deficit in Hypernatremia',
-    description: 'Calculates free water deficit by estimated total body water in a patient with hypernatremia or dehydration.',
-    infoAlert: '<h4>TBW Factors:</h4>' + uiBuilder.createList({
-        items: [
-            'Adult Male: 0.6',
-            'Adult Female: 0.5',
-            'Elderly Male: 0.5',
-            'Elderly Female: 0.45',
-            'Child: 0.6'
-        ],
-        className: 'info-list'
-    }),
+    description:
+        'Calculates free water deficit by estimated total body water in a patient with hypernatremia or dehydration.',
+    infoAlert:
+        '<h4>TBW Factors:</h4>' +
+        uiBuilder.createList({
+            items: [
+                'Adult Male: 0.6',
+                'Adult Female: 0.5',
+                'Elderly Male: 0.5',
+                'Elderly Female: 0.45',
+                'Child: 0.6'
+            ],
+            className: 'info-list'
+        }),
     sections: [
         {
             title: 'Patient Data',
@@ -72,7 +75,8 @@ export const freeWaterDeficitConfig: FormulaCalculatorConfig = {
     formulas: [
         {
             label: 'Free Water Deficit (L)',
-            formula: 'TBW × (<span class="formula-fraction"><span class="numerator">Current Na</span><span class="denominator">140</span></span> − 1)'
+            formula:
+                'TBW × (<span class="formula-fraction"><span class="numerator">Current Na</span><span class="denominator">140</span></span> − 1)'
         },
         {
             label: 'TBW (Total Body Water)',
@@ -81,7 +85,7 @@ export const freeWaterDeficitConfig: FormulaCalculatorConfig = {
     ],
     autoPopulateGender: 'fwd-gender',
     calculate: calculateFreeWaterDeficit,
-    customResultRenderer: (results) => {
+    customResultRenderer: results => {
         const deficitResult = results[0];
         const tbwResult = results[1];
         const noteResult = results[2];

@@ -6,16 +6,19 @@ import { sirsCalculation } from './calculation.js';
 export const sirs = createUnifiedFormulaCalculator({
     id: 'sirs',
     title: 'SIRS Criteria for Systemic Inflammatory Response',
-    description: 'Evaluates SIRS criteria and progression to sepsis and septic shock using clinical parameters.',
-    infoAlert: '<h4>SIRS Criteria (Requires ≥ 2):</h4>' + uiBuilder.createList({
-        items: [
-            '<strong>Temperature:</strong> < 36°C or > 38°C',
-            '<strong>Heart Rate:</strong> > 90 bpm',
-            '<strong>Resp Rate:</strong> > 20/min OR PaCO2 < 32 mmHg',
-            '<strong>WBC:</strong> < 4,000 or > 12,000 or > 10% Bands'
-        ],
-        className: 'info-list'
-    }),
+    description:
+        'Evaluates SIRS criteria and progression to sepsis and septic shock using clinical parameters.',
+    infoAlert:
+        '<h4>SIRS Criteria (Requires ≥ 2):</h4>' +
+        uiBuilder.createList({
+            items: [
+                '<strong>Temperature:</strong> < 36°C or > 38°C',
+                '<strong>Heart Rate:</strong> > 90 bpm',
+                '<strong>Resp Rate:</strong> > 20/min OR PaCO2 < 32 mmHg',
+                '<strong>WBC:</strong> < 4,000 or > 12,000 or > 10% Bands'
+            ],
+            className: 'info-list'
+        }),
     sections: [
         {
             title: 'Vital Signs',
@@ -74,6 +77,7 @@ export const sirs = createUnifiedFormulaCalculator({
                         default: 'mmHg'
                     },
                     validationType: 'paCO2',
+                    loincCode: LOINC_CODES.PCO2,
                     standardUnit: 'mmHg'
                 }
             ]
@@ -141,11 +145,16 @@ export const sirs = createUnifiedFormulaCalculator({
         }
     ],
     calculate: sirsCalculation,
-    customResultRenderer: (results) => {
+    customResultRenderer: results => {
         const res = results[0];
         if (!res) return '';
 
-        const payload = res.alertPayload as { criteriaCount: number, metDetails: string[], description: string, recommendations: string };
+        const payload = res.alertPayload as {
+            criteriaCount: number;
+            metDetails: string[];
+            description: string;
+            recommendations: string;
+        };
         const criteriaCount = payload.criteriaCount;
         const metDetails = payload.metDetails;
         const description = payload.description;
@@ -155,30 +164,32 @@ export const sirs = createUnifiedFormulaCalculator({
 
         return `
             ${uiBuilder.createResultItem({
-            label: res.label, // Diagnosis
-            value: res.interpretation || '',
-            interpretation: description,
-            alertClass: `ui-alert-${alertClass}`,
-            unit: ''
-        })}
+                label: res.label, // Diagnosis
+                value: res.interpretation || '',
+                interpretation: description,
+                alertClass: `ui-alert-${alertClass}`,
+                unit: ''
+            })}
 
             <div class="result-item mt-10">
                 <span class="label text-muted">SIRS Criteria Met:</span>
                 <span class="value font-semibold">${criteriaCount} / 4</span>
             </div>
             
-            ${metDetails.length > 0 ? `
+            ${
+                metDetails.length > 0
+                    ? `
             <div class="text-sm mt-5 mb-10 text-muted">
-                <ul class="list-disc pl-20">
-                    ${metDetails.map(d => `<li>${d}</li>`).join('')}
-                </ul>
+                ${uiBuilder.createList({ items: metDetails })}
             </div>
-            ` : ''}
+            `
+                    : ''
+            }
 
             ${uiBuilder.createAlert({
-            type: alertClass as 'success' | 'warning' | 'danger' | 'info',
-            message: `<strong>🏥 Management:</strong> ${recommendations}`
-        })}
+                type: alertClass as 'success' | 'warning' | 'danger' | 'info',
+                message: `<strong>🏥 Management:</strong> ${recommendations}`
+            })}
         `;
     }
 });

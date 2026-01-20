@@ -1,9 +1,11 @@
-
-import { createUnifiedFormulaCalculator } from '../shared/unified-formula-calculator.js';
+import {
+    createUnifiedFormulaCalculator,
+    FormulaCalculatorConfig
+} from '../shared/unified-formula-calculator.js';
 import { LOINC_CODES } from '../../fhir-codes.js';
 import { uiBuilder } from '../../ui-builder.js';
 
-export const hepScore = createUnifiedFormulaCalculator({
+export const hepScoreConfig: FormulaCalculatorConfig = {
     id: '4ts-hit',
     title: 'HIT Expert Probability (HEP) Score for Heparin-Induced Thrombocytopenia',
     description: 'Pre-test clinical scoring model for HIT based on broad expert opinion.',
@@ -56,8 +58,14 @@ export const hepScore = createUnifiedFormulaCalculator({
                     label: 'Timing of platelet count fall (Rapid Onset)',
                     type: 'radio',
                     options: [
-                        { label: 'Fall begins <48 hours after heparin re-exposure (+2)', value: '2' },
-                        { label: 'Fall begins ≥48 hours after heparin re-exposure (-1)', value: '-1' }
+                        {
+                            label: 'Fall begins <48 hours after heparin re-exposure (+2)',
+                            value: '2'
+                        },
+                        {
+                            label: 'Fall begins ≥48 hours after heparin re-exposure (-1)',
+                            value: '-1'
+                        }
                     ]
                 },
                 {
@@ -76,7 +84,10 @@ export const hepScore = createUnifiedFormulaCalculator({
                     type: 'radio',
                     options: [
                         { label: 'New VTE/ATE ≥4 days after heparin exposure (+3)', value: '3' },
-                        { label: 'Progression of pre-existing VTE/ATE while receiving heparin (+2)', value: '2' },
+                        {
+                            label: 'Progression of pre-existing VTE/ATE while receiving heparin (+2)',
+                            value: '2'
+                        },
                         { label: 'None (0)', value: '0', checked: true }
                     ]
                 },
@@ -87,7 +98,10 @@ export const hepScore = createUnifiedFormulaCalculator({
                     type: 'radio',
                     options: [
                         { label: 'New VTE/ATE after heparin exposure (+3)', value: '3' },
-                        { label: 'Progression of pre-existing VTE/ATE while receiving heparin (+2)', value: '2' },
+                        {
+                            label: 'Progression of pre-existing VTE/ATE while receiving heparin (+2)',
+                            value: '2'
+                        },
                         { label: 'None (0)', value: '0', checked: true }
                     ]
                 },
@@ -127,43 +141,64 @@ export const hepScore = createUnifiedFormulaCalculator({
                     id: 'chronic_thrombocytopenia',
                     label: 'Presence of chronic thrombocytopenic disorder',
                     type: 'radio',
-                    options: [{ label: 'No (0)', value: '0', checked: true }, { label: 'Yes (-1)', value: '-1' }]
+                    options: [
+                        { label: 'No (0)', value: '0', checked: true },
+                        { label: 'Yes (-1)', value: '-1' }
+                    ]
                 },
                 {
                     id: 'new_medication',
                     label: 'Newly initiated non-heparin medication known to cause thrombocytopenia',
                     type: 'radio',
-                    options: [{ label: 'No (0)', value: '0', checked: true }, { label: 'Yes (-1)', value: '-1' }]
+                    options: [
+                        { label: 'No (0)', value: '0', checked: true },
+                        { label: 'Yes (-1)', value: '-1' }
+                    ]
                 },
                 {
                     id: 'severe_infection',
                     label: 'Severe infection',
                     type: 'radio',
-                    options: [{ label: 'No (0)', value: '0', checked: true }, { label: 'Yes (-2)', value: '-2' }]
+                    options: [
+                        { label: 'No (0)', value: '0', checked: true },
+                        { label: 'Yes (-2)', value: '-2' }
+                    ]
                 },
                 {
                     id: 'dic',
                     label: 'Severe DIC (fibrinogen <100 mg/dL and D-dimer >5 µg/mL)',
                     type: 'radio',
-                    options: [{ label: 'No (0)', value: '0', checked: true }, { label: 'Yes (-2)', value: '-2' }]
+                    options: [
+                        { label: 'No (0)', value: '0', checked: true },
+                        { label: 'Yes (-2)', value: '-2' }
+                    ]
                 },
                 {
                     id: 'arterial_device',
                     label: 'Indwelling intra-arterial device (e.g. IABP, VAD, ECMO)',
                     type: 'radio',
-                    options: [{ label: 'No (0)', value: '0', checked: true }, { label: 'Yes (-2)', value: '-2' }]
+                    options: [
+                        { label: 'No (0)', value: '0', checked: true },
+                        { label: 'Yes (-2)', value: '-2' }
+                    ]
                 },
                 {
                     id: 'cardiopulmonary_bypass',
                     label: 'Cardiopulmonary bypass within previous 96 hours',
                     type: 'radio',
-                    options: [{ label: 'No (0)', value: '0', checked: true }, { label: 'Yes (-1)', value: '-1' }]
+                    options: [
+                        { label: 'No (0)', value: '0', checked: true },
+                        { label: 'Yes (-1)', value: '-1' }
+                    ]
                 },
                 {
                     id: 'no_other_cause',
                     label: 'No other apparent cause',
                     type: 'radio',
-                    options: [{ label: 'No (0)', value: '0', checked: true }, { label: 'Yes (+3)', value: '3' }]
+                    options: [
+                        { label: 'No (0)', value: '0', checked: true },
+                        { label: 'Yes (+3)', value: '3' }
+                    ]
                 }
             ]
         }
@@ -223,7 +258,9 @@ export const hepScore = createUnifiedFormulaCalculator({
         const typeRadios = container.querySelectorAll('input[name="hit_onset_type"]');
 
         const updateVisibility = () => {
-            const type = (container.querySelector('input[name="hit_onset_type"]:checked') as HTMLInputElement)?.value;
+            const type = (
+                container.querySelector('input[name="hit_onset_type"]:checked') as HTMLInputElement
+            )?.value;
 
             // Helpers
             const setVisible = (id: string, show: boolean) => {
@@ -246,10 +283,12 @@ export const hepScore = createUnifiedFormulaCalculator({
             setVisible('thrombosis_rapid', !isTypical);
         };
 
-        typeRadios.forEach(r => r.addEventListener('change', () => {
-            updateVisibility();
-            // Recalculate will happen automatically via unified calculator listeners
-        }));
+        typeRadios.forEach(r =>
+            r.addEventListener('change', () => {
+                updateVisibility();
+                // Recalculate will happen automatically via unified calculator listeners
+            })
+        );
 
         updateVisibility();
     },
@@ -257,4 +296,6 @@ export const hepScore = createUnifiedFormulaCalculator({
     references: [
         'Cuker A, et al. The HIT Expert Probability (HEP) Score. <em>J Thromb Haemost</em>. 2010.'
     ]
-});
+};
+
+export const hepScore = createUnifiedFormulaCalculator(hepScoreConfig);

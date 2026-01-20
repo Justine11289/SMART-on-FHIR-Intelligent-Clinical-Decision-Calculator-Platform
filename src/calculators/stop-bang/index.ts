@@ -10,7 +10,7 @@ import { LOINC_CODES, SNOMED_CODES } from '../../fhir-codes.js';
 import { fhirDataService } from '../../fhir-data-service.js';
 import { uiBuilder } from '../../ui-builder.js';
 
-const config: ScoringCalculatorConfig = {
+export const stopBangConfig: ScoringCalculatorConfig = {
     inputType: 'checkbox',
     id: 'stop-bang',
     title: 'STOP-BANG Score for Obstructive Sleep Apnea',
@@ -43,7 +43,7 @@ const config: ScoringCalculatorConfig = {
                     label: 'Pressure - Do you have or are you being treated for high blood pressure?',
                     value: 1,
                     // SNOMED code for hypertension
-                    conditionCode: '38341003'
+                    conditionCode: SNOMED_CODES.HYPERTENSION
                 },
                 { id: 'sb-bmi', label: 'BMI more than 35 kg/m²', value: 1 },
                 { id: 'sb-age', label: 'Age over 50 years old', value: 1 },
@@ -94,9 +94,24 @@ const config: ScoringCalculatorConfig = {
         interpretationTitle: 'Risk Categories',
         tableHeaders: ['Score', 'OSA Probability', 'Risk Level'],
         interpretations: [
-            { score: '0-2', category: 'Low', interpretation: 'Low probability of moderate to severe OSA', severity: 'success' },
-            { score: '3-4', category: 'Intermediate', interpretation: 'Intermediate probability of moderate to severe OSA', severity: 'warning' },
-            { score: '5-8', category: 'High', interpretation: 'High probability of moderate to severe OSA', severity: 'danger' }
+            {
+                score: '0-2',
+                category: 'Low',
+                interpretation: 'Low probability of moderate to severe OSA',
+                severity: 'success'
+            },
+            {
+                score: '3-4',
+                category: 'Intermediate',
+                interpretation: 'Intermediate probability of moderate to severe OSA',
+                severity: 'warning'
+            },
+            {
+                score: '5-8',
+                category: 'High',
+                interpretation: 'High probability of moderate to severe OSA',
+                severity: 'danger'
+            }
         ]
     },
     references: [
@@ -152,7 +167,7 @@ const config: ScoringCalculatorConfig = {
             }
 
             // 獲取高血壓病史
-            const hasHypertension = await fhirDataService.hasCondition(['38341003']);
+            const hasHypertension = await fhirDataService.hasCondition([SNOMED_CODES.HYPERTENSION]);
             if (hasHypertension) {
                 setCheckbox('sb-pressure', true);
             }
@@ -162,4 +177,4 @@ const config: ScoringCalculatorConfig = {
     }
 };
 
-export const stopBang = createScoringCalculator(config);
+export const stopBang = createScoringCalculator(stopBangConfig);

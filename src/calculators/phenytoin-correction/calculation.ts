@@ -1,14 +1,20 @@
 ﻿import { AlertSeverity } from '../../types/calculator-base.js';
 import { FormulaResultItem } from '../../types/calculator-formula.js';
 
-export function phenytoinCorrectionCalculation(values: Record<string, number | string | boolean>): FormulaResultItem[] {
+export function phenytoinCorrectionCalculation(
+    values: Record<string, number | string | boolean>
+): FormulaResultItem[] {
     const totalInput = values['pheny-total'];
     const albuminInput = values['pheny-albumin'];
     const renalStatus = values['pheny-renal'];
 
     if (
-        totalInput === undefined || totalInput === null || totalInput === '' ||
-        albuminInput === undefined || albuminInput === null || albuminInput === '' ||
+        totalInput === undefined ||
+        totalInput === null ||
+        totalInput === '' ||
+        albuminInput === undefined ||
+        albuminInput === null ||
+        albuminInput === '' ||
         !renalStatus
     ) {
         return [];

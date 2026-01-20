@@ -45,7 +45,7 @@
 ```html
 <div class="input-group">
     <label for="age">Age (years):</label>
-    <input type="number" id="age" placeholder="e.g., 55" min="0" max="120">
+    <input type="number" id="age" placeholder="e.g., 55" min="0" max="120" />
     <span class="input-hint">Enter patient's age in years</span>
 </div>
 ```
@@ -72,19 +72,19 @@
 ```html
 <div class="radio-group">
     <span class="radio-group-title">Glasgow Coma Scale - Eye Opening:</span>
-    
+
     <label class="radio-option">
-        <input type="radio" name="eye" value="4" checked>
+        <input type="radio" name="eye" value="4" checked />
         <span>Spontaneous - open with blinking at baseline (4)</span>
     </label>
-    
+
     <label class="radio-option">
-        <input type="radio" name="eye" value="3">
+        <input type="radio" name="eye" value="3" />
         <span>To verbal stimuli, command, speech (3)</span>
     </label>
-    
+
     <label class="radio-option">
-        <input type="radio" name="eye" value="2">
+        <input type="radio" name="eye" value="2" />
         <span>To pain only (not applied to face) (2)</span>
     </label>
 </div>
@@ -95,11 +95,11 @@
 ```html
 <div class="segmented-control">
     <label>
-        <input type="radio" name="gender" value="male" checked>
+        <input type="radio" name="gender" value="male" checked />
         <span>Male</span>
     </label>
     <label>
-        <input type="radio" name="gender" value="female">
+        <input type="radio" name="gender" value="female" />
         <span>Female</span>
     </label>
 </div>
@@ -112,17 +112,17 @@
 ```html
 <div class="checkbox-group">
     <label class="checkbox-option">
-        <input type="checkbox" id="diabetes" value="yes">
+        <input type="checkbox" id="diabetes" value="yes" />
         <span>Diabetes Mellitus</span>
     </label>
-    
+
     <label class="checkbox-option">
-        <input type="checkbox" id="hypertension" value="yes">
+        <input type="checkbox" id="hypertension" value="yes" />
         <span>Hypertension</span>
     </label>
-    
+
     <label class="checkbox-option">
-        <input type="checkbox" id="smoking" value="yes">
+        <input type="checkbox" id="smoking" value="yes" />
         <span>Current Smoker</span>
     </label>
 </div>
@@ -154,12 +154,12 @@
     <div class="result-header">
         <h4>Calculated BMI</h4>
     </div>
-    
+
     <div class="result-score">
         <span class="result-score-value" id="bmi-value">24.5</span>
         <span class="result-score-unit">kg/m²</span>
     </div>
-    
+
     <div class="risk-badge moderate">Normal Weight</div>
 </div>
 ```
@@ -170,23 +170,17 @@
 <div class="result-container show" id="result">
     <div class="result-item">
         <span class="result-item-label">BMI</span>
-        <span class="result-item-value">
-            24.5 <span class="result-item-unit">kg/m²</span>
-        </span>
+        <span class="result-item-value"> 24.5 <span class="result-item-unit">kg/m²</span> </span>
     </div>
-    
+
     <div class="result-item">
         <span class="result-item-label">BSA (Du Bois)</span>
-        <span class="result-item-value">
-            1.85 <span class="result-item-unit">m²</span>
-        </span>
+        <span class="result-item-value"> 1.85 <span class="result-item-unit">m²</span> </span>
     </div>
-    
+
     <div class="result-item">
         <span class="result-item-label">Ideal Body Weight</span>
-        <span class="result-item-value">
-            70.5 <span class="result-item-unit">kg</span>
-        </span>
+        <span class="result-item-value"> 70.5 <span class="result-item-unit">kg</span> </span>
     </div>
 </div>
 ```
@@ -230,19 +224,15 @@
 ```html
 <div class="info-section">
     <h4>📐 Formula</h4>
-    
+
     <div class="formula-box">
         <div class="formula-title">Body Mass Index (BMI):</div>
-        <div class="formula-code">
-            BMI = Weight (kg) / Height² (m²)
-        </div>
+        <div class="formula-code">BMI = Weight (kg) / Height² (m²)</div>
     </div>
-    
+
     <div class="formula-box">
         <div class="formula-title">Body Surface Area (Du Bois):</div>
-        <div class="formula-code">
-            BSA = 0.007184 × Weight^0.425 × Height^0.725
-        </div>
+        <div class="formula-code">BSA = 0.007184 × Weight^0.425 × Height^0.725</div>
     </div>
 </div>
 ```
@@ -313,9 +303,7 @@
 
 ```html
 <div class="progress-bar">
-    <div class="progress-bar-fill" style="width: 65%;">
-        65% Risk
-    </div>
+    <div class="progress-bar-fill" style="width: 65%;">65% Risk</div>
 </div>
 ```
 
@@ -357,8 +345,8 @@
 export const exampleCalculator = {
     id: 'example',
     title: 'Example Calculator',
-    
-    generateHTML: function() {
+
+    generateHTML: function () {
         return `
             <!-- 標題區域 -->
             <div class="calculator-header">
@@ -422,32 +410,32 @@ export const exampleCalculator = {
             </div>
         `;
     },
-    
-    initialize: function(client, patient, container) {
+
+    initialize: function (client, patient, container) {
         const calculateBtn = container.querySelector('#calculate-btn');
         const resultContainer = container.querySelector('#result');
         const scoreValue = container.querySelector('#score-value');
         const riskBadge = container.querySelector('#risk-badge');
-        
+
         calculateBtn.addEventListener('click', () => {
             // 獲取輸入值
             const age = parseInt(container.querySelector('#age').value);
             const gender = container.querySelector('input[name="gender"]:checked').value;
-            
+
             // 驗證輸入
             if (!age || age < 0 || age > 120) {
                 // 顯示錯誤
                 return;
             }
-            
+
             // 計算分數
             const score = this.calculate(age, gender);
-            
+
             // 顯示結果
             scoreValue.textContent = score;
             resultContainer.style.display = 'block';
             resultContainer.classList.add('show');
-            
+
             // 設定風險徽章
             if (score < 5) {
                 riskBadge.innerHTML = '<div class="risk-badge low">Low Risk</div>';
@@ -458,8 +446,8 @@ export const exampleCalculator = {
             }
         });
     },
-    
-    calculate: function(age, gender) {
+
+    calculate: function (age, gender) {
         // 計算邏輯
         const factor = gender === 'male' ? 1.2 : 1.0;
         return Math.round(age * factor);
@@ -481,6 +469,7 @@ export const exampleCalculator = {
 ### 轉換範例：
 
 #### Before（舊樣式）
+
 ```javascript
 generateHTML: function() {
     return `
@@ -500,18 +489,19 @@ generateHTML: function() {
 ```
 
 #### After（新樣式）
+
 ```javascript
 generateHTML: function() {
     return `
         <h3 class="calculator-title">${this.title}</h3>
-        
+
         <div class="input-group">
             <label for="age">Age:</label>
             <input type="number" id="age">
         </div>
-        
+
         <button class="btn-calculate" id="calc-btn">Calculate</button>
-        
+
         <div class="result-container" id="result" style="display: none;">
             <div class="result-score">
                 <span class="result-score-value" id="value"></span>
@@ -526,12 +516,14 @@ generateHTML: function() {
 ## 🎨 顏色系統
 
 ### 主要顏色
+
 - **主要漸變色**：`#667eea` → `#764ba2`
 - **文字顏色**：`#2d3748`（深灰）
 - **次要文字**：`#718096`（中灰）
 - **邊框顏色**：`#e2e8f0`（淺灰）
 
 ### 風險顏色
+
 - **低風險**：`#c6f6d5`（綠色系）
 - **中等風險**：`#feebc8`（橙色系）
 - **高風險**：`#fed7d7`（紅色系）
@@ -587,4 +579,3 @@ A: 不會。樣式系統是向後兼容的。但建議轉換後進行完整測�
 
 **最後更新**：2025-11-01  
 **版本**：2.0.0
-

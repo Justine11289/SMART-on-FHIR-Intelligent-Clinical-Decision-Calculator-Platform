@@ -34,12 +34,13 @@ const STATIC_RESOURCES = [
  * Install Event
  * Cache static resources
  */
-self.addEventListener('install', (event) => {
+self.addEventListener('install', event => {
     console.log('[Service Worker] Installing...');
 
     event.waitUntil(
-        caches.open(CACHE_NAMES.static)
-            .then((cache) => {
+        caches
+            .open(CACHE_NAMES.static)
+            .then(cache => {
                 console.log('[Service Worker] Caching static resources');
                 return cache.addAll(STATIC_RESOURCES);
             })
@@ -47,7 +48,7 @@ self.addEventListener('install', (event) => {
                 console.log('[Service Worker] Installed successfully');
                 return self.skipWaiting();
             })
-            .catch((error) => {
+            .catch(error => {
                 console.error('[Service Worker] Installation failed:', error);
             })
     );
@@ -57,14 +58,15 @@ self.addEventListener('install', (event) => {
  * Activate Event
  * Clean up old caches
  */
-self.addEventListener('activate', (event) => {
+self.addEventListener('activate', event => {
     console.log('[Service Worker] Activating...');
 
     event.waitUntil(
-        caches.keys()
-            .then((cacheNames) => {
+        caches
+            .keys()
+            .then(cacheNames => {
                 return Promise.all(
-                    cacheNames.map((cacheName) => {
+                    cacheNames.map(cacheName => {
                         // Delete old version caches
                         if (!Object.values(CACHE_NAMES).includes(cacheName)) {
                             console.log('[Service Worker] Deleting old cache:', cacheName);
@@ -84,7 +86,7 @@ self.addEventListener('activate', (event) => {
  * Fetch Event
  * Handle network requests with different caching strategies
  */
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
     const { request } = event;
     const url = new URL(request.url);
 
@@ -192,7 +194,7 @@ async function staleWhileRevalidate(request, cacheName) {
         const cached = await cache.match(request);
 
         // Fetch fresh version in background
-        const fetchPromise = fetch(request).then((response) => {
+        const fetchPromise = fetch(request).then(response => {
             if (response.ok) {
                 cache.put(request, response.clone());
             }
@@ -225,28 +227,31 @@ async function staleWhileRevalidate(request, cacheName) {
  * Helper: Check if request is for static resource
  */
 function isStaticResource(url) {
-    return url.pathname.match(/\.(css|js|woff2?|ttf|eot)$/) ||
+    return (
+        url.pathname.match(/\.(css|js|woff2?|ttf|eot)$/) ||
         url.pathname === '/' ||
         url.pathname === '/index.html' ||
-        url.pathname === '/calculator.html';
+        url.pathname === '/calculator.html'
+    );
 }
 
 /**
  * Helper: Check if request is for calculator module
  */
 function isCalculatorModule(url) {
-    return url.pathname.includes('/js/calculators/') &&
-        url.pathname.endsWith('/index.js');
+    return url.pathname.includes('/js/calculators/') && url.pathname.endsWith('/index.js');
 }
 
 /**
  * Helper: Check if request is FHIR API call
  */
 function isFHIRRequest(url) {
-    return url.hostname.includes('fhir') ||
+    return (
+        url.hostname.includes('fhir') ||
         url.pathname.includes('/fhir/') ||
         url.pathname.includes('/Patient') ||
-        url.pathname.includes('/Observation');
+        url.pathname.includes('/Observation')
+    );
 }
 
 /**
@@ -260,26 +265,27 @@ function isImageRequest(url) {
  * Message Event
  * Handle messages from clients
  */
-self.addEventListener('message', (event) => {
+self.addEventListener('message', event => {
     if (event.data && event.data.type === 'SKIP_WAITING') {
         self.skipWaiting();
     }
 
     if (event.data && event.data.type === 'CLEAR_CACHE') {
         event.waitUntil(
-            caches.keys().then((cacheNames) => {
-                return Promise.all(
-                    cacheNames.map((cacheName) => caches.delete(cacheName))
-                );
-            }).then(() => {
-                event.ports[0].postMessage({ success: true });
-            })
+            caches
+                .keys()
+                .then(cacheNames => {
+                    return Promise.all(cacheNames.map(cacheName => caches.delete(cacheName)));
+                })
+                .then(() => {
+                    event.ports[0].postMessage({ success: true });
+                })
         );
     }
 
     if (event.data && event.data.type === 'GET_CACHE_STATS') {
         event.waitUntil(
-            getCacheStats().then((stats) => {
+            getCacheStats().then(stats => {
                 event.ports[0].postMessage({ stats });
             })
         );
@@ -309,7 +315,7 @@ async function getCacheStats() {
  * Background Sync Event (Progressive Enhancement)
  * Sync data when connection is restored
  */
-self.addEventListener('sync', (event) => {
+self.addEventListener('sync', event => {
     if (event.tag === 'sync-fhir-data') {
         event.waitUntil(syncFHIRData());
     }
@@ -327,7 +333,7 @@ async function syncFHIRData() {
 /**
  * Push Notification Event (Future Enhancement)
  */
-self.addEventListener('push', (event) => {
+self.addEventListener('push', event => {
     const data = event.data ? event.data.json() : {};
 
     const options = {
@@ -337,21 +343,16 @@ self.addEventListener('push', (event) => {
         data: data
     };
 
-    event.waitUntil(
-        self.registration.showNotification(data.title || 'MedCalc EHR', options)
-    );
+    event.waitUntil(self.registration.showNotification(data.title || 'MedCalc EHR', options));
 });
 
 /**
  * Notification Click Event
  */
-self.addEventListener('notificationclick', (event) => {
+self.addEventListener('notificationclick', event => {
     event.notification.close();
 
-    event.waitUntil(
-        clients.openWindow(event.notification.data.url || '/')
-    );
+    event.waitUntil(clients.openWindow(event.notification.data.url || '/'));
 });
 
 console.log('[Service Worker] Script loaded');
-

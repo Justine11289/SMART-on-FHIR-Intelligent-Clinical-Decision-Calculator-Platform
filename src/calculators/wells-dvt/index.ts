@@ -5,9 +5,10 @@
  * 已整合 FHIRDataService，使用 dataRequirements 聲明式配置自動填充
  */
 
-import { createScoringCalculator } from '../shared/scoring-calculator.js';
+import { createScoringCalculator, ScoringCalculatorConfig } from '../shared/scoring-calculator.js';
+import { SNOMED_CODES } from '../../fhir-codes.js';
 
-export const wellsDVT = createScoringCalculator({
+export const wellsDVTConfig: ScoringCalculatorConfig = {
     inputType: 'yesno',
     id: 'wells-dvt',
     title: "Wells' Criteria for DVT",
@@ -23,13 +24,13 @@ export const wellsDVT = createScoringCalculator({
             label: 'Active cancer (treatment or palliation within 6 months)',
             points: 1,
             // 使用 SNOMED 代碼自動檢測癌症
-            conditionCode: '363346000' // Malignant neoplastic disease
+            conditionCode: SNOMED_CODES.MALIGNANCY
         },
         {
             id: 'dvt-paralysis',
             label: 'Paralysis, paresis, or recent plaster immobilization of the lower extremities',
             points: 1,
-            conditionCode: '166001' // Paralysis
+            conditionCode: SNOMED_CODES.PARALYSIS
         },
         {
             id: 'dvt-bedridden',
@@ -66,7 +67,7 @@ export const wellsDVT = createScoringCalculator({
             label: 'Previously documented DVT',
             points: 1,
             // 使用 SNOMED 代碼自動檢測 DVT 病史
-            conditionCode: '128053003' // Deep venous thrombosis
+            conditionCode: SNOMED_CODES.DEEP_VEIN_THROMBOSIS
         },
         {
             id: 'dvt-alternative',
@@ -78,7 +79,11 @@ export const wellsDVT = createScoringCalculator({
     // 聲明式 FHIR 數據需求配置
     dataRequirements: {
         // 自動從患者條件中檢測並勾選相關問題
-        conditions: ['363346000', '166001', '128053003']
+        conditions: [
+            SNOMED_CODES.MALIGNANCY,
+            SNOMED_CODES.PARALYSIS,
+            SNOMED_CODES.DEEP_VEIN_THROMBOSIS
+        ]
     },
 
     riskLevels: [
@@ -153,4 +158,6 @@ export const wellsDVT = createScoringCalculator({
     references: [
         'Wells PS, Anderson DR, Bormanis J, et al. Value of assessment of pretest probability of deep-vein thrombosis in clinical management. <em>Lancet</em>. 1997;350(9094):1795-1798.'
     ]
-});
+};
+
+export const wellsDVT = createScoringCalculator(wellsDVTConfig);

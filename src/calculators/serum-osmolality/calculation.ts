@@ -8,16 +8,24 @@ export interface SerumOsmoBreakdown {
     ethanolTerm: number;
 }
 
-export function serumOsmolalityCalculation(values: Record<string, number | string | boolean>): FormulaResultItem[] {
+export function serumOsmolalityCalculation(
+    values: Record<string, number | string | boolean>
+): FormulaResultItem[] {
     const naInput = values['osmo-na'];
     const glucoseInput = values['osmo-glucose'];
     const bunInput = values['osmo-bun'];
     const ethanolInput = values['osmo-ethanol'];
 
     if (
-        naInput === undefined || naInput === null || naInput === '' ||
-        glucoseInput === undefined || glucoseInput === null || glucoseInput === '' ||
-        bunInput === undefined || bunInput === null || bunInput === ''
+        naInput === undefined ||
+        naInput === null ||
+        naInput === '' ||
+        glucoseInput === undefined ||
+        glucoseInput === null ||
+        glucoseInput === '' ||
+        bunInput === undefined ||
+        bunInput === null ||
+        bunInput === ''
     ) {
         return [];
     }

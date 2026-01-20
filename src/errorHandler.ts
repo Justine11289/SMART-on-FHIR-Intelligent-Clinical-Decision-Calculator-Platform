@@ -109,15 +109,16 @@ export function displayError(
             <div class="error-content">
                 ${message}
             </div>
-            ${typeof window !== 'undefined' && window.location.hostname === 'localhost'
-            ? `
+            ${
+                typeof window !== 'undefined' && window.location.hostname === 'localhost'
+                    ? `
                 <details>
                     <summary>Technical Details</summary>
                     <pre>${error.stack || error.message}</pre>
                 </details>
             `
-            : ''
-        }
+                    : ''
+            }
         </div>
     `;
 }

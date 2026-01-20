@@ -9,8 +9,9 @@
  */
 
 import { createUnifiedFormulaCalculator } from '../shared/unified-formula-calculator.js';
-import { LOINC_CODES } from '../../fhir-codes.js';
+import { LOINC_CODES, SNOMED_CODES, RXNORM_CODES } from '../../fhir-codes.js';
 import { uiBuilder } from '../../ui-builder.js';
+import { fhirDataService } from '../../fhir-data-service.js';
 
 // ==========================================
 // PRECISE-HBR 評分函數
@@ -26,7 +27,7 @@ const calculateScore = (
     arcHbrRisk: boolean
 ): { score: number; breakdown: string } => {
     let score = 2; // Base Score
-    let breakdownParts: string[] = ['Base Score (2)'];
+    const breakdownParts: string[] = ['Base Score (2)'];
 
     // --- Age ---
     // Range 30-80. If > 30: + (Age - 30) * 0.25
@@ -66,7 +67,9 @@ const calculateScore = (
         const egfrPoints = (100 - egfrClamped) * 0.05;
         if (egfrPoints > 0) {
             score += egfrPoints;
-            breakdownParts.push(`eGFR ${egfr} (Clamped: ${egfrClamped}) -> +${egfrPoints.toFixed(2)}`);
+            breakdownParts.push(
+                `eGFR ${egfr} (Clamped: ${egfrClamped}) -> +${egfrPoints.toFixed(2)}`
+            );
         }
     }
 
@@ -111,7 +114,8 @@ export const preciseHbr = createUnifiedFormulaCalculator({
     id: 'precise-hbr',
     title: 'PRECISE-HBR Score',
     description: 'Predicts bleeding risk in patients undergoing stent implantation.',
-    infoAlert: 'Calculates bleeding risk using the PRECISE-HBR criteria. Score is rounded to the nearest integer.',
+    infoAlert:
+        'Calculates bleeding risk using the PRECISE-HBR criteria. Score is rounded to the nearest integer.',
 
     autoPopulateAge: 'precise-hbr-age',
 
@@ -190,7 +194,8 @@ export const preciseHbr = createUnifiedFormulaCalculator({
                 {
                     name: 'arc_hbr_plt',
                     label: 'Platelet count < 100 × 10⁹/L',
-                    description: '<strong>ARC-HBR Risk Factors</strong> (Presence of ANY below adds +3 points)',
+                    description:
+                        '<strong>ARC-HBR Risk Factors</strong> (Presence of ANY below adds +3 points)',
                     options: [
                         { value: '1', label: 'Yes' },
                         { value: '0', label: 'No', checked: true }
@@ -265,13 +270,22 @@ export const preciseHbr = createUnifiedFormulaCalculator({
         const hbrSurgery = getRadioValue('arc_hbr_surgery') === '1';
         const hbrNsaids = getRadioValue('arc_hbr_nsaids') === '1';
 
-        const arcHbrRisk = hbrPlt || hbrDiathesis || hbrCirrhosis || hbrMalignancy || hbrSurgery || hbrNsaids;
+        const arcHbrRisk =
+            hbrPlt || hbrDiathesis || hbrCirrhosis || hbrMalignancy || hbrSurgery || hbrNsaids;
 
         if (age === null || hb === null || wbc === null || egfr === null) {
             return null;
         }
 
-        const result = calculateScore(age, hb, egfr, wbc, priorBleeding, oralAnticoagulation, arcHbrRisk);
+        const result = calculateScore(
+            age,
+            hb,
+            egfr,
+            wbc,
+            priorBleeding,
+            oralAnticoagulation,
+            arcHbrRisk
+        );
 
         // Interpretation
         const s = result.score;
@@ -340,18 +354,116 @@ export const preciseHbr = createUnifiedFormulaCalculator({
 
     reference: `
         ${uiBuilder.createSection({
-        title: 'Risk Stratification',
-        icon: '📊',
-        content: uiBuilder.createTable({
-            headers: ['Score', 'Risk Category', '1-Yr Bleeding Risk'],
-            rows: [
-                ['≤ 22', 'Non-HBR', '0.5% ~ 3.5%'],
-                ['23 - 26', 'HBR', '3.5% ~ 5.5%'],
-                ['27 - 30', 'Very HBR', '5.5% ~ 8.0%'],
-                ['31 - 35', 'Extreme', '8.0% ~ 12.0%'],
-                ['> 35', 'Capped', '~15%']
-            ]
-        })
-    })}
-    `
+            title: 'Risk Stratification',
+            icon: '📊',
+            content: uiBuilder.createTable({
+                headers: ['Score', 'Risk Category', '1-Yr Bleeding Risk'],
+                rows: [
+                    ['≤ 22', 'Non-HBR', '0.5% ~ 3.5%'],
+                    ['23 - 26', 'HBR', '3.5% ~ 5.5%'],
+                    ['27 - 30', 'Very HBR', '5.5% ~ 8.0%'],
+                    ['31 - 35', 'Extreme', '8.0% ~ 12.0%'],
+                    ['> 35', 'Capped', '~15%']
+                ]
+            })
+        })}
+    `,
+
+    customInitialize: async (client, patient, container) => {
+        // Initialize FHIR service (already done by factory, but harmless to repeat or ensure)
+        // Actually factory calls fhirDataService.initialize if client is present
+
+        if (!fhirDataService.isReady()) return;
+
+        const setRadioResult = (name: string, isTrue: boolean) => {
+            if (isTrue) {
+                const radio = container.querySelector(
+                    `input[name="${name}"][value="1"]`
+                ) as HTMLInputElement;
+                if (radio) {
+                    radio.checked = true;
+                    radio.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+            }
+        };
+
+        try {
+            // 1. Prior Bleeding
+            const hasPriorBleeding = await fhirDataService.hasCondition([
+                SNOMED_CODES.PREVIOUS_BLEEDING
+            ]);
+            setRadioResult('prior_bleeding', hasPriorBleeding);
+
+            // 2. Oral Anticoagulation (OAC)
+            const oacCodes = [
+                RXNORM_CODES.WARFARIN,
+                RXNORM_CODES.APIXABAN,
+                RXNORM_CODES.RIVAROXABAN,
+                RXNORM_CODES.DABIGATRAN,
+                RXNORM_CODES.EDOXABAN
+            ];
+            const onOAC = await fhirDataService.isOnMedication(oacCodes);
+            setRadioResult('oral_anticoagulation', onOAC);
+
+            // 3. Platelet count < 100
+            // Note: Platelet unit varies (10*3/uL vs 10*9/L). Usually 100 x 10^9/L = 100,000 / uL.
+            // LOINC usually returns 10*3/uL (e.g. 150-450).
+            // Input asks for < 100 x 10^9/L.
+            // If value < 100 (assuming unit is 10^9/L or 10^3/uL which are numerically same for this range usually)
+            const pltResult = await fhirDataService.getObservation(LOINC_CODES.PLATELETS);
+            if (pltResult.value !== null) {
+                // Assuming standard units where < 100 is the threshold
+                if (pltResult.value < 100) {
+                    setRadioResult('arc_hbr_plt', true);
+                }
+            }
+
+            // 4. Chronic bleeding diathesis
+            const hasDiathesis = await fhirDataService.hasCondition([
+                SNOMED_CODES.BLEEDING_DISORDER,
+                SNOMED_CODES.THROMBOCYTOPENIA,
+                SNOMED_CODES.ANEMIA // Maybe too broad? Keeping it relevant to bleeding risk
+            ]);
+            setRadioResult('arc_hbr_diathesis', hasDiathesis);
+
+            // 5. Active Malignancy
+            const hasMalignancy = await fhirDataService.hasCondition([
+                SNOMED_CODES.MALIGNANCY,
+                SNOMED_CODES.METASTATIC_CANCER,
+                SNOMED_CODES.LEUKEMIA,
+                SNOMED_CODES.LYMPHOMA
+            ]);
+            setRadioResult('arc_hbr_malignancy', hasMalignancy);
+
+            // 6. Liver Cirrhosis
+            const hasCirrhosis = await fhirDataService.hasCondition([
+                SNOMED_CODES.CIRRHOSIS,
+                SNOMED_CODES.LIVER_FAILURE
+            ]);
+            setRadioResult('arc_hbr_cirrhosis', hasCirrhosis);
+
+            // 7. Chronic NSAIDs or Steroids
+            const antiInflammatoryCodes = [
+                // NSAIDs
+                RXNORM_CODES.IBUPROFEN,
+                RXNORM_CODES.NAPROXEN,
+                RXNORM_CODES.DICLOFENAC,
+                RXNORM_CODES.KETOROLAC,
+                RXNORM_CODES.INDOMETHACIN,
+                RXNORM_CODES.MELOXICAM,
+                RXNORM_CODES.CELECOXIB,
+                // Steroids
+                RXNORM_CODES.PREDNISONE,
+                RXNORM_CODES.PREDNISOLONE,
+                RXNORM_CODES.METHYLPREDNISOLONE,
+                RXNORM_CODES.DEXAMETHASONE,
+                RXNORM_CODES.HYDROCORTISONE,
+                RXNORM_CODES.TRIAMCINOLONE
+            ];
+            const onAntiInflammatory = await fhirDataService.isOnMedication(antiInflammatoryCodes);
+            setRadioResult('arc_hbr_nsaids', onAntiInflammatory);
+        } catch (error) {
+            console.warn('Error in PRECISE-HBR auto-population:', error);
+        }
+    }
 });

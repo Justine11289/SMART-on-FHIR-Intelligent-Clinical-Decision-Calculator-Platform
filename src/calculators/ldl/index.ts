@@ -7,7 +7,8 @@ import type { FormulaCalculatorConfig } from '../../types/calculator-formula.js'
 export const ldlConfig: FormulaCalculatorConfig = {
     id: 'ldl',
     title: 'LDL Calculated',
-    description: 'Calculates LDL based on total and HDL cholesterol and triglycerides using the Friedewald equation.',
+    description:
+        'Calculates LDL based on total and HDL cholesterol and triglycerides using the Friedewald equation.',
     inputs: [
         {
             id: 'ldl-tc',
@@ -59,7 +60,7 @@ export const ldlConfig: FormulaCalculatorConfig = {
         }
     ],
     calculate: calculateLDL,
-    customResultRenderer: (results) => {
+    customResultRenderer: results => {
         const ldlRes = results[0];
         const ldlMmolRes = results[1];
         const trigVal = results[2].value as number;
@@ -74,45 +75,45 @@ export const ldlConfig: FormulaCalculatorConfig = {
 
         return `
             ${uiBuilder.createResultItem({
-            label: ldlRes.label,
-            value: ldlRes.value.toString(),
-            unit: ldlRes.unit,
-            interpretation: ldlRes.interpretation,
-            alertClass: ldlRes.alertClass ? `ui-alert-${ldlRes.alertClass}` : ''
-        })}
+                label: ldlRes.label,
+                value: ldlRes.value.toString(),
+                unit: ldlRes.unit,
+                interpretation: ldlRes.interpretation,
+                alertClass: ldlRes.alertClass ? `ui-alert-${ldlRes.alertClass}` : ''
+            })}
             
             ${uiBuilder.createResultItem({
-            label: ldlMmolRes.label,
-            value: ldlMmolRes.value.toString(),
-            unit: ldlMmolRes.unit
-        })}
+                label: ldlMmolRes.label,
+                value: ldlMmolRes.value.toString(),
+                unit: ldlMmolRes.unit
+            })}
             
             <p class="text-sm text-muted mt-10">
                 <strong>Note:</strong> All values in mg/dL
             </p>
             
             ${uiBuilder.createAlert({
-            type: 'warning',
-            message: `
+                type: 'warning',
+                message: `
                     <strong>Limitation:</strong> This formula is not accurate when triglycerides ≥400 mg/dL (≥4.52 mmol/L). 
                     Consider direct LDL measurement in such cases.
                 `
-        })}
+            })}
             
             ${uiBuilder.createSection({
-            title: 'LDL Cholesterol Goals (Adults)',
-            content: uiBuilder.createTable({
-                headers: ['Category', 'mg/dL', 'mmol/L'],
-                rows: [
-                    ['Optimal', '< 100', '< 2.59'],
-                    ['Near Optimal', '100 - 129', '2.59 - 3.34'],
-                    ['Borderline High', '130 - 159', '3.37 - 4.12'],
-                    ['High', '160 - 189', '4.15 - 4.90'],
-                    ['Very High', '≥ 190', '≥ 4.92']
-                ],
-                className: 'reference-table'
-            })
-        })}
+                title: 'LDL Cholesterol Goals (Adults)',
+                content: uiBuilder.createTable({
+                    headers: ['Category', 'mg/dL', 'mmol/L'],
+                    rows: [
+                        ['Optimal', '< 100', '< 2.59'],
+                        ['Near Optimal', '100 - 129', '2.59 - 3.34'],
+                        ['Borderline High', '130 - 159', '3.37 - 4.12'],
+                        ['High', '160 - 189', '4.15 - 4.90'],
+                        ['Very High', '≥ 190', '≥ 4.92']
+                    ],
+                    className: 'reference-table'
+                })
+            })}
         `;
     }
 };

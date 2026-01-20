@@ -5,7 +5,7 @@
  */
 
 import { createUnifiedFormulaCalculator } from '../shared/unified-formula-calculator.js';
-import { LOINC_CODES } from '../../fhir-codes.js';
+import { LOINC_CODES, SNOMED_CODES } from '../../fhir-codes.js';
 import { uiBuilder } from '../../ui-builder.js';
 import { fhirDataService } from '../../fhir-data-service.js';
 import { calculateGenevaScore } from './calculation.js';
@@ -17,6 +17,8 @@ const config: FormulaCalculatorConfig = {
     description: 'Estimates the pre-test probability of pulmonary embolism (PE).',
     infoAlert:
         '<strong>Note:</strong> This is the Simplified (Modified) Revised Geneva Score. Each criterion is worth 1 point (except heart rate scoring).',
+
+    autoPopulateAge: 'geneva-age',
 
     sections: [
         {
@@ -36,6 +38,7 @@ const config: FormulaCalculatorConfig = {
                     type: 'radio',
                     id: 'geneva-prev-dvt',
                     label: 'Previous DVT or PE (+1)',
+                    snomedCode: `${SNOMED_CODES.DEEP_VEIN_THROMBOSIS},${SNOMED_CODES.PULMONARY_EMBOLISM}`,
                     options: [
                         { value: '0', label: 'No', checked: true },
                         { value: '1', label: 'Yes' }
@@ -45,6 +48,7 @@ const config: FormulaCalculatorConfig = {
                     type: 'radio',
                     id: 'geneva-surgery',
                     label: 'Surgery or fracture within 1 month (+1)',
+                    snomedCode: SNOMED_CODES.FRACTURE,
                     options: [
                         { value: '0', label: 'No', checked: true },
                         { value: '1', label: 'Yes' }
@@ -54,6 +58,7 @@ const config: FormulaCalculatorConfig = {
                     type: 'radio',
                     id: 'geneva-malignancy',
                     label: 'Active malignancy (+1)',
+                    snomedCode: SNOMED_CODES.MALIGNANCY,
                     options: [
                         { value: '0', label: 'No', checked: true },
                         { value: '1', label: 'Yes' }
@@ -78,6 +83,7 @@ const config: FormulaCalculatorConfig = {
                     type: 'radio',
                     id: 'geneva-hemoptysis',
                     label: 'Hemoptysis (+1)',
+                    snomedCode: SNOMED_CODES.HEMOPTYSIS,
                     options: [
                         { value: '0', label: 'No', checked: true },
                         { value: '1', label: 'Yes' }
@@ -105,7 +111,8 @@ const config: FormulaCalculatorConfig = {
                     unit: 'bpm',
                     placeholder: 'Enter heart rate',
                     helpText: '75-94 bpm (+1), ≥ 95 bpm (+2)',
-                    validationType: 'heartRate'
+                    validationType: 'heartRate',
+                    loincCode: LOINC_CODES.HEART_RATE
                 }
             ]
         }
@@ -150,7 +157,7 @@ const config: FormulaCalculatorConfig = {
 
     calculate: calculateGenevaScore,
 
-    customResultRenderer: (results) => {
+    customResultRenderer: results => {
         let html = '';
         results.forEach(item => {
             if (item.label === 'Recommendation' && item.alertPayload) {
@@ -175,87 +182,41 @@ const config: FormulaCalculatorConfig = {
         const setValue = (id: string, value: string) => {
             const input = container.querySelector(`#${id}`) as HTMLInputElement;
             if (input) {
-                if (input.type === 'radio') {
-                    // Find radio with that value
-                    const radio = container.querySelector(`input[name="${id}"][value="${value}"]`) as HTMLInputElement;
-                    if (radio) {
-                        radio.checked = true;
-                        radio.dispatchEvent(new Event('change', { bubbles: true }));
-                    }
-                } else {
-                    input.value = value;
-                    input.dispatchEvent(new Event('input', { bubbles: true }));
-                }
-            } else {
-                // Try finding radio group
-                const radio = container.querySelector(`input[id="${id}"][value="${value}"]`) as HTMLInputElement;
-                if (radio) { // unified-formula-calculator uses ID for radio group name?
-                    // Config uses id='geneva-age'.
-                    // Unified calculator:
-                    // Group name = input.id (Step 559 lines 212: `name: input.id`).
-                    // Radios don't have IDs individually usually, but name attribute.
-                    // The loop checks `input[name="${id}"]`.
-                    // Let's fix loop to use name selector.
-                    const targetRadio = container.querySelector(`input[name="${id}"][value="${value}"]`) as HTMLInputElement;
-                    if (targetRadio) {
-                        targetRadio.checked = true;
-                        targetRadio.dispatchEvent(new Event('change', { bubbles: true }));
-                    }
-                }
+                input.value = value;
+                input.dispatchEvent(new Event('input', { bubbles: true }));
             }
         };
 
-        // Auto-populate Age Logic
-        const age = fhirDataService.getPatientAge();
-        if (age !== null) {
-            if (age > 65) {
-                setValue('geneva-age', '1');
-            } else {
-                setValue('geneva-age', '0');
+        const setRadio = (id: string, value: string) => {
+            const radio = container.querySelector(
+                `input[name="${id}"][value="${value}"]`
+            ) as HTMLInputElement;
+            if (radio) {
+                radio.checked = true;
+                radio.dispatchEvent(new Event('change', { bubbles: true }));
             }
-        }
+        };
 
         if (client && fhirDataService.isReady()) {
-            // Heart Rate
             try {
+                // Heart Rate
                 const hrResult = await fhirDataService.getObservation(LOINC_CODES.HEART_RATE, {
                     trackStaleness: true,
                     stalenessLabel: 'Heart Rate'
                 });
+
                 if (hrResult.value !== null) {
-                    const hrInput = container.querySelector('#geneva-hr') as HTMLInputElement;
-                    if (hrInput) {
-                        hrInput.value = Math.round(hrResult.value).toString();
-                        hrInput.dispatchEvent(new Event('input', { bubbles: true }));
-                    }
+                    setValue('geneva-hr', Math.round(hrResult.value).toString());
                 }
+
+                // Check for manual conditions not covered by logic or requiring complex logic (e.g. combined palpation/edema not easily auto-populated)
+                // Conditions check is now largely handled by snomedCode in config for DVT/PE, Fracture, Malignancy, Hemoptysis
             } catch (e) {
-                console.warn('Error fetching Heart Rate', e);
+                console.warn('Error fetching FHIR data for Geneva', e);
             }
-
-            // Check for previous DVT/PE
-            fhirDataService
-                .hasCondition(['128053003', '59282003'])
-                .then(hasDVTPE => {
-                    if (hasDVTPE) {
-                        setValue('geneva-prev-dvt', '1');
-                    }
-                })
-                .catch(e => console.warn('Error checking DVT/PE history:', e));
-
-            // Check for malignancy
-            fhirDataService
-                .hasCondition(['363346000', '86049000'])
-                .then(hasMalignancy => {
-                    if (hasMalignancy) {
-                        setValue('geneva-malignancy', '1');
-                    }
-                })
-                .catch(e => console.warn('Error checking malignancy:', e));
         }
 
-        // Wait slightly for async checks to complete or just initial calculate
-        setTimeout(calculate, 200);
+        calculate();
     }
 };
 

@@ -21,7 +21,7 @@ export const calculateABG: ComplexCalculateFn = (getValue, getStdValue, getRadio
     // Note: The original code had radio buttons but didn't actually use the value in the calculation logic provided
     // It seemed to rely solely on the rules of thumb relative to reference ranges.
     // However, for completeness if we want to add compensation checks later:
-    // const chronicity = getRadioValue('chronicity'); 
+    // const chronicity = getRadioValue('chronicity');
 
     // 2. Validate core inputs
     if (ph === null || pco2 === null || hco3 === null) {

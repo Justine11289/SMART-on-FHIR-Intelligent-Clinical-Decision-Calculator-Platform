@@ -1,8 +1,9 @@
 import type { SimpleCalculateFn, FormulaResultItem } from '../../types/calculator-formula.js';
 
-export const calculateGraceAcs: SimpleCalculateFn = (values) => {
+export const calculateGraceAcs: SimpleCalculateFn = values => {
     const parseInput = (val: string | number | boolean | undefined | null): number | null => {
-        if (val === undefined || val === null || val === '' || typeof val === 'boolean') return null;
+        if (val === undefined || val === null || val === '' || typeof val === 'boolean')
+            return null;
         const num = Number(val);
         return isNaN(num) ? null : num;
     };
@@ -56,9 +57,15 @@ export const calculateGraceAcs: SimpleCalculateFn = (values) => {
 
     // Radio points (assume values are string representations of points)
     const killip = values['grace-killip'] ? parseInt(values['grace-killip'] as string, 10) : 0;
-    const arrest = values['grace-cardiac-arrest'] ? parseInt(values['grace-cardiac-arrest'] as string, 10) : 0;
-    const st = values['grace-st-deviation'] ? parseInt(values['grace-st-deviation'] as string, 10) : 0;
-    const enzymes = values['grace-cardiac-enzymes'] ? parseInt(values['grace-cardiac-enzymes'] as string, 10) : 0;
+    const arrest = values['grace-cardiac-arrest']
+        ? parseInt(values['grace-cardiac-arrest'] as string, 10)
+        : 0;
+    const st = values['grace-st-deviation']
+        ? parseInt(values['grace-st-deviation'] as string, 10)
+        : 0;
+    const enzymes = values['grace-cardiac-enzymes']
+        ? parseInt(values['grace-cardiac-enzymes'] as string, 10)
+        : 0;
 
     const score = agePoints + hrPoints + sbpPoints + crPoints + killip + arrest + st + enzymes;
 

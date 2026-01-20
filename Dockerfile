@@ -1,26 +1,20 @@
-# Stage 1: Build stage (optional, for future if needed)
-FROM nginx:alpine AS production
-
-# Set working directory
-WORKDIR /usr/share/nginx/html
-
-# Remove default nginx static assets
-RUN rm -rf ./*
-
-# Copy application files
+# 階段 1: 編譯 TS 為 JS
+FROM node:18-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
 COPY . .
+RUN npx tsc
 
-# Copy custom nginx configuration
+# 階段 2: 運行 Nginx
+FROM nginx:alpine
+WORKDIR /usr/share/nginx/html
+RUN rm -rf ./*
+COPY --from=builder /app/index.html .
+COPY --from=builder /app/calculator.html .
+COPY --from=builder /app/test-Patient.json .
+COPY --from=builder /app/js ./js
+COPY --from=builder /app/css ./css
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Expose port 80
 EXPOSE 80
-
-# Add healthcheck
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD wget --quiet --tries=1 --spider http://localhost/ || exit 1
-
-# Start nginx
 CMD ["nginx", "-g", "daemon off;"]
-
-

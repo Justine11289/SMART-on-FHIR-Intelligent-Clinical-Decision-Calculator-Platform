@@ -1,6 +1,6 @@
 import type { SimpleCalculateFn, FormulaResultItem } from '../../types/calculator-formula.js';
 
-export const calculateGuptaMica: SimpleCalculateFn = (values) => {
+export const calculateGuptaMica: SimpleCalculateFn = values => {
     const age = values['mica-age'] ? parseFloat(values['mica-age'] as string) : null;
     const creat = values['mica-creat'] ? parseFloat(values['mica-creat'] as string) : null;
     const functionalStatus = parseFloat((values['mica-status'] as string) || '0');

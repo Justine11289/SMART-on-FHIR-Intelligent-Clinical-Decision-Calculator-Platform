@@ -24,13 +24,13 @@ npm start
 
 ## 🎯 主要命令
 
-| 命令 | 说明 |
-|------|------|
-| `npm start` | 启动开发服务器 (端口 8000) |
-| `npm test` | 运行测试套件 |
-| `npm run lint` | 检查代码风格 |
-| `npm run lint:fix` | 自动修复代码风格问题 |
-| `npm run format` | 格式化代码 |
+| 命令               | 说明                                 |
+| ------------------ | ------------------------------------ |
+| `npm start`        | 启动开发服务器 (端口 8000)           |
+| `npm test`         | 运行测试套件                         |
+| `npm run lint`     | 检查代码风格                         |
+| `npm run lint:fix` | 自动修复代码风格问题                 |
+| `npm run format`   | 格式化代码                           |
 | `npm run validate` | 运行全部检查（lint + format + test） |
 
 ---
@@ -38,19 +38,21 @@ npm start
 ## 🧪 测试 SMART on FHIR
 
 1. 启动本地服务器:
-   ```bash
-   npm start
-   ```
+
+    ```bash
+    npm start
+    ```
 
 2. 访问 SMART Health IT Launcher:
-   ```
-   https://launch.smarthealthit.org/
-   ```
+
+    ```
+    https://launch.smarthealthit.org/
+    ```
 
 3. 配置启动参数:
-   - **App Launch URL**: `http://localhost:8000/launch.html`
-   - **Provider**: 任意
-   - **Patient**: 任意患者
+    - **App Launch URL**: `http://localhost:8000/launch.html`
+    - **Provider**: 任意
+    - **Patient**: 任意患者
 
 4. 点击 "Launch" 按钮
 
@@ -123,4 +125,3 @@ npm run format
 ---
 
 Happy Coding! 🎉
-

@@ -7,7 +7,8 @@ import type { FormulaCalculatorConfig } from '../../types/calculator-formula.js'
 export const sixMwdConfig: FormulaCalculatorConfig = {
     id: '6mwd',
     title: '6 Minute Walk Distance',
-    description: 'Calculates reference values for distance walked, as a measure of functional status.',
+    description:
+        'Calculates reference values for distance walked, as a measure of functional status.',
     sections: [
         {
             title: 'Patient Information',
@@ -93,7 +94,8 @@ export const sixMwdConfig: FormulaCalculatorConfig = {
         },
         {
             label: 'Abbreviations',
-            content: 'BMI = body mass index (kg/m²); 6MWD = 6-min walk distance; LLN = lower limit of normal'
+            content:
+                'BMI = body mass index (kg/m²); 6MWD = 6-min walk distance; LLN = lower limit of normal'
         }
     ],
     reference: uiBuilder.createReference({

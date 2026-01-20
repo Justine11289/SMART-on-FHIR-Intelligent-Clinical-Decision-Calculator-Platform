@@ -68,7 +68,7 @@ export const fib4 = createUnifiedFormulaCalculator({
     ],
     autoPopulateAge: 'fib4-age',
     calculate: fib4Calculation,
-    customResultRenderer: (results) => {
+    customResultRenderer: results => {
         const res = results[0];
         if (!res) return '';
 
@@ -85,16 +85,16 @@ export const fib4 = createUnifiedFormulaCalculator({
 
         return `
             ${uiBuilder.createResultItem({
-            label: res.label,
-            value: res.value,
-            unit: res.unit,
-            interpretation: res.interpretation,
-            alertClass: res.alertClass ? `ui-alert-${res.alertClass}` : ''
-        })}
+                label: res.label,
+                value: res.value,
+                unit: res.unit,
+                interpretation: res.interpretation,
+                alertClass: res.alertClass ? `ui-alert-${res.alertClass}` : ''
+            })}
             ${uiBuilder.createAlert({
-            type: alertClass as 'success' | 'warning' | 'danger' | 'info',
-            message: `<strong>Recommendation:</strong> ${recommendation}`
-        })}
+                type: alertClass as 'success' | 'warning' | 'danger' | 'info',
+                message: `<strong>Recommendation:</strong> ${recommendation}`
+            })}
         `;
     }
 });

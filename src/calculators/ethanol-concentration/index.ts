@@ -8,15 +8,17 @@ export const ethanolConcentrationConfig: FormulaCalculatorConfig = {
     id: 'ethanol-concentration',
     title: 'Estimated Ethanol (and Toxic Alcohol) Serum Concentration Based on Ingestion',
     description: 'Predicts ethanol concentration based on ingestion of alcohol.',
-    infoAlert: '<h4>Clinical Reference</h4>' + uiBuilder.createList({
-        items: [
-            '<strong>Legal limit (US driving):</strong> 80 mg/dL (0.08%)',
-            '<strong>Severe intoxication:</strong> Usually >300 mg/dL',
-            '<strong>Potentially fatal:</strong> >400-500 mg/dL',
-            '<strong>Metabolism rate:</strong> ~15-20 mg/dL/hour',
-            '<strong>Peak time:</strong> 30-90 min after ingestion (empty stomach)'
-        ]
-    }),
+    infoAlert:
+        '<h4>Clinical Reference</h4>' +
+        uiBuilder.createList({
+            items: [
+                '<strong>Legal limit (US driving):</strong> 80 mg/dL (0.08%)',
+                '<strong>Severe intoxication:</strong> Usually >300 mg/dL',
+                '<strong>Potentially fatal:</strong> >400-500 mg/dL',
+                '<strong>Metabolism rate:</strong> ~15-20 mg/dL/hour',
+                '<strong>Peak time:</strong> 30-90 min after ingestion (empty stomach)'
+            ]
+        }),
     sections: [
         {
             title: 'Ingestion Details',

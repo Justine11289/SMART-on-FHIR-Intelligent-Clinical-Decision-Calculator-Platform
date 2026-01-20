@@ -1,13 +1,18 @@
 ﻿/**
  * APACHE II 評分計算邏輯
- * 
+ *
  * 計算 ICU 死亡風險
- * 
- * Reference: Knaus, W. A., Draper, E. A., Wagner, D. P., & Zimmerman, J. E. (1985). 
+ *
+ * Reference: Knaus, W. A., Draper, E. A., Wagner, D. P., & Zimmerman, J. E. (1985).
  * APACHE II: a severity of disease classification system. Critical care medicine, 13(10), 818-829.
  */
 
-import type { ComplexCalculationResult, GetValueFn, GetStdValueFn, GetRadioValueFn } from '../../types/calculator-formula.js';
+import type {
+    ComplexCalculationResult,
+    GetValueFn,
+    GetStdValueFn,
+    GetRadioValueFn
+} from '../../types/calculator-formula.js';
 
 // ==========================================
 // APACHE II 評分函數
@@ -106,7 +111,7 @@ export const getPoints = {
 
 /**
  * 計算預測 ICU 死亡率
- * 
+ *
  * @param score - APACHE II 總分
  * @returns 預測死亡率 (%)
  */
@@ -116,7 +121,7 @@ export function calculateMortality(score: number): number {
 
 /**
  * APACHE II 主計算函數
- * 
+ *
  * @param getValue - 取得原始值函數
  * @param getStdValue - 取得標準化值函數
  * @param getRadioValue - 取得 Radio 值函數

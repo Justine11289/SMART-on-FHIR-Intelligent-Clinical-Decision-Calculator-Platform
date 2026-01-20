@@ -5,11 +5,11 @@
  * 心房顫動患者中風和出血風險綜合評估
  */
 
-import { createScoringCalculator } from '../shared/scoring-calculator.js';
+import { createScoringCalculator, ScoringCalculatorConfig } from '../shared/scoring-calculator.js';
 import { uiBuilder } from '../../ui-builder.js';
 import { fhirDataService } from '../../fhir-data-service.js';
 
-export const afRisk = createScoringCalculator({
+export const afRiskConfig: ScoringCalculatorConfig = {
     id: 'af-risk',
     title: 'AF Stroke/Bleed Risk (CHA₂DS₂-VASc & HAS-BLED)',
     description: 'Combined assessment of stroke and bleeding risk in atrial fibrillation patients.',
@@ -276,20 +276,20 @@ export const afRisk = createScoringCalculator({
 
         return `
             ${uiBuilder.createResultItem({
-            label: 'CHA₂DS₂-VASc Score (Stroke Risk)',
-            value: cha2ds2vasc_score.toString(),
-            unit: '/ 9 points'
-        })}
+                label: 'CHA₂DS₂-VASc Score (Stroke Risk)',
+                value: cha2ds2vasc_score.toString(),
+                unit: '/ 9 points'
+            })}
             ${uiBuilder.createResultItem({
-            label: 'HAS-BLED Score (Bleeding Risk)',
-            value: hasbled_score.toString(),
-            unit: '/ 9 points'
-        })}
+                label: 'HAS-BLED Score (Bleeding Risk)',
+                value: hasbled_score.toString(),
+                unit: '/ 9 points'
+            })}
             
             ${uiBuilder.createAlert({
-            type: alertClass as 'success' | 'warning' | 'danger' | 'info',
-            message: `<strong>Recommendation:</strong> ${recommendation}`
-        })}
+                type: alertClass as 'success' | 'warning' | 'danger' | 'info',
+                message: `<strong>Recommendation:</strong> ${recommendation}`
+            })}
             ${bleedNote}
         `;
     },
@@ -341,4 +341,6 @@ export const afRisk = createScoringCalculator({
             console.warn('FHIR data fetch failed:', e);
         }
     }
-});
+};
+
+export const afRisk = createScoringCalculator(afRiskConfig);

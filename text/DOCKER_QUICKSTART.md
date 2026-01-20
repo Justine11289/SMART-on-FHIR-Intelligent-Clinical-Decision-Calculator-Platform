@@ -18,12 +18,14 @@ MEDCALCEHR/
 ### 方式 1：使用啟動腳本（最簡單）
 
 **Windows:**
+
 ```powershell
 cd MEDCALCEHR
 .\start-docker.ps1
 ```
 
 **Linux/Mac:**
+
 ```bash
 cd MEDCALCEHR
 chmod +x start-docker.sh
@@ -38,12 +40,14 @@ docker-compose up -d
 ```
 
 查看狀態：
+
 ```bash
 docker-compose ps
 docker-compose logs -f
 ```
 
 停止服務：
+
 ```bash
 docker-compose down
 ```
@@ -83,8 +87,8 @@ docker rm medcalcehr-app
 1. 確保容器已啟動
 2. 訪問 [SMART Health IT Launcher](https://launch.smarthealthit.org/)
 3. 設置：
-   - **App Launch URL**: `http://localhost:8080/launch.html`
-   - 選擇一個測試患者
+    - **App Launch URL**: `http://localhost:8080/launch.html`
+    - 選擇一個測試患者
 4. 點擊 Launch
 
 ## 🔍 常見問題
@@ -92,12 +96,14 @@ docker rm medcalcehr-app
 ### 1. 端口 8080 已被佔用？
 
 **方法 A：修改 docker-compose.yml**
+
 ```yaml
 ports:
-  - "3000:80"  # 改為 3000 端口
+    - '3000:80' # 改為 3000 端口
 ```
 
 **方法 B：使用 docker 命令**
+
 ```bash
 docker run -d -p 3000:80 --name medcalcehr-app medcalcehr:latest
 ```
@@ -144,21 +150,21 @@ docker system prune -a
 ### ✅ 已解決的問題
 
 1. **✅ X-Frame-Options 錯誤**
-   - 現在通過 Nginx HTTP 頭正確設置
+    - 現在通過 Nginx HTTP 頭正確設置
 
 2. **✅ CSP 錯誤**
-   - Content Security Policy 已正確配置
-   - 允許 cdn.jsdelivr.net 用於 source maps
+    - Content Security Policy 已正確配置
+    - 允許 cdn.jsdelivr.net 用於 source maps
 
 3. **✅ 緩存問題**
-   - HTML 文件不緩存（實時更新）
-   - 靜態資源（JS/CSS/圖片）緩存 1 年
+    - HTML 文件不緩存（實時更新）
+    - 靜態資源（JS/CSS/圖片）緩存 1 年
 
 4. **✅ 安全頭**
-   - X-Frame-Options: SAMEORIGIN
-   - X-Content-Type-Options: nosniff
-   - Referrer-Policy
-   - Permissions-Policy
+    - X-Frame-Options: SAMEORIGIN
+    - X-Content-Type-Options: nosniff
+    - Referrer-Policy
+    - Permissions-Policy
 
 ### 🚀 性能優化
 
@@ -199,20 +205,22 @@ docker exec -it medcalcehr-app sh
 ### 雲端平台
 
 1. **Docker Hub**
-   ```bash
-   docker tag medcalcehr:latest username/medcalcehr:latest
-   docker push username/medcalcehr:latest
-   ```
+
+    ```bash
+    docker tag medcalcehr:latest username/medcalcehr:latest
+    docker push username/medcalcehr:latest
+    ```
 
 2. **Azure Container Instances**
-   ```bash
-   az container create \
-     --resource-group myResourceGroup \
-     --name medcalcehr \
-     --image username/medcalcehr:latest \
-     --dns-name-label medcalcehr \
-     --ports 80
-   ```
+
+    ```bash
+    az container create \
+      --resource-group myResourceGroup \
+      --name medcalcehr \
+      --image username/medcalcehr:latest \
+      --dns-name-label medcalcehr \
+      --ports 80
+    ```
 
 3. **AWS ECS / Google Cloud Run / Heroku**
    詳見 [README_DOCKER.md](README_DOCKER.md)
@@ -220,6 +228,7 @@ docker exec -it medcalcehr-app sh
 ### SSL/TLS 配置
 
 如果需要 HTTPS，可以：
+
 1. 使用 Nginx Proxy Manager
 2. 使用 Traefik
 3. 使用雲端負載均衡器（推薦）
@@ -249,7 +258,3 @@ docker exec -it medcalcehr-app sh
 現在您的 MEDCALCEHR 應用已經在 Docker 容器中運行了！
 
 訪問：**http://localhost:8080** 🏥
-
-
-
-

@@ -1,6 +1,6 @@
 import type { SimpleCalculateFn, FormulaResultItem } from '../../types/calculator-formula.js';
 
-export const calculateGenevaScore: SimpleCalculateFn = (values) => {
+export const calculateGenevaScore: SimpleCalculateFn = values => {
     let score = 0;
 
     // Radios (value '1' adds 1 point)
@@ -21,9 +21,12 @@ export const calculateGenevaScore: SimpleCalculateFn = (values) => {
     });
 
     // Heart Rate
-    const hr = (values['geneva-hr'] !== '' && values['geneva-hr'] !== undefined && values['geneva-hr'] !== null)
-        ? Number(values['geneva-hr'])
-        : null;
+    const hr =
+        values['geneva-hr'] !== '' &&
+        values['geneva-hr'] !== undefined &&
+        values['geneva-hr'] !== null
+            ? Number(values['geneva-hr'])
+            : null;
 
     if (hr !== null) {
         if (hr >= 75 && hr <= 94) {

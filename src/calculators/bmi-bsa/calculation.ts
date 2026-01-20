@@ -1,13 +1,19 @@
 ﻿import { AlertSeverity } from '../../types/calculator-base.js';
 import { FormulaResultItem } from '../../types/calculator-formula.js';
 
-export function bmiBsaCalculation(values: Record<string, number | string | boolean>): FormulaResultItem[] {
+export function bmiBsaCalculation(
+    values: Record<string, number | string | boolean>
+): FormulaResultItem[] {
     const weightInput = values['bmi-bsa-weight'];
     const heightInput = values['bmi-bsa-height'];
 
     if (
-        weightInput === undefined || weightInput === null || weightInput === '' ||
-        heightInput === undefined || heightInput === null || heightInput === ''
+        weightInput === undefined ||
+        weightInput === null ||
+        weightInput === '' ||
+        heightInput === undefined ||
+        heightInput === null ||
+        heightInput === ''
     ) {
         return [];
     }

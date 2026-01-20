@@ -7,14 +7,12 @@ export const phenytoinCorrection = createUnifiedFormulaCalculator({
     id: 'phenytoin-correction',
     title: 'Phenytoin (Dilantin) Correction for Albumin/Renal Failure',
     description: 'Corrects serum phenytoin level for renal failure and/or hypoalbuminemia.',
-    infoAlert: '<h4>Therapeutic Range:</h4>' + uiBuilder.createList({
-        items: [
-            '10-20 mcg/mL',
-            '>20 mcg/mL: Toxic',
-            '<10 mcg/mL: Subtherapeutic'
-        ],
-        className: 'info-list'
-    }),
+    infoAlert:
+        '<h4>Therapeutic Range:</h4>' +
+        uiBuilder.createList({
+            items: ['10-20 mcg/mL', '>20 mcg/mL: Toxic', '<10 mcg/mL: Subtherapeutic'],
+            className: 'info-list'
+        }),
     sections: [
         {
             title: 'Lab Values & Clinical Status',
@@ -66,36 +64,37 @@ export const phenytoinCorrection = createUnifiedFormulaCalculator({
     formulas: [
         {
             label: 'Corrected Level',
-            formula: '<span class="formula-fraction"><span class="numerator">Total Phenytoin</span><span class="denominator">((1 − K) × Albumin / 4.4) + K</span></span>',
+            formula:
+                '<span class="formula-fraction"><span class="numerator">Total Phenytoin</span><span class="denominator">((1 − K) × Albumin / 4.4) + K</span></span>',
             notes: 'K = 0.1 (Normal) or 0.2 (Renal Failure)'
         }
     ],
     calculate: phenytoinCorrectionCalculation,
-    customResultRenderer: (results) => {
+    customResultRenderer: results => {
         const res = results[0];
         if (!res) return '';
 
-        const payload = res.alertPayload as { alertMsg: string, measuredTotal: number };
+        const payload = res.alertPayload as { alertMsg: string; measuredTotal: number };
         const alertMsg = payload.alertMsg;
         const alertClass = res.alertClass || 'info';
 
         return `
             ${uiBuilder.createResultItem({
-            label: res.label,
-            value: res.value,
-            unit: res.unit,
-            interpretation: res.interpretation,
-            alertClass: `ui-alert-${alertClass}`
-        })}
+                label: res.label,
+                value: res.value,
+                unit: res.unit,
+                interpretation: res.interpretation,
+                alertClass: `ui-alert-${alertClass}`
+            })}
             ${uiBuilder.createResultItem({
-            label: 'Measured Total',
-            value: payload.measuredTotal.toFixed(1),
-            unit: 'mcg/mL'
-        })}
+                label: 'Measured Total',
+                value: payload.measuredTotal.toFixed(1),
+                unit: 'mcg/mL'
+            })}
             ${uiBuilder.createAlert({
-            type: alertClass as 'success' | 'warning' | 'danger' | 'info',
-            message: alertMsg
-        })}
+                type: alertClass as 'success' | 'warning' | 'danger' | 'info',
+                message: alertMsg
+            })}
         `;
     }
 });

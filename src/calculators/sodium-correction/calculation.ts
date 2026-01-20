@@ -2,7 +2,7 @@
 
 interface SodiumCorrectionInput {
     'measured-sodium': number;
-    'glucose': number;
+    glucose: number;
     'correction-factor': string;
 }
 
@@ -14,8 +14,12 @@ export const calculateSodiumCorrection = (
     const glucose = inputs['glucose'];
     const factorStr = inputs['correction-factor'] || '1.6';
 
-    if (measuredSodium === undefined || measuredSodium === null ||
-        glucose === undefined || glucose === null) {
+    if (
+        measuredSodium === undefined ||
+        measuredSodium === null ||
+        glucose === undefined ||
+        glucose === null
+    ) {
         return null;
     }
 
@@ -23,7 +27,7 @@ export const calculateSodiumCorrection = (
 
     // Formula: Corrected Na = Measured Na + Factor * ((Glucose - 100) / 100)
     // Note: If Glucose < 100, the correction term would be negative, which might not be clinically intended for "hyperglycemia correction".
-    // However, strictly following the formula allows it. 
+    // However, strictly following the formula allows it.
     // Usually this is used for Hyperglycemia (Glucose > 100).
     // Let's assume standard behavior: calculate as is, but interpretation focuses on the result.
 
@@ -50,7 +54,7 @@ export const calculateSodiumCorrection = (
             unit: 'mEq/L',
             interpretation,
             alertClass,
-            // Pass extra data safely via a custom property if needed, 
+            // Pass extra data safely via a custom property if needed,
             // or we can rely on re-calculating or passing input values if the renderer has access.
             // But createUnifiedFormulaCalculator passes these results to the renderer.
             // We can treat 'alertPayload' as a generic bag for extra data if needed, or just append strictly formatted items.

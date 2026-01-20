@@ -3,13 +3,11 @@
  */
 
 import { describe, expect, test, jest, beforeEach, afterEach } from '@jest/globals';
-import {
-    createUnifiedFormulaCalculator
-} from '../../calculators/shared/unified-formula-calculator';
+import { createUnifiedFormulaCalculator } from '../../calculators/shared/unified-formula-calculator';
 
 // Mock console
-jest.spyOn(console, 'warn').mockImplementation(() => { });
-jest.spyOn(console, 'error').mockImplementation(() => { });
+jest.spyOn(console, 'warn').mockImplementation(() => {});
+jest.spyOn(console, 'error').mockImplementation(() => {});
 
 describe('Unified Formula Calculator Factory', () => {
     let container: HTMLElement;

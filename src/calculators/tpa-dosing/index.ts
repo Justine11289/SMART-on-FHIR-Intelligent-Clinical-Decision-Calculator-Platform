@@ -7,18 +7,23 @@ import type { FormulaCalculatorConfig } from '../../types/calculator-formula.js'
 export const tpaDosingConfig: FormulaCalculatorConfig = {
     id: 'tpa-dosing',
     title: 'tPA (Alteplase) Dosing for Ischemic Stroke',
-    description: 'Calculates tPA (alteplase) dosing for acute ischemic stroke based on patient weight.',
-    infoAlert: uiBuilder.createAlert({
-        type: 'warning',
-        message: '<strong>⚠️ Important:</strong> This calculator is for acute ischemic stroke only. Verify all inclusion/exclusion criteria before administration.'
-    }) + '<h4>Dosing Guidelines</h4>' + uiBuilder.createList({
-        items: [
-            '<strong>Total Dose:</strong> 0.9 mg/kg (Maximum 90 mg)',
-            '<strong>Bolus:</strong> 10% of total dose over 1 minute',
-            '<strong>Infusion:</strong> 90% of total dose over 60 minutes',
-            '<strong>Time Window:</strong> Within 4.5 hours of symptom onset'
-        ]
-    }),
+    description:
+        'Calculates tPA (alteplase) dosing for acute ischemic stroke based on patient weight.',
+    infoAlert:
+        uiBuilder.createAlert({
+            type: 'warning',
+            message:
+                '<strong>⚠️ Important:</strong> This calculator is for acute ischemic stroke only. Verify all inclusion/exclusion criteria before administration.'
+        }) +
+        '<h4>Dosing Guidelines</h4>' +
+        uiBuilder.createList({
+            items: [
+                '<strong>Total Dose:</strong> 0.9 mg/kg (Maximum 90 mg)',
+                '<strong>Bolus:</strong> 10% of total dose over 1 minute',
+                '<strong>Infusion:</strong> 90% of total dose over 60 minutes',
+                '<strong>Time Window:</strong> Within 4.5 hours of symptom onset'
+            ]
+        }),
     sections: [
         {
             title: 'Patient Weight',

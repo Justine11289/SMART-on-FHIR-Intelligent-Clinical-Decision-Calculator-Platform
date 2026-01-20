@@ -5,6 +5,7 @@ A comprehensive SMART on FHIR application providing **92 clinical calculators** 
 ## ✨ Features
 
 ### 🧮 **92 Clinical Calculators**
+
 - **Cardiovascular Risk Assessment**: ASCVD, Framingham, GRACE ACS, etc.
 - **Renal Function**: CKD-EPI, MDRD, Cockcroft-Gault, etc.
 - **Critical Care Scoring**: APACHE II, SOFA, qSOFA, etc.
@@ -13,17 +14,20 @@ A comprehensive SMART on FHIR application providing **92 clinical calculators** 
 - **Infection Assessment**: CURB-65, SIRS, Bacterial Meningitis Score, etc.
 
 ### 🔗 **SMART on FHIR Integration**
+
 - Automatic patient data population from EHR
 - Real-time lab value retrieval
 - Seamless integration with clinical workflows
 
 ### 🎨 **Modern User Interface**
+
 - **Responsive Design**: Works on desktop, tablet, and mobile
 - **Sticky Header**: Patient info and search always visible
 - **Advanced Search & Sort**: Find calculators quickly with A-Z, Z-A sorting
 - **Beautiful UI**: Modern gradient design with smooth animations
 
 ### 📊 **Enhanced Calculator Features**
+
 - **Formula Display**: Mathematical formulas with detailed explanations
 - **Reference Materials**: Citations and clinical images
 - **Normal Value Ranges**: Built-in reference ranges
@@ -66,22 +70,23 @@ docker-compose up -d
 #### 🏥 透過 SMART on FHIR 啟動
 
 1. **確保容器正在運行**
-   ```bash
-   docker ps  # 應看到 medcalcehr-app
-   ```
+
+    ```bash
+    docker ps  # 應看到 medcalcehr-app
+    ```
 
 2. **訪問健康檢查頁面**
-   - http://localhost:8080/health-check.html
+    - http://localhost:8080/health-check.html
 
 3. **使用 SMART Health IT Launcher 測試**
-   - 前往：https://launch.smarthealthit.org/
-   - App Launch URL: `http://localhost:8080/launch.html`
-   - 或使用您的 IP: `http://YOUR_IP:8080/launch.html`
-   - FHIR Version: **R4 (FHIR 4.0.1)**
-   - 選擇測試病患並點擊 **"Launch App!"**
+    - 前往：https://launch.smarthealthit.org/
+    - App Launch URL: `http://localhost:8080/launch.html`
+    - 或使用您的 IP: `http://YOUR_IP:8080/launch.html`
+    - FHIR Version: **R4 (FHIR 4.0.1)**
+    - 選擇測試病患並點擊 **"Launch App!"**
 
 4. **詳細設定指南**
-   - 參考：[SMART_LAUNCH_GUIDE.md](SMART_LAUNCH_GUIDE.md)
+    - 參考：[SMART_LAUNCH_GUIDE.md](SMART_LAUNCH_GUIDE.md)
 
 #### 🔍 檢查清單
 
@@ -100,6 +105,7 @@ http://localhost:8080/test-calculators.html
 ```
 
 **功能**：
+
 - ✅ 自動測試所有計算器載入
 - ✅ 驗證模組結構和必要方法
 - ✅ 即時顯示測試進度和結果
@@ -114,6 +120,7 @@ http://localhost:8080/test-calculators.html
 所有計算器現在使用統一的樣式系統，確保一致的使用者體驗：
 
 **新功能**：
+
 - ✅ 預定義的 UI 組件庫（輸入、按鈕、結果顯示）
 - ✅ 統一的顏色方案和風險指標
 - ✅ 響應式設計（手機、平板、桌面）
@@ -121,6 +128,7 @@ http://localhost:8080/test-calculators.html
 - ✅ 列印友好樣式
 
 **開發指南**：
+
 - 快速參考：[UNIFIED_STYLE_QUICK_REF.md](UNIFIED_STYLE_QUICK_REF.md)
 - 完整指南：[CALCULATOR_STYLE_GUIDE.md](CALCULATOR_STYLE_GUIDE.md)
 - CSS 檔案：`css/unified-calculator.css`
@@ -132,7 +140,7 @@ http://localhost:8080/test-calculators.html
 
 ```javascript
 export const exampleCalculator = {
-    generateHTML: function() {
+    generateHTML: function () {
         return `
             <!-- 標題 -->
             <div class="calculator-header">
@@ -161,27 +169,32 @@ export const exampleCalculator = {
     }
 };
 ```
+
 </details>
 
 📖 詳細說明請參考 [Docker 部署指南](README_DOCKER.md)
 
 ### Method 2: Python HTTP Server
+
 1. Navigate to the project directory
 2. Start a local web server:
-   ```bash
-   # Python 3
-   python -m http.server 8000
-   
-   # Python 2
-   python -m SimpleHTTPServer 8000
-   ```
+
+    ```bash
+    # Python 3
+    python -m http.server 8000
+
+    # Python 2
+    python -m SimpleHTTPServer 8000
+    ```
 
 ### Method 3: Node.js HTTP Server
+
 ```bash
 npx http-server -p 8000
 ```
 
 ### Method 4: Live Server (VS Code Extension)
+
 1. Install the "Live Server" extension in VS Code
 2. Right-click on `launch.html` and select "Open with Live Server"
 
@@ -190,41 +203,44 @@ npx http-server -p 8000
 1. **Start your local server** (using any method above)
 2. **Go to SMART Health IT Launcher**: [https://launch.smarthealthit.org/](https://launch.smarthealthit.org/)
 3. **Configure the launcher**:
-   - **App Launch URL**: `http://localhost:8000/launch.html`
-   - **Select a patient** from the available test patients
+    - **App Launch URL**: `http://localhost:8000/launch.html`
+    - **Select a patient** from the available test patients
 4. **Launch the application**
 
 ## 📱 Usage
 
 ### 🔍 **Finding Calculators**
+
 - Use the **search bar** to find specific calculators
 - **Sort options**: A→Z, Z→A, Recently Added, Most Used
 - **Browse by category**: All calculators are alphabetically organized
 
 ### 📋 **Using Calculators**
+
 - Patient data is **automatically populated** from the EHR
 - **Manual input** available for all fields
 - **Real-time calculations** with immediate results
 - **Formula explanations** and clinical guidance provided
 
 ### 📊 **Special Features**
+
 - **Growth Charts**: Side-by-side height/weight visualization
 - **Reference Images**: Clinical scoring tables and diagrams
 - **Formula Sections**: Mathematical explanations with normal values
 
 ## 🛠️ Technical Stack
 
-| 類別 | 技術 |
-|------|------|
-| **語言** | TypeScript, HTML5, CSS3 |
-| **FHIR 整合** | SMART on FHIR JavaScript Client |
-| **圖表** | Chart.js（生長曲線圖） |
-| **架構** | 模組化計算器系統 + Factory Pattern |
-| **UI 系統** | UIBuilder 元件庫 |
-| **驗證** | 三級驗證系統（綠/黃/紅） |
-| **代碼標準** | LOINC、SNOMED CT、RxNorm |
-| **部署** | Docker + Nginx |
-| **測試** | Jest + SaMD 驗證
+| 類別          | 技術                               |
+| ------------- | ---------------------------------- |
+| **語言**      | TypeScript, HTML5, CSS3            |
+| **FHIR 整合** | SMART on FHIR JavaScript Client    |
+| **圖表**      | Chart.js（生長曲線圖）             |
+| **架構**      | 模組化計算器系統 + Factory Pattern |
+| **UI 系統**   | UIBuilder 元件庫                   |
+| **驗證**      | 三級驗證系統（綠/黃/紅）           |
+| **代碼標準**  | LOINC、SNOMED CT、RxNorm           |
+| **部署**      | Docker + Nginx                     |
+| **測試**      | Jest + SaMD 驗證                   |
 
 ### 🏗️ 系統架構
 
@@ -233,40 +249,40 @@ flowchart TB
     subgraph EHR["🏥 EHR 系統"]
         FHIR["FHIR Server"]
     end
-    
+
     subgraph App["📱 CGMH EHRCALC"]
         direction TB
         Launch["launch.html<br/>SMART 啟動"]
         Index["index.html<br/>計算器列表"]
         Calc["calculator.html<br/>計算器頁面"]
-        
+
         subgraph Core["核心模組"]
             UIBuilder["UIBuilder<br/>UI 元件"]
             Validator["Validator<br/>輸入驗證"]
             UnitConv["UnitConverter<br/>單位轉換"]
             FHIRCodes["FHIR Codes<br/>標準代碼"]
         end
-        
+
         subgraph Calculators["計算器模組 (92+)"]
             Scoring["計分型<br/>APACHE, SOFA..."]
             Formula["公式型<br/>GFR, BMI..."]
             Convert["轉換型<br/>MME, 類固醇..."]
         end
-        
+
         subgraph Factories["Factory 函數"]
             SF["createScoringCalculator"]
             FF["createUnifiedFormulaCalculator"]
             CF["createConversionCalculator"]
         end
     end
-    
+
     FHIR <-->|"OAuth 2.0"| Launch
     Launch --> Index
     Index --> Calc
     Calc --> Core
     Core --> Factories
     Factories --> Calculators
-    
+
     style EHR fill:#e3f2fd
     style App fill:#f5f5f5
     style Core fill:#fff3e0
@@ -425,20 +441,20 @@ MEDCALCEHR/
 
 建立新計算器時，請遵守以下 **SaMD (Software as a Medical Device)** 合規要求：
 
-| 規則 | 說明 |
-|------|------|
+| 規則               | 說明                                                    |
+| ------------------ | ------------------------------------------------------- |
 | **必須有臨床代碼** | 每個數值輸入必須有對應的標準代碼（LOINC/SNOMED/RxNorm） |
-| **必須有驗證規則** | 每個數值輸入必須定義驗證規則（綠/黃/紅區間） |
-| **禁止原始 HTML** | 使用 `uiBuilder` 或 Factory 函數，不可自行撰寫 HTML |
-| **必須有測試** | 每個計算器必須有對應的測試檔案驗證 |
+| **必須有驗證規則** | 每個數值輸入必須定義驗證規則（綠/黃/紅區間）            |
+| **禁止原始 HTML**  | 使用 `uiBuilder` 或 Factory 函數，不可自行撰寫 HTML     |
+| **必須有測試**     | 每個計算器必須有對應的測試檔案驗證                      |
 
 ### 🏭 選擇正確的 Factory
 
-| 計算器類型 | Factory 函數 | 檔案位置 |
-|------------|--------------|----------|
-| **計分型** | `createScoringCalculator` | `src/calculators/shared/scoring-calculator.ts` |
-| **公式型** | `createUnifiedFormulaCalculator` | `src/calculators/shared/unified-formula-calculator.ts` |
-| **單位轉換** | `createConversionCalculator` | `src/calculators/shared/conversion-calculator.ts` |
+| 計算器類型   | Factory 函數                     | 檔案位置                                               |
+| ------------ | -------------------------------- | ------------------------------------------------------ |
+| **計分型**   | `createScoringCalculator`        | `src/calculators/shared/scoring-calculator.ts`         |
+| **公式型**   | `createUnifiedFormulaCalculator` | `src/calculators/shared/unified-formula-calculator.ts` |
+| **單位轉換** | `createConversionCalculator`     | `src/calculators/shared/conversion-calculator.ts`      |
 
 ### 📝 建立新計算器步驟
 
@@ -461,12 +477,12 @@ flowchart LR
 
 ### 📚 開發文件
 
-| 文件 | 說明 |
-|------|------|
-| [DEVELOPER_GUIDE.md](docs/DEVELOPER_GUIDE.md) | 完整開發指南 |
-| [UI_BUILDER_GUIDE.md](text/UI_BUILDER_GUIDE.md) | UIBuilder 使用指南 |
-| [CALCULATOR_STYLE_GUIDE.md](text/CALCULATOR_STYLE_GUIDE.md) | 樣式指南 |
-| [CALCULATOR_TESTING_GUIDE.md](text/CALCULATOR_TESTING_GUIDE.md) | 測試指南 |
+| 文件                                                            | 說明               |
+| --------------------------------------------------------------- | ------------------ |
+| [DEVELOPER_GUIDE.md](docs/DEVELOPER_GUIDE.md)                   | 完整開發指南       |
+| [UI_BUILDER_GUIDE.md](text/UI_BUILDER_GUIDE.md)                 | UIBuilder 使用指南 |
+| [CALCULATOR_STYLE_GUIDE.md](text/CALCULATOR_STYLE_GUIDE.md)     | 樣式指南           |
+| [CALCULATOR_TESTING_GUIDE.md](text/CALCULATOR_TESTING_GUIDE.md) | 測試指南           |
 
 ### ✅ 開發檢查清單
 
@@ -486,6 +502,7 @@ flowchart LR
 Contributions are welcome! Please feel free to submit issues, feature requests, or pull requests.
 
 在提交 PR 之前，請確保：
+
 1. ✅ 遵循開發規則
 2. ✅ 所有測試通過
 3. ✅ 程式碼經過 linting

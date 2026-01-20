@@ -98,12 +98,12 @@ function generateYesNoSectionHTML(
                     <div class="yesno-label">${q.label}</div>
                     ${q.description ? `<div class="yesno-description">${q.description}</div>` : ''}
                     ${uiBuilder.createRadioGroup({
-                name: q.id,
-                options: [
-                    { value: '0', label: 'No', checked: true },
-                    { value: String(q.points), label: `Yes (${pointsLabel})` }
-                ]
-            })}
+                        name: q.id,
+                        options: [
+                            { value: '0', label: 'No', checked: true },
+                            { value: String(q.points), label: `Yes (${pointsLabel})` }
+                        ]
+                    })}
                 </div>
             `;
         })
@@ -404,13 +404,13 @@ export function createScoringCalculator(config: ScoringCalculatorConfig): Calcul
                 const effectiveSections =
                     inputType === 'yesno' && config.questions
                         ? config.questions.map(q => ({
-                            id: q.id,
-                            title: q.label,
-                            options: [
-                                { value: '0', label: 'No' },
-                                { value: String(q.points), label: 'Yes' }
-                            ]
-                        }))
+                              id: q.id,
+                              title: q.label,
+                              options: [
+                                  { value: '0', label: 'No' },
+                                  { value: String(q.points), label: 'Yes' }
+                              ]
+                          }))
                         : sections;
                 formulaSectionHTML = generateFormulaSectionHTML(
                     config,
@@ -428,9 +428,9 @@ export function createScoringCalculator(config: ScoringCalculatorConfig): Calcul
                 ${sectionsHTML}
                 
                 ${uiBuilder.createResultBox({
-                id: `${config.id}-result`,
-                title: `${config.title} Results`
-            })}
+                    id: `${config.id}-result`,
+                    title: `${config.title} Results`
+                })}
                 
                 ${formulaSectionHTML}
                 ${interpretationHTML}
@@ -760,5 +760,3 @@ export function createScoringCalculator(config: ScoringCalculatorConfig): Calcul
         }
     };
 }
-
-

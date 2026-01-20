@@ -1,10 +1,14 @@
 ﻿/**
  * PRECISE-HBR Score Calculation Logic
- * 
+ *
  * Predicts bleeding risk in patients undergoing stent implantation.
  */
 
-import type { ComplexCalculationResult, GetValueFn, GetRadioValueFn } from '../../types/calculator-formula.js';
+import type {
+    ComplexCalculationResult,
+    GetValueFn,
+    GetRadioValueFn
+} from '../../types/calculator-formula.js';
 
 // ==========================================
 // PRECISE-HBR Score Calculation
@@ -17,7 +21,7 @@ export interface ScoreResult {
 
 /**
  * Calculate PRECISE-HBR Score
- * 
+ *
  * @param age - Patient age (years)
  * @param hb - Hemoglobin (g/dL)
  * @param egfr - eGFR (mL/min/1.73m²)
@@ -77,7 +81,9 @@ export function calculatePreciseHbrScore(
         const egfrPoints = (100 - egfrClamped) * 0.05;
         if (egfrPoints > 0) {
             score += egfrPoints;
-            breakdownParts.push(`eGFR ${egfr} (Clamped: ${egfrClamped}) -> +${egfrPoints.toFixed(2)}`);
+            breakdownParts.push(
+                `eGFR ${egfr} (Clamped: ${egfrClamped}) -> +${egfrPoints.toFixed(2)}`
+            );
         }
     }
 
@@ -120,7 +126,7 @@ export function calculatePreciseHbrScore(
 
 /**
  * PRECISE-HBR Main Calculation Function
- * 
+ *
  * @param getValue - Get raw value function
  * @param getStdValue - Get standardized value function (unused)
  * @param getRadioValue - Get radio value function
@@ -147,13 +153,22 @@ export function preciseHbrCalculation(
     const hbrSurgery = getRadioValue('arc_hbr_surgery') === '1';
     const hbrNsaids = getRadioValue('arc_hbr_nsaids') === '1';
 
-    const arcHbrRisk = hbrPlt || hbrDiathesis || hbrCirrhosis || hbrMalignancy || hbrSurgery || hbrNsaids;
+    const arcHbrRisk =
+        hbrPlt || hbrDiathesis || hbrCirrhosis || hbrMalignancy || hbrSurgery || hbrNsaids;
 
     if (age === null || hb === null || wbc === null || egfr === null) {
         return null;
     }
 
-    const result = calculatePreciseHbrScore(age, hb, egfr, wbc, priorBleeding, oralAnticoagulation, arcHbrRisk);
+    const result = calculatePreciseHbrScore(
+        age,
+        hb,
+        egfr,
+        wbc,
+        priorBleeding,
+        oralAnticoagulation,
+        arcHbrRisk
+    );
 
     // Interpretation
     const s = result.score;

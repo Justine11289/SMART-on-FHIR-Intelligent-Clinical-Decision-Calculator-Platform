@@ -99,7 +99,11 @@
     /* Apply Background & Font */
     background: var(--gradient-body-bg);
     color: var(--text-primary);
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family:
+        'Inter',
+        system-ui,
+        -apple-system,
+        sans-serif;
     line-height: var(--line-height-normal);
     position: relative;
 
@@ -161,14 +165,17 @@
 }
 
 @keyframes tron-pulse {
-
     0%,
     100% {
-        box-shadow: 0 0 60px rgba(0, 180, 255, 0.3), inset 0 0 60px rgba(0, 180, 255, 0.05);
+        box-shadow:
+            0 0 60px rgba(0, 180, 255, 0.3),
+            inset 0 0 60px rgba(0, 180, 255, 0.05);
     }
 
     50% {
-        box-shadow: 0 0 80px rgba(0, 180, 255, 0.5), inset 0 0 80px rgba(0, 180, 255, 0.1);
+        box-shadow:
+            0 0 80px rgba(0, 180, 255, 0.5),
+            inset 0 0 80px rgba(0, 180, 255, 0.1);
     }
 }
 
@@ -178,7 +185,9 @@
     background: none;
     -webkit-text-fill-color: var(--color-primary);
     color: var(--color-primary);
-    text-shadow: 0 0 20px rgba(0, 217, 255, 0.8), 0 0 40px rgba(0, 217, 255, 0.4);
+    text-shadow:
+        0 0 20px rgba(0, 217, 255, 0.8),
+        0 0 40px rgba(0, 217, 255, 0.4);
 }
 
 /* Result Values - Higher specificity with body selector */
@@ -186,7 +195,10 @@ body.tech-theme .ui-result-value,
 body.tech-theme .result-item-value {
     color: #00ffff;
     -webkit-text-fill-color: #00ffff;
-    text-shadow: 0 0 30px rgba(0, 255, 255, 0.9), 0 0 60px rgba(0, 255, 255, 0.6), 0 0 90px rgba(0, 255, 255, 0.3);
+    text-shadow:
+        0 0 30px rgba(0, 255, 255, 0.9),
+        0 0 60px rgba(0, 255, 255, 0.6),
+        0 0 90px rgba(0, 255, 255, 0.3);
 }
 
 /* Result Header */
@@ -272,8 +284,8 @@ body.tech-theme .ui-checkbox-option:has(input:checked) .ui-option-label {
     color: #00ffff;
 }
 
-body.tech-theme .ui-radio-option label>*,
-body.tech-theme .ui-radio-option .radio-label>* {
+body.tech-theme .ui-radio-option label > *,
+body.tech-theme .ui-radio-option .radio-label > * {
     border: none;
 }
 
@@ -289,9 +301,9 @@ body.tech-theme .input-wrapper {
    Using body.tech-theme for higher specificity
    ========================================= */
 
-body.tech-theme input[type="text"],
-body.tech-theme input[type="number"],
-body.tech-theme input[type="search"],
+body.tech-theme input[type='text'],
+body.tech-theme input[type='number'],
+body.tech-theme input[type='search'],
 body.tech-theme select {
     background: var(--bg-input);
     color: #00ffff;
@@ -332,14 +344,6 @@ body.tech-theme .input-hint {
    Tables & Formula Sections
    Use multiple selectors to catch all possibilities
    ========================================= */
-
-
-
-
-
-
-
-
 
 .tech-theme .ui-table {
     color: var(--text-secondary);

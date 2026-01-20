@@ -62,37 +62,37 @@ MEDCALCEHR/
 
 ```javascript
 // 获取最近的观察数据
-getMostRecentObservation(client, loincCode)
+getMostRecentObservation(client, loincCode);
 
 // 计算患者年龄
-calculateAge(birthDate)
+calculateAge(birthDate);
 
 // 显示患者信息
-displayPatientInfo(client, container)
+displayPatientInfo(client, container);
 
 // 获取患者条件
-getPatientConditions(client, snomedCodes)
+getPatientConditions(client, snomedCodes);
 
 // 获取患者用药
-getMedicationRequests(client)
+getMedicationRequests(client);
 ```
 
 #### LOINC 代码参考
 
-| 数据类型 | LOINC 代码 | 说明 |
-|---------|-----------|------|
-| 心率 | 8867-4 | Heart Rate |
-| 血压 | 85354-9 | Blood Pressure panel |
-| 收缩压 | 8480-6 | Systolic BP |
-| 舒张压 | 8462-4 | Diastolic BP |
-| 体温 | 8310-5 | Body temperature |
-| 血糖 | 2339-0 | Glucose |
-| 肌酐 | 2160-0 | Creatinine |
-| 钠 | 2951-2 | Sodium |
-| 钾 | 2823-3 | Potassium |
-| 白细胞 | 6690-2 | WBC |
-| 血红蛋白 | 718-7 | Hemoglobin |
-| 血小板 | 777-3 | Platelets |
+| 数据类型 | LOINC 代码 | 说明                 |
+| -------- | ---------- | -------------------- |
+| 心率     | 8867-4     | Heart Rate           |
+| 血压     | 85354-9    | Blood Pressure panel |
+| 收缩压   | 8480-6     | Systolic BP          |
+| 舒张压   | 8462-4     | Diastolic BP         |
+| 体温     | 8310-5     | Body temperature     |
+| 血糖     | 2339-0     | Glucose              |
+| 肌酐     | 2160-0     | Creatinine           |
+| 钠       | 2951-2     | Sodium               |
+| 钾       | 2823-3     | Potassium            |
+| 白细胞   | 6690-2     | WBC                  |
+| 血红蛋白 | 718-7      | Hemoglobin           |
+| 血小板   | 777-3      | Platelets            |
 
 ---
 
@@ -190,20 +190,20 @@ const customSchema = {
 export const calculatorName = {
     // 必需：唯一 ID
     id: 'calculator-id',
-    
+
     // 必需：显示标题
     title: 'Calculator Title',
-    
+
     // 可选：简短描述
     description: 'What this calculator does',
-    
+
     // 必需：生成 HTML
-    generateHTML: function() {
+    generateHTML: function () {
         return `<!-- HTML content -->`;
     },
-    
+
     // 必需：初始化逻辑
-    initialize: function(client, patient, container) {
+    initialize: function (client, patient, container) {
         // Setup logic
     }
 };
@@ -226,12 +226,12 @@ container.querySelector('#apache-age');
 ```javascript
 initialize: function(client, patient, container) {
     const ageInput = container.querySelector('#calc-age');
-    
+
     // 从患者资源填充
     if (patient && patient.birthDate) {
         ageInput.value = calculateAge(patient.birthDate);
     }
-    
+
     // 从 FHIR 观察填充
     if (client) {
         getMostRecentObservation(client, '8867-4').then(obs => {
@@ -251,10 +251,10 @@ generateHTML: function() {
     return `
         <!-- 计算器输入 -->
         <div class="input-group">...</div>
-        
+
         <!-- 结果显示 -->
         <div id="result" class="result"></div>
-        
+
         <!-- 公式说明 -->
         <div class="formula-section">
             <h4>📐 Formula</h4>
@@ -263,7 +263,7 @@ generateHTML: function() {
                     Score = (0.037 × Age) + (0.094 × BMI) + ...
                 </p>
             </div>
-            
+
             <h5>Variables:</h5>
             <ul>
                 <li><strong>Age:</strong> Patient age in years</li>
@@ -334,14 +334,14 @@ async function fetchPatientData(client) {
             console.warn('FHIR server unavailable, using cached data');
             return JSON.parse(sessionStorage.getItem('patientData'));
         }
-        
+
         // 未授权
         if (error.status === 401) {
             console.error('FHIR authorization expired');
             window.location.href = 'launch.html';
             return null;
         }
-        
+
         throw new FHIRDataError('Failed to fetch patient data', { error });
     }
 }
@@ -364,7 +364,7 @@ describe('calculateAge', () => {
         expect(age).toBeGreaterThan(30);
         expect(age).toBeLessThan(40);
     });
-    
+
     it('should handle leap years', () => {
         const birthDate = '2000-02-29';
         const age = calculateAge(birthDate);
@@ -385,15 +385,15 @@ describe('APACHE II Calculator', () => {
             age: 65,
             temp: 37.5,
             map: 85,
-            pH: 7.35,
+            pH: 7.35
             // ...other inputs
         };
-        
+
         const score = calculateAPACHEII(inputs);
         expect(score).toBeGreaterThan(0);
         expect(score).toBeLessThan(72);
     });
-    
+
     it('should handle missing data gracefully', () => {
         const inputs = { age: 65 };
         expect(() => calculateAPACHEII(inputs)).toThrow(ValidationError);
@@ -428,7 +428,7 @@ export function displayPatientInfo(client, patientInfoDiv) {
     if (cachedPatient) {
         renderPatient(JSON.parse(cachedPatient));
     }
-    
+
     // 然后从 FHIR 刷新
     if (client) {
         client.patient.read().then(patient => {
@@ -484,7 +484,7 @@ if (window.location.hostname === 'localhost') {
         gender: 'male',
         name: [{ given: ['Test'], family: 'Patient' }]
     };
-    
+
     // 直接初始化计算器
     calculator.initialize(null, mockPatient, container);
 </script>
@@ -506,6 +506,7 @@ if (window.location.hostname === 'localhost') {
 ### Q: 如何在本地测试 FHIR 集成？
 
 A: 使用 SMART Health IT 提供的测试沙盒：
+
 ```
 https://launch.smarthealthit.org/
 ```
@@ -517,12 +518,12 @@ A: 在 `utils.js` 中使用 `getMostRecentObservation(client, 'LOINC-CODE')`
 ### Q: 如何处理单位转换？
 
 A: 使用 `utils.js` 中的转换函数：
+
 ```javascript
-convertToMmolL(valueMgDl, 'glucose')
-convertToMgDl(valueMmolL, 'glucose')
+convertToMmolL(valueMgDl, 'glucose');
+convertToMgDl(valueMmolL, 'glucose');
 ```
 
 ---
 
 Happy Coding! 🎉
-

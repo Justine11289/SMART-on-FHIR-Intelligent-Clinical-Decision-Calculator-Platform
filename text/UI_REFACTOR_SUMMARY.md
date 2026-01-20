@@ -7,6 +7,7 @@ I have successfully refactored a significant portion of the calculators to use t
 The following calculators have been fully updated to use `UIBuilder` for input generation and result display:
 
 ### Clinical Scores & Scales
+
 1.  **NIH Stroke Scale (`nihss`)**
 2.  **4 A's Test for Delirium (`4as-delirium`)**
 3.  **CIWA-Ar for Alcohol Withdrawal (`ciwa-ar`)**
@@ -49,6 +50,7 @@ The following calculators have been fully updated to use `UIBuilder` for input g
 40. **STOP-BANG (`stop-bang`)**
 
 ### Risk Stratification
+
 41. **Padua Prediction Score (`padua-vte`)**
 42. **Caprini Risk Assessment Model (`caprini`)**
 43. **Wells' Criteria for DVT (`wells-dvt`)**
@@ -67,6 +69,7 @@ The following calculators have been fully updated to use `UIBuilder` for input g
 56. **PREVENT CVD (`prevent-cvd`)**
 
 ### Medical Calculators
+
 57. **BMI & Body Surface Area (`bmi-bsa`)**
 58. **MDRD GFR Equation (`mdrd-gfr`)**
 59. **Calcium Correction (`calcium-correction`)**
@@ -98,27 +101,28 @@ The following calculators have been fully updated to use `UIBuilder` for input g
 
 ## Key Improvements
 
-*   **UI Consistency**: All calculators now share the same visual language for:
-    *   Section headers
-    *   Input fields (text/number)
-    *   Radio button groups (standardized selection logic)
-    *   Result boxes (consistent header, value, unit, and interpretation layout)
-    *   Alert boxes (Info, Warning, Danger styles)
-    *   Formula display sections
-*   **Unit Conversion**: Integrated `UnitConverter` for automatic unit handling in lab values (e.g., Creatinine mg/dL vs µmol/L).
-*   **Maintainability**: HTML generation is now centralized in `UIBuilder`. Changes to styling or structure only need to be made in one place.
-*   **Test Coverage**: Updated and verified unit tests for all refactored calculators to ensure logic integrity.
+- **UI Consistency**: All calculators now share the same visual language for:
+    - Section headers
+    - Input fields (text/number)
+    - Radio button groups (standardized selection logic)
+    - Result boxes (consistent header, value, unit, and interpretation layout)
+    - Alert boxes (Info, Warning, Danger styles)
+    - Formula display sections
+- **Unit Conversion**: Integrated `UnitConverter` for automatic unit handling in lab values (e.g., Creatinine mg/dL vs µmol/L).
+- **Maintainability**: HTML generation is now centralized in `UIBuilder`. Changes to styling or structure only need to be made in one place.
+- **Test Coverage**: Updated and verified unit tests for all refactored calculators to ensure logic integrity.
 
 ## UIBuilder Enhancements
 
 The `UIBuilder` class now supports:
-*   `createSection`
-*   `createInput` (with unit toggle support)
-*   `createRadioGroup`
-*   `createCheckbox`
-*   `createSelect` (Added)
-*   `createRange` (Added)
-*   `createResultBox`
-*   `createResultItem`
-*   `createAlert`
-*   `createFormulaSection`
+
+- `createSection`
+- `createInput` (with unit toggle support)
+- `createRadioGroup`
+- `createCheckbox`
+- `createSelect` (Added)
+- `createRange` (Added)
+- `createResultBox`
+- `createResultItem`
+- `createAlert`
+- `createFormulaSection`

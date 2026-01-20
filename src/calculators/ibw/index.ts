@@ -7,13 +7,16 @@ import type { FormulaCalculatorConfig } from '../../types/calculator-formula.js'
 export const ibwConfig: FormulaCalculatorConfig = {
     id: 'ibw',
     title: 'Ideal & Adjusted Body Weight',
-    description: 'Calculates ideal body weight (IBW) and adjusted body weight (ABW) using the Devine formula.',
-    infoAlert: '<h4>Clinical Applications</h4>' + uiBuilder.createList({
-        items: [
-            '<strong>Ideal Body Weight (IBW):</strong> Drug dosing for medications with narrow therapeutic index, nutritional assessment, ventilator settings.',
-            '<strong>Adjusted Body Weight (ABW):</strong> Drug dosing in obese patients (actual weight > IBW), aminoglycoside dosing.'
-        ]
-    }),
+    description:
+        'Calculates ideal body weight (IBW) and adjusted body weight (ABW) using the Devine formula.',
+    infoAlert:
+        '<h4>Clinical Applications</h4>' +
+        uiBuilder.createList({
+            items: [
+                '<strong>Ideal Body Weight (IBW):</strong> Drug dosing for medications with narrow therapeutic index, nutritional assessment, ventilator settings.',
+                '<strong>Adjusted Body Weight (ABW):</strong> Drug dosing in obese patients (actual weight > IBW), aminoglycoside dosing.'
+            ]
+        }),
     sections: [
         {
             title: 'Patient Data',
@@ -61,7 +64,7 @@ export const ibwConfig: FormulaCalculatorConfig = {
     ],
     autoPopulateGender: 'ibw-gender',
     calculate: calculateIBW,
-    customResultRenderer: (results) => {
+    customResultRenderer: results => {
         const standardResults = results.filter(r => r.label !== '__ALERT__');
         const alertResult = results.find(r => r.label === '__ALERT__');
 

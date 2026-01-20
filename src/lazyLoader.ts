@@ -80,7 +80,7 @@ export async function loadCalculator(calculatorId: string): Promise<unknown> {
             `./calculators/${calculatorId}/index.js`
         );
 
-        return module;
+        return module.default || Object.values(module)[0];
     } catch (error) {
         console.error(`Failed to load calculator: ${calculatorId}`, error);
         throw new Error(`Calculator "${calculatorId}" not found`);

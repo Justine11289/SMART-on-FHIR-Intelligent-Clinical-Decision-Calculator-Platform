@@ -1,6 +1,6 @@
 /**
  * NAFLD Fibrosis Score Calculator - SaMD Verification Tests
- * 
+ *
  * Formula:
  * −1.675 + (0.037 × age) + (0.094 × BMI) + (1.13 × IFG/diabetes) + (0.99 × AST/ALT) − (0.013 × platelet) − (0.66 × albumin)
  */
@@ -8,7 +8,6 @@
 import { calculateNafldFibrosisScore } from '../../calculators/nafld-fibrosis-score/calculation';
 
 describe('NAFLD Fibrosis Score Calculator', () => {
-
     // ===========================================
     // TC-001: Standard Calculation Tests
     // ===========================================
@@ -25,13 +24,13 @@ describe('NAFLD Fibrosis Score Calculator', () => {
 
     test('Standard Low Risk Case', () => {
         const result = calculateNafldFibrosisScore({
-            'age': '40',
-            'bmi': '25',
-            'diabetes': '0',
-            'ast': '20',
-            'alt': '30',
-            'platelet': '250',
-            'albumin': '4.0'
+            age: '40',
+            bmi: '25',
+            diabetes: '0',
+            ast: '20',
+            alt: '30',
+            platelet: '250',
+            albumin: '4.0'
         });
 
         expect(result).not.toBeNull();
@@ -53,13 +52,13 @@ describe('NAFLD Fibrosis Score Calculator', () => {
 
     test('Standard High Risk Case', () => {
         const result = calculateNafldFibrosisScore({
-            'age': '60',
-            'bmi': '35',
-            'diabetes': '1',
-            'ast': '50',
-            'alt': '40',
-            'platelet': '100',
-            'albumin': '3.0'
+            age: '60',
+            bmi: '35',
+            diabetes: '1',
+            ast: '50',
+            alt: '40',
+            platelet: '100',
+            albumin: '3.0'
         });
 
         expect(result).not.toBeNull();
@@ -74,13 +73,13 @@ describe('NAFLD Fibrosis Score Calculator', () => {
     // ===========================================
     test('Should handle zero ALT (Division by zero)', () => {
         const result = calculateNafldFibrosisScore({
-            'age': '40',
-            'bmi': '25',
-            'diabetes': '0',
-            'ast': '20',
-            'alt': '0', // Invalid
-            'platelet': '250',
-            'albumin': '4.0'
+            age: '40',
+            bmi: '25',
+            diabetes: '0',
+            ast: '20',
+            alt: '0', // Invalid
+            platelet: '250',
+            albumin: '4.0'
         });
         expect(result).toHaveLength(0);
     });

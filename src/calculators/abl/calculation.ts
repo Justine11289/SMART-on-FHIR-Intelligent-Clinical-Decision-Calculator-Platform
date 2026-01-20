@@ -1,6 +1,6 @@
 ﻿import type { SimpleCalculateFn, FormulaResultItem } from '../../types/calculator-formula.js';
 
-export const calculateABL: SimpleCalculateFn = (values) => {
+export const calculateABL: SimpleCalculateFn = values => {
     const weightKg = Number(values['abl-weight']);
     const hgbInitial = Number(values['abl-hgb-initial']);
     const hgbFinal = Number(values['abl-hgb-final']);
@@ -49,4 +49,3 @@ export const calculateABL: SimpleCalculateFn = (values) => {
 
     return results;
 };
-

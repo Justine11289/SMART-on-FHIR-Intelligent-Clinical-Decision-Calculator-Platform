@@ -1,7 +1,6 @@
 import { qtcCalculation } from '../../calculators/qtc/calculation.js';
 
 describe('QTc Calculator (SaMD Protocol Verification)', () => {
-
     // Phase 1: Formula Verification
     // QT 400ms, HR 60bpm -> RR 1.0s. All formulas should yield 400ms.
     test('TC-001: Baseline Formula Verification (HR 60)', () => {

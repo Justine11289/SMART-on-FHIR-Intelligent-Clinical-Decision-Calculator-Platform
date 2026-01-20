@@ -43,22 +43,28 @@ export class FavoritesManager {
      */
     setPractitionerId(id: string | null): void {
         this.practitionerId = id;
-        // Notify listeners of a 'clear' event effectively to force refresh, 
-        // though distinct event 'practitionerChange' might be better, 
+        // Notify listeners of a 'clear' event effectively to force refresh,
+        // though distinct event 'practitionerChange' might be better,
         // reusing 'import' or 'clear' triggers UI update.
         this.notifyListeners('import', null);
     }
 
     private get storageKey(): string {
-        return this.practitionerId ? `${this.baseStorageKey}-${this.practitionerId}` : this.baseStorageKey;
+        return this.practitionerId
+            ? `${this.baseStorageKey}-${this.practitionerId}`
+            : this.baseStorageKey;
     }
 
     private get recentKey(): string {
-        return this.practitionerId ? `${this.baseRecentKey}-${this.practitionerId}` : this.baseRecentKey;
+        return this.practitionerId
+            ? `${this.baseRecentKey}-${this.practitionerId}`
+            : this.baseRecentKey;
     }
 
     private get usageKey(): string {
-        return this.practitionerId ? `${this.baseUsageKey}-${this.practitionerId}` : this.baseUsageKey;
+        return this.practitionerId
+            ? `${this.baseUsageKey}-${this.practitionerId}`
+            : this.baseUsageKey;
     }
 
     // ========== Favorites Functionality ==========

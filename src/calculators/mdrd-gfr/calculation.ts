@@ -1,6 +1,6 @@
 ﻿import { SimpleCalculateFn } from '../../types/calculator-formula.js';
 
-export const calculateMDRD: SimpleCalculateFn = (values) => {
+export const calculateMDRD: SimpleCalculateFn = values => {
     const age = Number(values['mdrd-age']);
     const creatinine = Number(values['mdrd-creatinine']);
     const gender = values['mdrd-gender'] as string;

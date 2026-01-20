@@ -8,6 +8,38 @@ interface CalculatorModule {
     initialize: (client: any, patient: any, container: HTMLElement) => void;
 }
 
+export function calculatePregnancyDates(
+    lmpDateString: string,
+    now: Date = new Date()
+): { edd: Date; gaWeeks: number; gaDays: number; diffDays: number } | null {
+    if (!lmpDateString) return null;
+
+    const [year, month, day] = lmpDateString.split('-').map(Number);
+
+    // Local date for EDD (preserves input path)
+    const lmpDateLocal = new Date(year, month - 1, day);
+    if (isNaN(lmpDateLocal.getTime())) return null;
+
+    // UTC date for GA (handles DST safe diff)
+    const lmpDateUtc = new Date(Date.UTC(year, month - 1, day));
+
+    // EDD = LMP + 280 days (Local)
+    const edd = new Date(lmpDateLocal.getTime());
+    edd.setDate(edd.getDate() + 280);
+
+    // GA
+    // Convert 'now' to UTC midnight based on its Local components
+    const nowUtc = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+
+    const diffTime = nowUtc.getTime() - lmpDateUtc.getTime();
+    const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+
+    const weeks = Math.floor(diffDays / 7);
+    const days = diffDays % 7;
+
+    return { edd, gaWeeks: weeks, gaDays: days, diffDays };
+}
+
 export const dueDate: CalculatorModule = {
     id: 'due-date',
     title: 'Pregnancy Due Dates Calculator',
@@ -59,32 +91,17 @@ export const dueDate: CalculatorModule = {
 
         const calculate = () => {
             const lmpDateString = lmpInput.value;
-            if (!lmpDateString) {
-                return;
-            }
-
-            const [year, month, day] = lmpDateString.split('-').map(Number);
-            const lmpDate = new Date(year, month - 1, day);
+            const result = calculatePregnancyDates(lmpDateString);
 
             const resultBox = container.querySelector('#due-date-result');
-            if (isNaN(lmpDate.getTime())) {
+            if (!result) {
                 if (resultBox) {
                     resultBox.classList.remove('show');
                 }
                 return;
             }
 
-            // EDD = LMP + 280 days
-            const edd = new Date(lmpDate.getTime());
-            edd.setDate(edd.getDate() + 280);
-
-            // GA
-            const now = new Date();
-            const diffTime = now.getTime() - lmpDate.getTime();
-            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-
-            const weeks = Math.floor(diffDays / 7);
-            const days = diffDays % 7;
+            const { edd, gaWeeks, gaDays, diffDays } = result;
 
             if (resultBox) {
                 const resultContent = resultBox.querySelector('.ui-result-content');
@@ -123,7 +140,7 @@ export const dueDate: CalculatorModule = {
                         })}
                         ${uiBuilder.createResultItem({
                             label: 'Gestational Age',
-                            value: `${weeks} weeks, ${days} days`,
+                            value: `${gaWeeks} weeks, ${gaDays} days`,
                             unit: '',
                             alertClass: `ui-alert-${alertType}`
                         })}

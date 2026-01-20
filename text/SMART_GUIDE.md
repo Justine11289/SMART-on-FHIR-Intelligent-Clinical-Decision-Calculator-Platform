@@ -19,22 +19,23 @@
 ### 最简单的测试方式
 
 1. **启动本地服务器**
-   ```bash
-   cd MEDCALCEHR
-   python -m http.server 8000
-   # 或
-   npm start
-   ```
+
+    ```bash
+    cd MEDCALCEHR
+    python -m http.server 8000
+    # 或
+    npm start
+    ```
 
 2. **访问 SMART Launcher**
-   - 打开：https://launch.smarthealthit.org/
-   - App Launch URL: `http://localhost:8000/launch.html`
-   - 选择一个测试患者
-   - 点击 "Launch"
+    - 打开：https://launch.smarthealthit.org/
+    - App Launch URL: `http://localhost:8000/launch.html`
+    - 选择一个测试患者
+    - 点击 "Launch"
 
-3. **完成！** 
-   - 应用将自动完成认证流程
-   - 显示患者信息和计算器列表
+3. **完成！**
+    - 应用将自动完成认证流程
+    - 显示患者信息和计算器列表
 
 ---
 
@@ -138,44 +139,47 @@
 #### 步骤：
 
 1. **访问 SMART Launcher**
-   - 前往：https://launch.smarthealthit.org/
+    - 前往：https://launch.smarthealthit.org/
 
 2. **配置启动参数**
-   ```
-   App Launch URL: http://localhost:8000/launch.html
-   Launch Type: Provider EHR Launch
-   Patient: 选择任何测试患者
-   Provider: 选择任何测试医生
-   FHIR Version: R4
-   ```
+
+    ```
+    App Launch URL: http://localhost:8000/launch.html
+    Launch Type: Provider EHR Launch
+    Patient: 选择任何测试患者
+    Provider: 选择任何测试医生
+    FHIR Version: R4
+    ```
 
 3. **点击 "Launch"**
-   - 系统会自动完成 OAuth2 流程
-   - 重定向回您的应用
+    - 系统会自动完成 OAuth2 流程
+    - 重定向回您的应用
 
 4. **验证成功**
-   - 应显示患者信息
-   - 所有计算器可用
-   - 可自动填入 FHIR 数据
+    - 应显示患者信息
+    - 所有计算器可用
+    - 可自动填入 FHIR 数据
 
 ### 方式二：本地 FHIR 服务器
 
 如果您有本地 FHIR 服务器：
 
 1. **启动 FHIR 服务器**
-   ```bash
-   # 例如使用 HAPI FHIR
-   docker run -p 8080:8080 hapiproject/hapi:latest
-   ```
+
+    ```bash
+    # 例如使用 HAPI FHIR
+    docker run -p 8080:8080 hapiproject/hapi:latest
+    ```
 
 2. **修改 launch.html**
-   ```javascript
-   const defaultIss = 'http://localhost:8080/fhir';
-   ```
+
+    ```javascript
+    const defaultIss = 'http://localhost:8080/fhir';
+    ```
 
 3. **从 EHR 启动**
-   - 使用您的 EHR 系统的 SMART 启动功能
-   - 配置 App Launch URL: `http://localhost:8000/launch.html`
+    - 使用您的 EHR 系统的 SMART 启动功能
+    - 配置 App Launch URL: `http://localhost:8000/launch.html`
 
 ### 方式三：Docker 环境
 
@@ -200,10 +204,12 @@ http://localhost:8080/launch.html
 **目的**：启动 OAuth2 认证流程
 
 **何时使用**：
+
 - 从 EHR 系统启动应用时
 - 首次访问需要患者上下文时
 
 **核心代码**：
+
 ```javascript
 FHIR.oauth2.authorize({
     client_id: 'my-app',
@@ -217,6 +223,7 @@ FHIR.oauth2.authorize({
 **目的**：应用主页面，显示计算器列表
 
 **认证检查逻辑**：
+
 ```javascript
 // 如果没有 OAuth state 且没有已存在的 session，重定向到 launch
 if (!/state=/.test(location.search) && !sessionStorage.getItem('SMART_KEY')) {
@@ -225,8 +232,10 @@ if (!/state=/.test(location.search) && !sessionStorage.getItem('SMART_KEY')) {
 ```
 
 **初始化 FHIR 客户端**：
+
 ```javascript
-FHIR.oauth2.ready()
+FHIR.oauth2
+    .ready()
     .then(client => {
         displayPatientInfo(client, patientInfoDiv);
     })
@@ -240,6 +249,7 @@ FHIR.oauth2.ready()
 **目的**：显示单个计算器
 
 **行为**：
+
 - 尝试初始化 FHIR 客户端
 - 如果成功，自动填入患者数据
 - 如果失败，仍可手动输入使用
@@ -249,15 +259,16 @@ FHIR.oauth2.ready()
 **目的**：提供 FHIR 数据访问工具函数
 
 **主要函数**：
+
 ```javascript
 // 获取观察值
-getMostRecentObservation(client, '8480-6')  // 收缩压
+getMostRecentObservation(client, '8480-6'); // 收缩压
 
 // 获取患者条件
-getPatientConditions(client, ['38341003'])  // 高血压
+getPatientConditions(client, ['38341003']); // 高血压
 
 // 显示患者信息
-displayPatientInfo(client, divElement)
+displayPatientInfo(client, divElement);
 ```
 
 ---
@@ -265,16 +276,20 @@ displayPatientInfo(client, divElement)
 ## 🔄 URL 参数说明
 
 ### 启动时 (launch.html)
+
 ```
 http://localhost:8000/launch.html?iss=FHIR_SERVER&launch=LAUNCH_TOKEN
 ```
+
 - `iss`: FHIR 服务器的基础 URL
 - `launch`: EHR 提供的启动令牌（包含患者上下文）
 
 ### 认证后 (index.html)
+
 ```
 http://localhost:8000/index.html?code=AUTH_CODE&state=STATE_TOKEN
 ```
+
 - `code`: 授权码（用于交换访问令牌）
 - `state`: 状态令牌（防止 CSRF 攻击）
 
@@ -299,6 +314,7 @@ FHIR 客户端使用 sessionStorage 存储：
 ```
 
 **检查方式**：
+
 1. 开启开发者工具 (F12)
 2. Application → Session Storage → http://localhost:8000
 3. 查看 `SMART_KEY` 和 `patientData`
@@ -308,6 +324,7 @@ FHIR 客户端使用 sessionStorage 存储：
 ## 🧪 测试场景
 
 ### 场景 1: 正常启动（有 SMART 认证）
+
 ```
 1. SMART Launcher → launch.html?iss=...&launch=...
 2. OAuth2 认证
@@ -317,6 +334,7 @@ FHIR 客户端使用 sessionStorage 存储：
 ```
 
 ### 场景 2: 直接访问（无认证）
+
 ```
 1. 直接访问 index.html
 2. 检查没有 state 参数
@@ -326,6 +344,7 @@ FHIR 客户端使用 sessionStorage 存储：
 ```
 
 ### 场景 3: 已有 Session
+
 ```
 1. 访问 index.html
 2. 检查到 sessionStorage 有 SMART_KEY
@@ -334,6 +353,7 @@ FHIR 客户端使用 sessionStorage 存储：
 ```
 
 ### 场景 4: 离线模式
+
 ```
 1. 直接访问 calculator.html?id=bmi-bsa
 2. FHIR 客户端初始化失败
@@ -348,11 +368,13 @@ FHIR 客户端使用 sessionStorage 存储：
 ### Q: "FHIR client not ready" 是什么意思？
 
 **原因**：
+
 - 没有经过 OAuth2 认证流程
 - Session 已过期
 - 认证失败
 
 **解决方法**：
+
 1. 清除 sessionStorage（F12 → Application → Clear）
 2. 重新从 SMART Launcher 启动
 3. 或直接手动输入数据使用计算器
@@ -360,10 +382,12 @@ FHIR 客户端使用 sessionStorage 存储：
 ### Q: 为什么访问 launch.html 显示 404？
 
 **原因**：
+
 - Docker 容器不包含 launch.html
 - 文件路径不正确
 
 **解决方法**：
+
 ```bash
 # 重新构建 Docker 镜像
 docker-compose down
@@ -374,6 +398,7 @@ docker-compose up -d
 ### Q: 如何测试不同的患者？
 
 在 SMART Launcher 中：
+
 1. 点击 "Change Patient"
 2. 选择不同的测试患者
 3. 重新启动应用
@@ -381,6 +406,7 @@ docker-compose up -d
 ### Q: 计算器没有自动填入数据？
 
 **检查清单**：
+
 1. ✓ FHIR 客户端已初始化？（查看控制台）
 2. ✓ 患者有相关的观察值？（部分测试患者数据不完整）
 3. ✓ LOINC 代码正确？（参考 `js/fhir-codes.js`）
@@ -411,6 +437,7 @@ docker-compose up -d
 ### 查看 FHIR 请求
 
 打开浏览器开发者工具：
+
 ```
 F12 → Network → Fetch/XHR
 ```
@@ -420,6 +447,7 @@ F12 → Network → Fetch/XHR
 ### 调试认证流程
 
 在 `launch.html` 和 `index.html` 中添加：
+
 ```javascript
 console.log('Current URL:', window.location.href);
 console.log('Session Storage:', sessionStorage.getItem('SMART_KEY'));
@@ -430,6 +458,7 @@ console.log('Session Storage:', sessionStorage.getItem('SMART_KEY'));
 访问：`http://localhost:8000/health-check.html`
 
 自动检查：
+
 - ✓ FHIR 客户端状态
 - ✓ Session Storage
 - ✓ 患者数据
@@ -438,4 +467,3 @@ console.log('Session Storage:', sessionStorage.getItem('SMART_KEY'));
 ---
 
 **提示**：遇到问题？查看浏览器控制台（F12）获取详细错误信息！
-

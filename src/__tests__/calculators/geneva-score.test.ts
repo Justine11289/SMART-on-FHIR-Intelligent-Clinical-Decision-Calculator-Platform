@@ -1,13 +1,12 @@
 /**
  * Geneva Score Calculator - SaMD Verification Tests
- * 
+ *
  * Formula: Sum of points. Simplified version.
  */
 
 import { calculateGenevaScore } from '../../calculators/geneva-score/calculation';
 
 describe('Geneva Score Calculator', () => {
-
     // ===========================================
     // TC-001: Standard Calculation Tests
     // ===========================================

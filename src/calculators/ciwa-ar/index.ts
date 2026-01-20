@@ -5,13 +5,10 @@
  * The CIWA-Ar objectifies severity of alcohol withdrawal.
  */
 
-import {
-    createScoringCalculator,
-    ScoringCalculatorConfig
-} from '../shared/scoring-calculator.js';
+import { createScoringCalculator, ScoringCalculatorConfig } from '../shared/scoring-calculator.js';
 import { uiBuilder } from '../../ui-builder.js';
 
-const config: ScoringCalculatorConfig = {
+export const ciwaArConfig: ScoringCalculatorConfig = {
     id: 'ciwa-ar',
     title: 'CIWA-Ar for Alcohol Withdrawal',
     description: 'The CIWA-Ar objectifies severity of alcohol withdrawal.',
@@ -231,19 +228,19 @@ const config: ScoringCalculatorConfig = {
 
         return `
             ${uiBuilder.createResultItem({
-            label: 'CIWA-Ar Score',
-            value: score.toString(),
-            unit: 'points',
-            interpretation: severity,
-            alertClass: `ui-alert-${alertClass}`
-        })}
+                label: 'CIWA-Ar Score',
+                value: score.toString(),
+                unit: 'points',
+                interpretation: severity,
+                alertClass: `ui-alert-${alertClass}`
+            })}
             
             ${uiBuilder.createAlert({
-            type: alertClass,
-            message: `<strong>Recommendation:</strong> ${recommendation}`
-        })}
+                type: alertClass,
+                message: `<strong>Recommendation:</strong> ${recommendation}`
+            })}
         `;
     }
 };
 
-export const ciwaAr = createScoringCalculator(config);
+export const ciwaAr = createScoringCalculator(ciwaArConfig);

@@ -79,6 +79,10 @@ export interface RadioInputConfig {
     options: RadioOptionItem[];
     /** 幫助文字 */
     helpText?: string;
+    /** LOINC code for FHIR auto-population */
+    loincCode?: string;
+    /** SNOMED code for FHIR auto-population */
+    snomedCode?: string;
 }
 
 /** Select 選項 */
@@ -103,6 +107,10 @@ export interface SelectInputConfig {
     defaultValue?: string;
     /** 幫助文字 */
     helpText?: string;
+    /** LOINC code for FHIR auto-population */
+    loincCode?: string;
+    /** SNOMED code for FHIR auto-population */
+    snomedCode?: string;
 }
 
 /** Checkbox 選項 */
@@ -138,7 +146,12 @@ export interface CheckboxInputConfig {
 }
 
 /** 輸入配置類型 (聯合類型) */
-export type InputConfig = NumberInputConfig | RadioInputConfig | SelectInputConfig | CheckboxInputConfig | string;
+export type InputConfig =
+    | NumberInputConfig
+    | RadioInputConfig
+    | SelectInputConfig
+    | CheckboxInputConfig
+    | string;
 
 // ==========================================
 // 區塊配置

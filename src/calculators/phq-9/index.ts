@@ -114,17 +114,21 @@ export const phq9 = createScoringCalculator({
 
         return `
             ${uiBuilder.createResultItem({
-            label: 'Total Score',
-            value: score.toString(),
-            unit: '/ 27 points',
-            interpretation: severity,
-            alertClass: alertClass
-        })}
+                label: 'Total Score',
+                value: score.toString(),
+                unit: '/ 27 points',
+                interpretation: severity,
+                alertClass: alertClass
+            })}
             
             ${uiBuilder.createAlert({
-            type: alertClass.replace('ui-alert-', '') as 'success' | 'info' | 'warning' | 'danger',
-            message: `<strong>Recommendation:</strong> ${recommendation}`
-        })}
+                type: alertClass.replace('ui-alert-', '') as
+                    | 'success'
+                    | 'info'
+                    | 'warning'
+                    | 'danger',
+                message: `<strong>Recommendation:</strong> ${recommendation}`
+            })}
         `;
     }
 });

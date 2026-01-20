@@ -5,10 +5,10 @@
  * 根據臨床標準診斷川崎病
  */
 
-import { createScoringCalculator } from '../shared/scoring-calculator.js';
+import { createScoringCalculator, ScoringCalculatorConfig } from '../shared/scoring-calculator.js';
 import { uiBuilder } from '../../ui-builder.js';
 
-export const kawasaki = createScoringCalculator({
+export const kawasakiConfig: ScoringCalculatorConfig = {
     id: 'kawasaki',
     title: 'Kawasaki Disease Diagnostic Criteria',
     description: 'Diagnoses Kawasaki Disease based on clinical criteria.',
@@ -148,17 +148,19 @@ export const kawasaki = createScoringCalculator({
 
         return `
             ${uiBuilder.createResultItem({
-            label: 'Fever Present',
-            value: hasFever ? 'Yes' : 'No'
-        })}
+                label: 'Fever Present',
+                value: hasFever ? 'Yes' : 'No'
+            })}
             ${uiBuilder.createResultItem({
-            label: 'Principal Features Present',
-            value: `${featureCount} / 5`
-        })}
+                label: 'Principal Features Present',
+                value: `${featureCount} / 5`
+            })}
             ${uiBuilder.createAlert({
-            type: alertType,
-            message: interpretation
-        })}
+                type: alertType,
+                message: interpretation
+            })}
         `;
     }
-});
+};
+
+export const kawasaki = createScoringCalculator(kawasakiConfig);

@@ -7,7 +7,8 @@ import type { FormulaCalculatorConfig } from '../../types/calculator-formula.js'
 export const ablConfig: FormulaCalculatorConfig = {
     id: 'abl',
     title: 'Maximum Allowable Blood Loss (ABL) Without Transfusion',
-    description: 'Calculates the allowable blood loss for a patient before a transfusion may be indicated.',
+    description:
+        'Calculates the allowable blood loss for a patient before a transfusion may be indicated.',
     sections: [
         {
             title: 'Patient Category',
@@ -49,7 +50,11 @@ export const ablConfig: FormulaCalculatorConfig = {
                     label: 'Initial Hemoglobin',
                     placeholder: 'e.g., 14',
                     step: 0.1,
-                    unitConfig: { type: 'hemoglobin', units: ['g/dL', 'g/L', 'mmol/L'], default: 'g/dL' },
+                    unitConfig: {
+                        type: 'hemoglobin',
+                        units: ['g/dL', 'g/L', 'mmol/L'],
+                        default: 'g/dL'
+                    },
                     validationType: 'hemoglobin',
                     loincCode: LOINC_CODES.HEMOGLOBIN,
                     standardUnit: 'g/dL',
@@ -61,7 +66,11 @@ export const ablConfig: FormulaCalculatorConfig = {
                     label: 'Target/Allowable Hemoglobin',
                     placeholder: 'e.g., 7',
                     step: 0.1,
-                    unitConfig: { type: 'hemoglobin', units: ['g/dL', 'g/L', 'mmol/L'], default: 'g/dL' },
+                    unitConfig: {
+                        type: 'hemoglobin',
+                        units: ['g/dL', 'g/L', 'mmol/L'],
+                        default: 'g/dL'
+                    },
                     validationType: 'hemoglobin',
                     standardUnit: 'g/dL',
                     required: true
@@ -71,12 +80,16 @@ export const ablConfig: FormulaCalculatorConfig = {
     ],
     formulas: [
         { label: 'Estimated Blood Volume (EBV)', content: 'Weight (kg) × Blood Volume (mL/kg)' },
-        { label: 'Allowable Blood Loss (ABL)', content: 'EBV × (Hgb<sub>initial</sub> - Hgb<sub>final</sub>) / Hgb<sub>average</sub>' },
+        {
+            label: 'Allowable Blood Loss (ABL)',
+            content: 'EBV × (Hgb<sub>initial</sub> - Hgb<sub>final</sub>) / Hgb<sub>average</sub>'
+        },
         { label: 'Average Hgb', content: '(Hgb<sub>initial</sub> + Hgb<sub>final</sub>) / 2' }
     ],
     infoAlert: uiBuilder.createAlert({
         type: 'info',
-        message: '<strong>Note:</strong> Initial hemoglobin must be greater than target hemoglobin for calculation.'
+        message:
+            '<strong>Note:</strong> Initial hemoglobin must be greater than target hemoglobin for calculation.'
     }),
     customInitialize: (client, patient, container, calculate) => {
         // Auto-select category based on patient data
@@ -84,8 +97,10 @@ export const ablConfig: FormulaCalculatorConfig = {
         if (fhirDataService) {
             const age = fhirDataService.getPatientAge?.() || 30;
             const gender = fhirDataService.getPatientGender?.();
-            const categorySelect = container.querySelector('#abl-age-category') as HTMLSelectElement;
-            
+            const categorySelect = container.querySelector(
+                '#abl-age-category'
+            ) as HTMLSelectElement;
+
             if (categorySelect) {
                 if (age > 18) {
                     categorySelect.value = gender === 'female' ? '65' : '75';

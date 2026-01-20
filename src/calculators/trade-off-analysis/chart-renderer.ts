@@ -25,7 +25,8 @@ export function createTradeOffChart(config: TradeOffChartConfig): any {
     if (!container) return null;
 
     // Clear previous chart
-    container.innerHTML = '<canvas id="trade-off-chart-canvas" style="max-height: 500px;"></canvas>';
+    container.innerHTML =
+        '<canvas id="trade-off-chart-canvas" style="max-height: 500px;"></canvas>';
     const canvas = document.getElementById('trade-off-chart-canvas') as HTMLCanvasElement;
     if (!canvas) return null;
 
@@ -39,7 +40,11 @@ export function createTradeOffChart(config: TradeOffChartConfig): any {
     const zonePlugin = {
         id: 'zonePlugin',
         beforeDatasetsDraw(chart: any) {
-            const { ctx, chartArea: { left, right, top, bottom }, scales: { x, y } } = chart;
+            const {
+                ctx,
+                chartArea: { left, right, top, bottom },
+                scales: { x, y }
+            } = chart;
 
             ctx.save();
 

@@ -5,7 +5,7 @@
  */
 
 import { createUnifiedFormulaCalculator } from '../shared/unified-formula-calculator.js';
-import { LOINC_CODES } from '../../fhir-codes.js';
+import { LOINC_CODES, SNOMED_CODES } from '../../fhir-codes.js';
 import { fhirDataService } from '../../fhir-data-service.js';
 import { calculateGwtgHf } from './calculation.js';
 import type { FormulaCalculatorConfig } from '../../types/calculator-formula.js';
@@ -18,6 +18,8 @@ const config: FormulaCalculatorConfig = {
     infoAlert:
         '<strong>IMPORTANT:</strong> This calculator includes inputs based on race, which may or may not provide better estimates.',
 
+    autoPopulateAge: 'gwtg-age',
+
     sections: [
         {
             title: 'Clinical Parameters',
@@ -28,7 +30,8 @@ const config: FormulaCalculatorConfig = {
                     label: 'Systolic BP',
                     unit: 'mmHg',
                     placeholder: '120',
-                    validationType: 'systolicBP'
+                    validationType: 'systolicBP',
+                    loincCode: LOINC_CODES.SYSTOLIC_BP
                 },
                 {
                     type: 'number',
@@ -36,7 +39,8 @@ const config: FormulaCalculatorConfig = {
                     label: 'BUN',
                     unit: 'mg/dL',
                     placeholder: '30',
-                    validationType: 'bun'
+                    validationType: 'bun',
+                    loincCode: LOINC_CODES.BUN
                 },
                 {
                     type: 'number',
@@ -44,7 +48,8 @@ const config: FormulaCalculatorConfig = {
                     label: 'Sodium',
                     unit: 'mEq/L',
                     placeholder: '140',
-                    validationType: 'sodium'
+                    validationType: 'sodium',
+                    loincCode: LOINC_CODES.SODIUM
                 },
                 {
                     type: 'number',
@@ -60,7 +65,8 @@ const config: FormulaCalculatorConfig = {
                     label: 'Heart Rate',
                     unit: 'bpm',
                     placeholder: '80',
-                    validationType: 'heartRate'
+                    validationType: 'heartRate',
+                    loincCode: LOINC_CODES.HEART_RATE
                 }
             ]
         },
@@ -74,7 +80,8 @@ const config: FormulaCalculatorConfig = {
                     options: [
                         { value: '0', label: 'No (0)', checked: true },
                         { value: '2', label: 'Yes (+2)' }
-                    ]
+                    ],
+                    snomedCode: SNOMED_CODES.COPD
                 },
                 {
                     type: 'radio',
@@ -125,15 +132,21 @@ const config: FormulaCalculatorConfig = {
             }
         };
 
-        // Age from patient using FHIRDataService
-        const age = fhirDataService.getPatientAge();
-        if (age !== null) {
-            setValue('gwtg-age', age.toString());
-        }
+        const setRadio = (id: string, value: string) => {
+            const radio = container.querySelector(
+                `input[name="${id}"][value="${value}"]`
+            ) as HTMLInputElement;
+            if (radio) {
+                radio.checked = true;
+                radio.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        };
+
+        // Age is handled by autoPopulateAge
 
         if (client) {
             try {
-                // Fetch all observations in parallel using FHIRDataService
+                // Fetch all observations in parallel
                 const [bpResult, bunResult, sodiumResult, hrResult] = await Promise.all([
                     fhirDataService
                         .getBloodPressure({ trackStaleness: true })
@@ -174,6 +187,12 @@ const config: FormulaCalculatorConfig = {
 
                 if (hrResult.value !== null) {
                     setValue('gwtg-hr', hrResult.value.toFixed(0));
+                }
+
+                // Check for COPD
+                const hasCopd = await fhirDataService.hasCondition([SNOMED_CODES.COPD]);
+                if (hasCopd) {
+                    setRadio('copd', '2');
                 }
             } catch (e) {
                 console.warn('Error fetching FHIR data for GWTG-HF', e);

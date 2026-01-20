@@ -48,7 +48,9 @@
 .input-group select:focus {
     outline: none;
     border-color: #667eea;
-    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+    box-shadow:
+        0 0 0 4px rgba(102, 126, 234, 0.1),
+        0 4px 6px rgba(0, 0, 0, 0.05);
     transform: translateY(-2px);
 }
 
@@ -58,7 +60,7 @@
 }
 
 /* Checkboxes */
-.input-group input[type="checkbox"] {
+.input-group input[type='checkbox'] {
     width: 24px;
     height: 24px;
     cursor: pointer;
@@ -167,4 +169,3 @@ button:disabled {
     content: '←';
     font-size: 1.2em;
 }
-

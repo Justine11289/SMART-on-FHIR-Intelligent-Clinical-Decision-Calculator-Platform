@@ -132,7 +132,7 @@
     align-items: center;
 }
 
-.check-item input[type="checkbox"] {
+.check-item input[type='checkbox'] {
     margin-right: 10px;
     height: 18px;
     width: 18px;

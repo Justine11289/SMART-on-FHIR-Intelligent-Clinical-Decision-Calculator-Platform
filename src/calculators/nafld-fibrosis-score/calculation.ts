@@ -1,6 +1,6 @@
 import type { SimpleCalculateFn, FormulaResultItem } from '../../types/calculator-formula.js';
 
-export const calculateNafldFibrosisScore: SimpleCalculateFn = (values) => {
+export const calculateNafldFibrosisScore: SimpleCalculateFn = values => {
     const getFloat = (key: string): number => {
         const val = values[key];
         return typeof val === 'string' ? parseFloat(val) : typeof val === 'number' ? val : NaN;
@@ -15,14 +15,7 @@ export const calculateNafldFibrosisScore: SimpleCalculateFn = (values) => {
     const platelet = getFloat('platelet');
     const albumin = getFloat('albumin');
 
-    if (
-        isNaN(age) ||
-        isNaN(bmi) ||
-        isNaN(ast) ||
-        isNaN(alt) ||
-        isNaN(platelet) ||
-        isNaN(albumin)
-    ) {
+    if (isNaN(age) || isNaN(bmi) || isNaN(ast) || isNaN(alt) || isNaN(platelet) || isNaN(albumin)) {
         return [];
     }
 

@@ -115,21 +115,6 @@ const config: FormulaCalculatorConfig = {
         show: true,
         title: 'ISTH DIC Scoring',
         calculationNote: 'Sum of laboratory criteria points:',
-        // FormulaSectionConfig doesn't usually support 'scoringCriteria' as a custom property unless extended?
-        // But generateFormulaSectionHTML (Step 255) in unified-formula-calculator.ts iterates `interpretations` and `footnotes`.
-        // It DOES NOT seem to support `scoringCriteria` array directly in `FormulaSectionConfig`.
-        // The original `mixed-input-calculator` supported it. I need to check `UnifiedFormulaCalculator`'s implementation of `generateFormulaSectionHTML`.
-        // Step 247/255 showed implementation.
-        // It supports `interpretations`, `footnotes`.
-        // It might NOT port `scoringCriteria` array automatically?
-        // I will check `FormulaSectionConfig` definition again in Step 255/425.
-        // `FormulaSectionConfig` = { title, tableHeaders?, rows?, interpretations?, footnotes?, ... }
-        // It does NOT have `scoringCriteria`.
-        // So I should convert the scoring criteria to `tableHeaders` and `rows` or put in `footerHTML`.
-        // Or simple text.
-        // The original `scoringCriteria` was an array of objects.
-        // I can render it as a table.
-        // Let's use `rows` and `tableHeaders`.  
         tableHeaders: ['Criteria', 'Points'],
         rows: [
             ['<strong>Platelet Count</strong>', ''],
@@ -165,21 +150,23 @@ const config: FormulaCalculatorConfig = {
 
     calculate: calculateIsthDic,
 
-    customResultRenderer: (results) => {
+    customResultRenderer: results => {
         let alertHtml = '';
-        const items = results.map(r => {
-            if (r.label === 'Interpretation' && r.alertPayload) {
-                alertHtml = uiBuilder.createAlert(r.alertPayload);
-                return '';
-            }
-            return uiBuilder.createResultItem({
-                label: r.label,
-                value: r.value.toString(),
-                unit: r.unit,
-                interpretation: r.interpretation,
-                alertClass: r.alertClass ? `ui-alert-${r.alertClass}` : ''
-            });
-        }).join('');
+        const items = results
+            .map(r => {
+                if (r.label === 'Interpretation' && r.alertPayload) {
+                    alertHtml = uiBuilder.createAlert(r.alertPayload);
+                    return '';
+                }
+                return uiBuilder.createResultItem({
+                    label: r.label,
+                    value: r.value.toString(),
+                    unit: r.unit,
+                    interpretation: r.interpretation,
+                    alertClass: r.alertClass ? `ui-alert-${r.alertClass}` : ''
+                });
+            })
+            .join('');
         return items + alertHtml;
     },
 
@@ -265,10 +252,13 @@ const config: FormulaCalculatorConfig = {
 
         try {
             // Platelets (LOINC 26515-7)
-            const plateletResult = await fhirDataService.getObservation('26515-7', {
-                trackStaleness: true,
-                stalenessLabel: 'Platelets'
-            });
+            const plateletResult = await fhirDataService.getObservation(
+                LOINC_CODES.PLATELET_COUNT,
+                {
+                    trackStaleness: true,
+                    stalenessLabel: 'Platelets'
+                }
+            );
             if (plateletResult.value !== null && plateletInput) {
                 plateletInput.value = plateletResult.value.toFixed(0);
                 plateletInput.dispatchEvent(new Event('input'));

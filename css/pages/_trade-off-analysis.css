@@ -39,7 +39,9 @@
     border-radius: 0.5rem;
     margin-bottom: 0.5rem;
     background: var(--bg-card, #ffffff);
-    transition: background 0.2s, border-color 0.2s;
+    transition:
+        background 0.2s,
+        border-color 0.2s;
 }
 
 .risk-factor-item:hover {
@@ -56,8 +58,8 @@
     color: var(--text-primary, #111827);
 }
 
-.risk-factor-label input[type="checkbox"],
-.risk-factor-label input[type="radio"] {
+.risk-factor-label input[type='checkbox'],
+.risk-factor-label input[type='radio'] {
     width: 1.25rem;
     height: 1.25rem;
     accent-color: var(--color-primary, #2563eb);
@@ -202,7 +204,7 @@
 
 /* Force dark background in tech-theme if variables fail */
 body.tech-theme .vertical-bar-chart,
-body[data-theme="tech"] .vertical-bar-chart {
+body[data-theme='tech'] .vertical-bar-chart {
     background: #1f2937 !important;
     /* dark-800 */
     border-color: #374151 !important;
@@ -210,13 +212,13 @@ body[data-theme="tech"] .vertical-bar-chart {
 }
 
 body.tech-theme .risk-factor-item,
-body[data-theme="tech"] .risk-factor-item {
+body[data-theme='tech'] .risk-factor-item {
     background: #1f2937 !important;
     border-color: #374151 !important;
 }
 
 body.tech-theme .trade-off-legend,
-body[data-theme="tech"] .trade-off-legend {
+body[data-theme='tech'] .trade-off-legend {
     background: #1f2937 !important;
     border-color: #374151 !important;
     color: #e5e7eb !important;
@@ -294,7 +296,9 @@ body[data-theme="tech"] .trade-off-legend {
     padding: 1.5rem;
     border-radius: 0.75rem;
     margin-bottom: 1rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .calculator-header h1 {

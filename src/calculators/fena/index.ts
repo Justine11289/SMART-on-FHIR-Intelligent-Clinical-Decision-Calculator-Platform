@@ -8,10 +8,12 @@ export const fenaConfig: FormulaCalculatorConfig = {
     id: 'fena',
     title: 'Fractional Excretion of Sodium (FENa)',
     description: 'Determines if renal failure is due to prerenal or intrinsic pathology.',
-    infoAlert: '<p>Use in the context of acute kidney injury (AKI) / acute renal failure to differentiate prerenal azotemia from acute tubular necrosis (ATN).</p>' +
+    infoAlert:
+        '<p>Use in the context of acute kidney injury (AKI) / acute renal failure to differentiate prerenal azotemia from acute tubular necrosis (ATN).</p>' +
         uiBuilder.createAlert({
             type: 'warning',
-            message: '<strong>Limitations:</strong> FENa is unreliable in patients on diuretics. Consider Fractional Excretion of Urea (FEUrea) instead.'
+            message:
+                '<strong>Limitations:</strong> FENa is unreliable in patients on diuretics. Consider Fractional Excretion of Urea (FEUrea) instead.'
         }),
     sections: [
         {
@@ -29,7 +31,7 @@ export const fenaConfig: FormulaCalculatorConfig = {
                         default: 'mEq/L'
                     },
                     validationType: 'urineSodium',
-                    loincCode: '2955-3',
+                    loincCode: LOINC_CODES.URINE_SODIUM,
                     standardUnit: 'mEq/L',
                     required: true
                 },
@@ -84,7 +86,8 @@ export const fenaConfig: FormulaCalculatorConfig = {
     formulas: [
         {
             label: 'FENa (%)',
-            formula: '<span class="formula-fraction"><span class="numerator">Urine Na × Serum Cr</span><span class="denominator">Serum Na × Urine Cr</span></span> × 100',
+            formula:
+                '<span class="formula-fraction"><span class="numerator">Urine Na × Serum Cr</span><span class="denominator">Serum Na × Urine Cr</span></span> × 100',
             notes: 'Units: Na (mEq/L), Cr (mg/dL or µmol/L)'
         }
     ],

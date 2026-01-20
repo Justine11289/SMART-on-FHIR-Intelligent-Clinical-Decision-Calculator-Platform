@@ -19,7 +19,7 @@
 
 export const calculatorModules = [
     { id: 'bmi-bsa', title: 'BMI & BSA Calculator', category: 'general' },
-    { id: 'gcs', title: 'Glasgow Coma Scale', category: 'critical-care' },
+    { id: 'gcs', title: 'Glasgow Coma Scale', category: 'critical-care' }
     // ... 更多計算器
 ];
 
@@ -36,6 +36,7 @@ export async function loadCalculator(calculatorId) {
 ```
 
 **預期效果：**
+
 - 首頁載入時間減少 60-70%
 - 初始 bundle 大小減少
 - 更好的使用者體驗
@@ -44,7 +45,8 @@ export async function loadCalculator(calculatorId) {
 
 #### 2. 測試覆蓋率提升 🧪
 
-**當前狀況：** 
+**當前狀況：**
+
 - 僅有 19/92 個計算器有測試（21%）
 - 缺少整合測試
 
@@ -65,6 +67,7 @@ coverageThreshold: {
 ```
 
 **實施計劃：**
+
 1. **Week 1-2：** 為剩餘 73 個計算器添加單元測試
 2. **Week 3：** 添加整合測試（FHIR 集成測試）
 3. **Week 4：** E2E 測試（使用 Playwright 或 Cypress）
@@ -108,16 +111,17 @@ export class CacheManager {
     }
 
     // FHIR 資料快取
-    async cacheFHIRData(patientId, data, ttl = 300000) { // 5分鐘
+    async cacheFHIRData(patientId, data, ttl = 300000) {
+        // 5分鐘
         const cacheKey = `fhir-${patientId}`;
         const item = {
             data,
             timestamp: Date.now(),
             ttl
         };
-        
+
         this.memoryCache.set(cacheKey, item);
-        
+
         // 同時存到 localStorage
         try {
             localStorage.setItem(cacheKey, JSON.stringify(item));
@@ -129,10 +133,10 @@ export class CacheManager {
     // 獲取快取資料
     async getCachedFHIRData(patientId) {
         const cacheKey = `fhir-${patientId}`;
-        
+
         // 優先從記憶體快取讀取
         let item = this.memoryCache.get(cacheKey);
-        
+
         // 如果記憶體快取沒有，嘗試從 localStorage
         if (!item) {
             try {
@@ -145,12 +149,12 @@ export class CacheManager {
                 console.warn('Failed to read from localStorage:', e);
             }
         }
-        
+
         // 檢查是否過期
         if (item && Date.now() - item.timestamp < item.ttl) {
             return item.data;
         }
-        
+
         return null;
     }
 
@@ -220,7 +224,7 @@ const translations = {
         'search.placeholder': '搜尋計算器...',
         'sort.a-z': 'A → Z',
         'sort.z-a': 'Z → A',
-        'error.fhir_not_available': '無法連接到 FHIR 伺服器',
+        'error.fhir_not_available': '無法連接到 FHIR 伺服器'
         // ... 更多翻譯
     },
     'en-US': {
@@ -228,7 +232,7 @@ const translations = {
         'search.placeholder': 'Search calculators...',
         'sort.a-z': 'A → Z',
         'sort.z-a': 'Z → A',
-        'error.fhir_not_available': 'Cannot connect to FHIR server',
+        'error.fhir_not_available': 'Cannot connect to FHIR server'
         // ... 更多翻譯
     }
 };
@@ -240,12 +244,12 @@ class I18n {
 
     t(key, params = {}) {
         let text = translations[this.locale]?.[key] || key;
-        
+
         // 支援參數替換：t('welcome.user', { name: 'John' })
         Object.keys(params).forEach(param => {
             text = text.replace(`{{${param}}}`, params[param]);
         });
-        
+
         return text;
     }
 
@@ -293,13 +297,13 @@ export class FavoritesManager {
     toggleFavorite(calculatorId) {
         const favorites = this.getFavorites();
         const index = favorites.indexOf(calculatorId);
-        
+
         if (index > -1) {
             favorites.splice(index, 1);
         } else {
             favorites.push(calculatorId);
         }
-        
+
         localStorage.setItem(this.storageKey, JSON.stringify(favorites));
         return favorites;
     }
@@ -315,16 +319,16 @@ export class FavoritesManager {
     // 最近使用
     addToRecent(calculatorId) {
         let recent = this.getRecent();
-        
+
         // 移除重複項目
         recent = recent.filter(id => id !== calculatorId);
-        
+
         // 添加到最前面
         recent.unshift(calculatorId);
-        
+
         // 只保留最近 10 個
         recent = recent.slice(0, 10);
-        
+
         localStorage.setItem(this.recentKey, JSON.stringify(recent));
     }
 
@@ -341,18 +345,18 @@ export const favoritesManager = new FavoritesManager();
 ```javascript
 // 更新 js/main.js
 const categories = {
-    'cardiovascular': '心血管',
-    'renal': '腎臟功能',
+    cardiovascular: '心血管',
+    renal: '腎臟功能',
     'critical-care': '重症醫學',
-    'pediatric': '兒科',
+    pediatric: '兒科',
     'drug-conversion': '藥物換算',
-    'infection': '感染評估'
+    infection: '感染評估'
 };
 
 // 添加分類到 calculatorModules
 export const calculatorModules = [
     { id: 'bmi-bsa', title: 'BMI & BSA', category: 'general' },
-    { id: 'gcs', title: 'Glasgow Coma Scale', category: 'critical-care' },
+    { id: 'gcs', title: 'Glasgow Coma Scale', category: 'critical-care' }
     // ...
 ];
 
@@ -454,21 +458,17 @@ const urlsToCache = [
     '/calculator.html',
     '/style.css',
     '/js/main.js',
-    '/js/utils.js',
+    '/js/utils.js'
     // ... 其他靜態資源
 ];
 
 self.addEventListener('install', event => {
-    event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then(cache => cache.addAll(urlsToCache))
-    );
+    event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache)));
 });
 
 self.addEventListener('fetch', event => {
     event.respondWith(
-        caches.match(event.request)
-            .then(response => response || fetch(event.request))
+        caches.match(event.request).then(response => response || fetch(event.request))
     );
 });
 ```
@@ -511,6 +511,7 @@ self.addEventListener('fetch', event => {
 - 進階分析
 
 **建議技術棧：**
+
 - Node.js + Express (輕量)
 - 或 FastAPI (Python, 如果需要機器學習功能)
 
@@ -563,12 +564,12 @@ export class AccessibilityManager {
 
     setupKeyboardNavigation() {
         // 確保所有互動元素可用鍵盤操作
-        document.addEventListener('keydown', (e) => {
+        document.addEventListener('keydown', e => {
             // Tab 導航
             if (e.key === 'Tab') {
                 this.highlightFocusedElement();
             }
-            
+
             // 快捷鍵：Ctrl+K 開啟搜尋
             if (e.ctrlKey && e.key === 'k') {
                 e.preventDefault();
@@ -580,7 +581,7 @@ export class AccessibilityManager {
     setupScreenReaderSupport() {
         // 添加 ARIA 標籤
         this.addAriaLabels();
-        
+
         // 確保動態內容變更會被通知
         this.setupLiveRegions();
     }
@@ -610,21 +611,25 @@ export class AccessibilityManager {
 ## 🎯 實施路線圖
 
 ### 第1個月
+
 - ✅ 實施計算器懶加載（效能優化）
 - ✅ 建立快取管理系統
 - ✅ 添加收藏和最近使用功能
 
 ### 第2-3個月
+
 - ✅ 完成所有計算器的單元測試
 - ✅ 實施 i18n 國際化
 - ✅ 添加分類過濾器
 
 ### 第4-6個月
+
 - ✅ 整合分析系統
 - ✅ PWA 支援
 - ✅ 輔助功能優化
 
 ### 長期（6個月以上）
+
 - ✅ 開發後端 API
 - ✅ 多使用者系統
 - ✅ 進階功能（AI 輔助診斷等）
@@ -657,9 +662,9 @@ function hideLoading(element) {
 ```javascript
 // 在 js/errorHandler.js 中添加更友善的錯誤訊息
 const errorMessages = {
-    'FHIR_CONNECTION_ERROR': '無法連接到醫療記錄系統，請確認網路連線。',
-    'INVALID_INPUT': '輸入的數值不正確，請檢查後重試。',
-    'CALCULATION_ERROR': '計算過程發生錯誤，請稍後再試。'
+    FHIR_CONNECTION_ERROR: '無法連接到醫療記錄系統，請確認網路連線。',
+    INVALID_INPUT: '輸入的數值不正確，請檢查後重試。',
+    CALCULATION_ERROR: '計算過程發生錯誤，請稍後再試。'
 };
 ```
 
@@ -723,23 +728,24 @@ const errorMessages = {
 
 \`\`\`javascript
 export const calculatorName = {
-    id: 'calculator-id',
-    title: 'Calculator Title',
-    description: 'Brief description',
-    category: 'category-name',
-    
+id: 'calculator-id',
+title: 'Calculator Title',
+description: 'Brief description',
+category: 'category-name',
+
     generateHTML: function() {
         // 返回計算器的 HTML
     },
-    
+
     initialize: function(client, patient, container) {
         // 初始化計算器，綁定事件
     },
-    
+
     calculate: function(inputs) {
         // 執行計算邏輯
         return result;
     }
+
 };
 \`\`\`
 ```
@@ -747,6 +753,7 @@ export const calculatorName = {
 ### 2. 貢獻指南更新
 
 在 CONTRIBUTING.md 中添加：
+
 - 程式碼風格指南
 - PR 審查清單
 - 測試要求
@@ -757,21 +764,25 @@ export const calculatorName = {
 ## 🎯 總結
 
 **立即可做（1週內）：**
+
 1. 實施計算器懶加載
 2. 添加載入指示器
 3. 改進錯誤訊息
 
 **短期目標（1個月內）：**
+
 1. 完成快取系統
 2. 添加收藏功能
 3. 提高測試覆蓋率到 60%
 
 **中期目標（3個月內）：**
+
 1. 完成國際化
 2. 實施分析系統
 3. PWA 支援
 
 **長期願景（6個月以上）：**
+
 1. 後端 API
 2. 多使用者系統
 3. AI 輔助功能
@@ -779,4 +790,3 @@ export const calculatorName = {
 ---
 
 **需要我開始實施其中任何一項嗎？我可以立即開始編寫程式碼！** 🚀
-

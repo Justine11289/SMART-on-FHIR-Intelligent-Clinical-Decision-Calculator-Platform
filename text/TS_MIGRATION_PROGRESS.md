@@ -1,6 +1,7 @@
 # TypeScript Migration Progress
 
 ## Configuration & Core
+
 - [x] Initialized `tsconfig.json`
 - [x] `fhir-codes.d.ts`
 - [x] `errorHandler.d.ts`
@@ -11,6 +12,7 @@
 - [x] `ui-builder.d.ts`
 
 ## Calculators
+
 - [x] `stop-bang`
 - [x] `has-bled`
 - [x] `ascvd`

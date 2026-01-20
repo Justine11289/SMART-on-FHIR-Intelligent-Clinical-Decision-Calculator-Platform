@@ -7,7 +7,8 @@ import type { FormulaCalculatorConfig, FormulaResultItem } from '../../types/cal
 export const tpaDosingStrokeConfig: FormulaCalculatorConfig = {
     id: 'tpa-dosing-stroke',
     title: 'tPA Dosing for Acute Stroke',
-    description: 'Calculates tissue plasminogen activator (tPA) dosing for acute ischemic stroke with eligibility check.',
+    description:
+        'Calculates tissue plasminogen activator (tPA) dosing for acute ischemic stroke with eligibility check.',
     infoAlert: uiBuilder.createAlert({
         type: 'warning',
         message: `
@@ -63,7 +64,9 @@ export const tpaDosingStrokeConfig: FormulaCalculatorConfig = {
     calculate: calculateTpaDosingStroke,
     customResultRenderer: (results: FormulaResultItem[]) => {
         // Extract Eligibility Item
-        const eligibilityItem = results.find(r => r.label === 'Eligibility Status') as TpaStrokeResult | undefined;
+        const eligibilityItem = results.find(r => r.label === 'Eligibility Status') as
+            | TpaStrokeResult
+            | undefined;
         const dosingItems = results.filter(r => r.label !== 'Eligibility Status');
 
         let eligibilityHtml = '';
@@ -72,29 +75,33 @@ export const tpaDosingStrokeConfig: FormulaCalculatorConfig = {
             if (status === 'eligible') {
                 eligibilityHtml = uiBuilder.createAlert({
                     type: 'success',
-                    message: '<strong>Eligibility:</strong> Within time window for IV tPA (≤ 4.5 hours)'
+                    message:
+                        '<strong>Eligibility:</strong> Within time window for IV tPA (≤ 4.5 hours)'
                 });
             } else if (status === 'ineligible') {
                 eligibilityHtml = uiBuilder.createAlert({
                     type: 'danger',
-                    message: '<strong>Eligibility:</strong> Outside time window for IV tPA (> 4.5 hours)'
+                    message:
+                        '<strong>Eligibility:</strong> Outside time window for IV tPA (> 4.5 hours)'
                 });
             } else {
                 eligibilityHtml = uiBuilder.createAlert({
                     type: 'warning',
-                    message: '<strong>Note:</strong> Please enter time from symptom onset to check eligibility.'
+                    message:
+                        '<strong>Note:</strong> Please enter time from symptom onset to check eligibility.'
                 });
             }
         }
 
         // Render items
-        const renderItem = (res: FormulaResultItem) => uiBuilder.createResultItem({
-            label: res.label,
-            value: res.value?.toString() || '',
-            unit: res.unit,
-            interpretation: res.interpretation,
-            alertClass: res.alertClass ? `ui-alert-${res.alertClass}` : ''
-        });
+        const renderItem = (res: FormulaResultItem) =>
+            uiBuilder.createResultItem({
+                label: res.label,
+                value: res.value?.toString() || '',
+                unit: res.unit,
+                interpretation: res.interpretation,
+                alertClass: res.alertClass ? `ui-alert-${res.alertClass}` : ''
+            });
 
         const totalDoseItem = dosingItems.find(r => r.label === 'Total Dose');
         const stepItems = dosingItems.filter(r => r.label !== 'Total Dose');

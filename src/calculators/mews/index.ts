@@ -5,15 +5,12 @@
  * 已整合 FHIRDataService 進行自動填充
  */
 
-import {
-    createScoringCalculator,
-    ScoringCalculatorConfig
-} from '../shared/scoring-calculator.js';
+import { createScoringCalculator, ScoringCalculatorConfig } from '../shared/scoring-calculator.js';
 import { LOINC_CODES } from '../../fhir-codes.js';
 import { fhirDataService } from '../../fhir-data-service.js';
 import { uiBuilder } from '../../ui-builder.js';
 
-const config: ScoringCalculatorConfig = {
+export const mewsConfig: ScoringCalculatorConfig = {
     id: 'mews',
     title: 'Modified Early Warning Score (MEWS)',
     description:
@@ -172,23 +169,24 @@ const config: ScoringCalculatorConfig = {
 
         const criticalWarning = hasCriticalParam
             ? uiBuilder.createAlert({
-                type: 'danger',
-                message: '<strong>Critical Parameter Alert:</strong> One or more parameters scored +3 points. Consider higher level of care regardless of total score.'
-            })
+                  type: 'danger',
+                  message:
+                      '<strong>Critical Parameter Alert:</strong> One or more parameters scored +3 points. Consider higher level of care regardless of total score.'
+              })
             : '';
 
         return `
             ${uiBuilder.createResultItem({
-            label: 'Total MEWS Score',
-            value: score.toString(),
-            unit: '/ 14 points',
-            interpretation: riskLabel,
-            alertClass: `ui-alert-${riskSeverity}`
-        })}
+                label: 'Total MEWS Score',
+                value: score.toString(),
+                unit: '/ 14 points',
+                interpretation: riskLabel,
+                alertClass: `ui-alert-${riskSeverity}`
+            })}
             ${uiBuilder.createAlert({
-            type: riskSeverity,
-            message: `<strong>Recommendation:</strong> ${riskDescription}`
-        })}
+                type: riskSeverity,
+                message: `<strong>Recommendation:</strong> ${riskDescription}`
+            })}
             ${criticalWarning}
         `;
     },
@@ -332,4 +330,4 @@ const config: ScoringCalculatorConfig = {
     }
 };
 
-export const mewsScore = createScoringCalculator(config);
+export const mewsScore = createScoringCalculator(mewsConfig);

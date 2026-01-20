@@ -1,14 +1,14 @@
 ﻿/**
  * tPA Dosing for Acute Stroke Calculator
- * 
+ *
  * Formula:
  *   Total Dose = 0.9 mg/kg (Maximum 90 mg)
  *   Bolus Dose = 10% of total dose (over 1 minute)
  *   Infusion Dose = 90% of total dose (over 60 minutes)
- * 
+ *
  * Eligibility:
  *   Time from symptom onset ≤ 4.5 hours for IV tPA
- * 
+ *
  * Reference:
  * NINDS rt-PA Stroke Study Group. N Engl J Med. 1995;333(24):1581-1587.
  */
@@ -19,9 +19,10 @@ export interface TpaStrokeResult extends FormulaResultItem {
     eligibilityStatus?: 'eligible' | 'ineligible' | 'unknown';
 }
 
-export const calculateTpaDosingStroke: SimpleCalculateFn = (values) => {
+export const calculateTpaDosingStroke: SimpleCalculateFn = values => {
     const weight = Number(values['tpa-stroke-weight']);
-    const onset = values['tpa-stroke-onset'] !== undefined ? Number(values['tpa-stroke-onset']) : null;
+    const onset =
+        values['tpa-stroke-onset'] !== undefined ? Number(values['tpa-stroke-onset']) : null;
 
     if (!weight || isNaN(weight) || weight <= 0) {
         return null;
@@ -47,7 +48,12 @@ export const calculateTpaDosingStroke: SimpleCalculateFn = (values) => {
             label: 'Eligibility Status',
             value: eligibilityStatus,
             unit: '',
-            alertClass: eligibilityStatus === 'eligible' ? 'success' : (eligibilityStatus === 'ineligible' ? 'danger' : 'warning'),
+            alertClass:
+                eligibilityStatus === 'eligible'
+                    ? 'success'
+                    : eligibilityStatus === 'ineligible'
+                      ? 'danger'
+                      : 'warning',
             eligibilityStatus
         },
         {
@@ -73,4 +79,3 @@ export const calculateTpaDosingStroke: SimpleCalculateFn = (values) => {
 
     return results;
 };
-

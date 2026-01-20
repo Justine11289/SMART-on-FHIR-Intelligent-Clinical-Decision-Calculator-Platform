@@ -1,21 +1,21 @@
 ﻿/**
  * Endotracheal Tube (ETT) Depth and Tidal Volume Calculator
- * 
+ *
  * Formulas:
  *   ETT Depth (at lips) = Height (cm) / 10 + 5
- *   
+ *
  *   IBW (Male) = 50 + 2.3 × (Height in inches - 60)
  *   IBW (Female) = 45.5 + 2.3 × (Height in inches - 60)
- *   
+ *
  *   Tidal Volume = IBW × 6-8 mL/kg (lung-protective ventilation)
- * 
+ *
  * Reference:
  * ARDSNet protocol for lung-protective ventilation
  */
 
 import type { SimpleCalculateFn, FormulaResultItem } from '../../types/calculator-formula.js';
 
-export const calculateETT: SimpleCalculateFn = (values) => {
+export const calculateETT: SimpleCalculateFn = values => {
     const heightCm = Number(values['ett-height']);
     const gender = values['ett-gender'] as string;
 
@@ -63,4 +63,3 @@ export const calculateETT: SimpleCalculateFn = (values) => {
 
     return results;
 };
-

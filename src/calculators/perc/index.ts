@@ -99,16 +99,17 @@ const config: ScoringCalculatorConfig = {
 
         return `
             ${uiBuilder.createResultItem({
-            label: 'Status',
-            value: resultTitle,
-            alertClass: `ui-alert-${alertClass}`
-        })}
-            ${criteriaMet > 0
-                ? uiBuilder.createResultItem({
-                    label: 'Criteria Met',
-                    value: `${criteriaMet} / 8`
-                })
-                : ''
+                label: 'Status',
+                value: resultTitle,
+                alertClass: `ui-alert-${alertClass}`
+            })}
+            ${
+                criteriaMet > 0
+                    ? uiBuilder.createResultItem({
+                          label: 'Criteria Met',
+                          value: `${criteriaMet} / 8`
+                      })
+                    : ''
             }
             ${uiBuilder.createAlert({
                 type: alertClass,

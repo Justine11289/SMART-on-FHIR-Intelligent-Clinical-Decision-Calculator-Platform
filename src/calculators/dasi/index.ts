@@ -8,7 +8,7 @@
 import { createScoringCalculator, ScoringCalculatorConfig } from '../shared/scoring-calculator.js';
 import { uiBuilder } from '../../ui-builder.js';
 
-const config: ScoringCalculatorConfig = {
+export const dasiConfig: ScoringCalculatorConfig = {
     inputType: 'checkbox',
     id: 'dasi',
     title: 'Duke Activity Status Index (DASI)',
@@ -136,24 +136,24 @@ const config: ScoringCalculatorConfig = {
 
         return `
             ${uiBuilder.createResultItem({
-            label: 'DASI Score',
-            value: score.toFixed(2),
-            unit: '/ 58.2 points'
-        })}
+                label: 'DASI Score',
+                value: score.toFixed(2),
+                unit: '/ 58.2 points'
+            })}
             ${uiBuilder.createResultItem({
-            label: 'Estimated VO₂ peak',
-            value: vo2peak.toFixed(1),
-            unit: 'mL/kg/min'
-        })}
+                label: 'Estimated VO₂ peak',
+                value: vo2peak.toFixed(1),
+                unit: 'mL/kg/min'
+            })}
             ${uiBuilder.createResultItem({
-            label: 'Estimated Peak METs',
-            value: mets.toFixed(1),
-            unit: '',
-            interpretation: interpretation,
-            alertClass: `ui-alert-${alertClass}`
-        })}
+                label: 'Estimated Peak METs',
+                value: mets.toFixed(1),
+                unit: '',
+                interpretation: interpretation,
+                alertClass: `ui-alert-${alertClass}`
+            })}
         `;
     }
 };
 
-export const dasi = createScoringCalculator(config);
+export const dasi = createScoringCalculator(dasiConfig);

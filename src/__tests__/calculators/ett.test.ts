@@ -1,15 +1,15 @@
 /**
  * ETT Depth and Tidal Volume Calculator - SaMD Verification Tests
- * 
+ *
  * Formulas:
  *   ETT Depth (at lips) = Height (cm) / 10 + 5
- *   
+ *
  *   IBW (Male) = 50 + 2.3 × (Height in inches - 60)
  *   IBW (Female) = 45.5 + 2.3 × (Height in inches - 60)
- *   
+ *
  *   Tidal Volume Low = IBW × 6 mL/kg
  *   Tidal Volume High = IBW × 8 mL/kg
- * 
+ *
  * Reference: ARDSNet lung-protective ventilation protocol
  */
 
@@ -19,7 +19,7 @@ describe('ETT Depth and Tidal Volume Calculator', () => {
     // ===========================================
     // TC-001: Standard Calculation Tests
     // ===========================================
-    
+
     describe('Standard Calculations', () => {
         test('Should calculate correct values for average male', () => {
             // 170 cm male
@@ -82,7 +82,7 @@ describe('ETT Depth and Tidal Volume Calculator', () => {
     // ===========================================
     // TC-002: ETT Depth Formula Tests
     // ===========================================
-    
+
     describe('ETT Depth Formula', () => {
         test('ETT Depth should equal height/10 + 5', () => {
             const testCases = [
@@ -90,7 +90,7 @@ describe('ETT Depth and Tidal Volume Calculator', () => {
                 { height: 160, expectedDepth: 21 },
                 { height: 170, expectedDepth: 22 },
                 { height: 180, expectedDepth: 23 },
-                { height: 190, expectedDepth: 24 },
+                { height: 190, expectedDepth: 24 }
             ];
 
             testCases.forEach(({ height, expectedDepth }) => {
@@ -108,7 +108,7 @@ describe('ETT Depth and Tidal Volume Calculator', () => {
     // ===========================================
     // TC-003: IBW Formula Tests
     // ===========================================
-    
+
     describe('IBW Formula', () => {
         test('IBW for male should use 50 + 2.3 * (inches - 60)', () => {
             // 5 feet exactly (60 inches = 152.4 cm)
@@ -151,23 +151,23 @@ describe('ETT Depth and Tidal Volume Calculator', () => {
     // ===========================================
     // TC-004: Tidal Volume Tests
     // ===========================================
-    
+
     describe('Tidal Volume', () => {
         test('Tidal volume range should be IBW × 6 to IBW × 8', () => {
             // 70 kg IBW patient
             // TV = 420 - 560 mL
             const result = calculateETT({
-                'ett-height': 175.3,  // Results in ~70 kg IBW for male
+                'ett-height': 175.3, // Results in ~70 kg IBW for male
                 'ett-gender': 'male'
             });
 
             expect(result).not.toBeNull();
             const ibw = parseFloat(result![1].value as string);
             const tvRange = result![2].value as string;
-            
+
             const expectedLow = Math.round(ibw * 6);
             const expectedHigh = Math.round(ibw * 8);
-            
+
             expect(tvRange).toContain(expectedLow.toString());
             expect(tvRange).toContain(expectedHigh.toString());
         });
@@ -176,7 +176,7 @@ describe('ETT Depth and Tidal Volume Calculator', () => {
     // ===========================================
     // TC-005: Boundary Value Tests
     // ===========================================
-    
+
     describe('Boundary Values', () => {
         test('Should handle minimum reasonable height', () => {
             const result = calculateETT({
@@ -204,7 +204,7 @@ describe('ETT Depth and Tidal Volume Calculator', () => {
     // ===========================================
     // TC-006: Invalid Input Tests
     // ===========================================
-    
+
     describe('Invalid Inputs', () => {
         test('Should return null for zero height', () => {
             const result = calculateETT({
@@ -236,19 +236,19 @@ describe('ETT Depth and Tidal Volume Calculator', () => {
     // ===========================================
     // TC-007: Golden Dataset Verification
     // ===========================================
-    
+
     describe('Golden Dataset', () => {
         const goldenDataset = [
             // height, gender, expectedDepth, expectedIBW (approx)
             // IBW(male) = 50 + 2.3 * (height/2.54 - 60)
             // IBW(female) = 45.5 + 2.3 * (height/2.54 - 60)
-            { h: 150, g: 'male', depth: 20.0, ibw: 50 },       // 59" < 60, so IBW = 50
-            { h: 160, g: 'male', depth: 21.0, ibw: 57 },       // 63", IBW = 50 + 2.3*3 = 56.9
-            { h: 170, g: 'male', depth: 22.0, ibw: 66 },       // 66.9", IBW = 65.9
-            { h: 180, g: 'male', depth: 23.0, ibw: 75 },       // 70.9", IBW = 75.0
-            { h: 150, g: 'female', depth: 20.0, ibw: 46 },     // 59" < 60, so IBW = 45.5
-            { h: 160, g: 'female', depth: 21.0, ibw: 52 },     // 63", IBW = 52.4
-            { h: 170, g: 'female', depth: 22.0, ibw: 61 },     // 66.9", IBW = 61.4
+            { h: 150, g: 'male', depth: 20.0, ibw: 50 }, // 59" < 60, so IBW = 50
+            { h: 160, g: 'male', depth: 21.0, ibw: 57 }, // 63", IBW = 50 + 2.3*3 = 56.9
+            { h: 170, g: 'male', depth: 22.0, ibw: 66 }, // 66.9", IBW = 65.9
+            { h: 180, g: 'male', depth: 23.0, ibw: 75 }, // 70.9", IBW = 75.0
+            { h: 150, g: 'female', depth: 20.0, ibw: 46 }, // 59" < 60, so IBW = 45.5
+            { h: 160, g: 'female', depth: 21.0, ibw: 52 }, // 63", IBW = 52.4
+            { h: 170, g: 'female', depth: 22.0, ibw: 61 } // 66.9", IBW = 61.4
         ];
 
         goldenDataset.forEach((data, index) => {
@@ -266,4 +266,3 @@ describe('ETT Depth and Tidal Volume Calculator', () => {
         });
     });
 });
-
