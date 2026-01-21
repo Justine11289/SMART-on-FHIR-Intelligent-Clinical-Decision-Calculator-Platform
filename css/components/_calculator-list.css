@@ -12,8 +12,8 @@
 .calculator-list,
 #calculator-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 15px;
     padding: 10px 0;
 }
 
@@ -66,7 +66,7 @@
 
 .list-item-title {
     font-weight: 700;
-    font-size: 1.1em;
+    font-size: 1.0em;
     color: var(--text-primary);
     margin-bottom: 8px;
     line-height: 1.4;
@@ -74,7 +74,7 @@
 
 .list-item-description {
     color: var(--text-secondary);
-    font-size: 0.9em;
+    font-size: 1.0em;
     margin-top: auto;
     line-height: 1.5;
 }
@@ -198,7 +198,7 @@
     }
 
     .list-item-description {
-        font-size: 0.85em;
+        font-size: 1em;
     }
 
     .list-item-star {

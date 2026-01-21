@@ -1,129 +1,123 @@
-/* =============================================
-   Container - 容器佈局樣式
-   ============================================= */
-
 /* ===================
    Main Container
    =================== */
 
 .container {
     max-width: var(--container-max-width);
-    margin: 0 auto;
+    margin: 2vh auto;
     background: var(--color-bg-container);
     border-radius: var(--radius-2xl);
-    box-shadow:
-        var(--shadow-xl),
-        0 10px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-xl), 0 10px 20px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     position: relative;
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* 給 calculator.html 使用的預設上下佈局 */
     min-height: 90vh;
     max-height: 90vh;
     overflow-y: auto;
     padding: var(--container-padding);
 }
 
-/* Top Gradient Bar */
-.container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #667eea 100%);
-    background-size: 200% 100%;
-    animation: shimmer 3s ease-in-out infinite;
-    border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+/* --- 側邊欄佈局 (index.html 使用) --- */
+.container.main-layout {
+    flex-direction: row;
+    overflow: hidden;
+    padding: 0;
 }
 
-@keyframes shimmer {
-    0%,
-    100% {
-        background-position: 200% 0;
-    }
-
-    50% {
-        background-position: -200% 0;
-    }
+.sidebar-area {
+    width: 280px;
+    min-width: 280px;
+    background: rgba(255, 255, 255, 0.03);
+    border-right: 1px solid var(--color-border-light);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    overflow-y: auto;
 }
-
-/* ===================
-   Sticky Header
-   =================== */
-
-.sticky-header {
-    position: sticky;
-    top: 0;
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(20px);
-    z-index: var(--z-sticky);
-    padding: var(--container-padding) var(--container-padding) var(--spacing-5)
-        var(--container-padding);
-    margin: calc(-1 * var(--container-padding)) calc(-1 * var(--container-padding)) 0
-        calc(-1 * var(--container-padding));
-    border-bottom: 1px solid var(--color-border-light);
-    border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
-}
-
-/* ===================
-   Content Area
-   =================== */
 
 .content-area {
     flex: 1;
-    padding-top: var(--spacing-5);
+    min-width: 0; /* 關鍵：防止 Flex 子元素溢出 */
+    padding: 20px;
+    overflow-y: auto;
+    overflow-x: hidden; /* 強制禁止左右滑動 */
 }
 
-/* ===================
-   Header Layout
-   =================== */
-
-.header-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: var(--spacing-4);
-}
-
-/* ===================
-   Patient Info Section
-   =================== */
-
+/* --- 縮小病人資訊 --- */
 #patient-info {
-    background: linear-gradient(
-        135deg,
-        rgba(102, 126, 234, 0.05) 0%,
-        rgba(118, 75, 162, 0.05) 100%
-    );
-    border-radius: var(--radius-xl);
-    padding: var(--spacing-6) var(--spacing-8);
-    margin-bottom: var(--spacing-6);
+    background: rgba(var(--color-primary-rgb), 0.05);
+    border-radius: var(--radius-md);
     border: 1px solid var(--color-border-light);
-    box-shadow: var(--shadow-sm);
+    padding: 8px 12px;           
+    font-size: 14px; /* 維持您滿意的字體大小 */
+    line-height: 1.4;
+    margin-bottom: 15px;
+    overflow: visible;           
+    height: auto;
 }
 
+/* 核心修正：讓 p 標籤恢復為區塊元素，強制換行 */
 #patient-info p {
-    margin: var(--spacing-1) 0;
+    display: block !important;  /* 改為 block 確保換行 */
+    margin: 4px 0 !important;   /* 增加一點點行距讓閱讀更清晰 */
+    font-size: inherit !important; /* 繼承父層的 12px */
 }
 
-/* ===================
-   Calculator Container
-   =================== */
+/* 讓標籤與數值維持在同一行 */
+#patient-info strong {
+    display: inline !important; 
+    font-weight: 600 !important;
+    margin-right: 5px;
+}
+/* --- 平行控制項佈局 --- */
+.sidebar-section {
+    margin-bottom: 15px;
+}
 
-#calculator-container {
+/* 按鈕平行 */
+.filter-row {
+    display: flex;
+    gap: 5px;
+}
+
+.filter-row .filter-btn {
     flex: 1;
+    padding: 6px 2px;
+    font-size: 0.8rem;
+    text-align: center;
 }
 
-/* ===================
-   Full Width Section
-   =================== */
+/* Category 與 Sort 平行 */
+.select-row {
+    display: flex;
+    gap: 8px;
+}
 
-.full-width {
-    margin-left: calc(-1 * var(--container-padding));
-    margin-right: calc(-1 * var(--container-padding));
-    padding-left: var(--container-padding);
-    padding-right: var(--container-padding);
+.select-row select {
+    flex: 1;
+    padding: 4px;
+    font-size: 0.8rem;
+    height: 34px;
+    width: 50%; /* 確保平分 */
+}
+
+.stats-text {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    text-align: center;
+}
+
+/* 手機版適應 */
+@media (max-width: 900px) {
+    .container.main-layout {
+        flex-direction: column;
+        max-height: none;
+    }
+    .sidebar-area {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--color-border-light);
+    }
 }
