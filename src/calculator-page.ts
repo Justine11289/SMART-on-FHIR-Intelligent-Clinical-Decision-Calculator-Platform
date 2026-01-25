@@ -2,7 +2,7 @@
 import { displayPatientInfo } from './utils.js';
 import { loadCalculator, getCalculatorMetadata, CalculatorModule } from './calculators/index.js';
 import { favoritesManager } from './favorites.js';
-import { displayError } from './errorHandler.js';  
+import { displayError } from './errorHandler.js';
 
 declare global {
     interface Window {
