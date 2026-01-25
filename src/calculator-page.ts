@@ -30,7 +30,6 @@ function showLoading(element: HTMLElement): void {
     `;
 }
 
-
 window.onload = () => {
     const params = new URLSearchParams(window.location.search);
     const calculatorId = params.get('id');
@@ -71,7 +70,9 @@ window.onload = () => {
             // 2. 讀取測試資料
             const response = await fetch('/test-Patient.json');
             const bundle = await response.json();
-            const patient = bundle.entry.find((e: any) => e.resource.resourceType === "Patient")?.resource;
+            const patient = bundle.entry.find(
+                (e: any) => e.resource.resourceType === 'Patient'
+            )?.resource;
 
             // 核心修正：將 patient.id 傳入 mockClient 滿足 utils.ts 的檢查
             const mockClient = {
@@ -79,7 +80,7 @@ window.onload = () => {
                     id: patient.id,
                     read: () => Promise.resolve(patient),
                     // 核心修正：request 必須在 patient 物件內，且回傳整個 bundle (模擬 FHIR Search)
-                    request: (url: string) => Promise.resolve(bundle) 
+                    request: (url: string) => Promise.resolve(bundle)
                 },
                 // 為了相容性，外層也可以放一個
                 request: (url: string) => Promise.resolve(bundle)
@@ -87,7 +88,7 @@ window.onload = () => {
             if (typeof calculator.initialize === 'function') {
                 calculator.initialize(mockClient, patient, card);
                 // 這裡會成功執行，不再跳出「No patient data」錯誤
-                displayPatientInfo(mockClient, patientInfoDiv); 
+                displayPatientInfo(mockClient, patientInfoDiv);
             }
         } catch (error) {
             console.error(`Failed: ${calculatorId}`, error);

@@ -362,63 +362,63 @@ export const ICD10_CODES: Record<string, string> = {
  */
 export const SNOMED_TO_ICD10_MAP: Record<string, string> = {
     // Cardiovascular
-    '38341003': 'I10',       // Hypertension
-    '53741008': 'I25.10',    // CAD
-    '22298006': 'I21.9',     // MI
-    '84114007': 'I50.9',     // Heart failure
-    '42343007': 'I50.0',     // CHF
-    '49436004': 'I48.91',    // AFib
-    '230690007': 'I63.9',    // Stroke
-    '266257000': 'G45.9',    // TIA
-    '399957001': 'I73.9',    // PAD
-    '27885002': 'R57.0',     // Cardiogenic shock
-    '394659003': 'I24.9',    // ACS
-    '128053003': 'I82.40',   // DVT
-    '410429000': 'I46.9',    // Cardiac arrest
-    '414545008': 'I25.9',    // Ischemic heart disease
+    '38341003': 'I10', // Hypertension
+    '53741008': 'I25.10', // CAD
+    '22298006': 'I21.9', // MI
+    '84114007': 'I50.9', // Heart failure
+    '42343007': 'I50.0', // CHF
+    '49436004': 'I48.91', // AFib
+    '230690007': 'I63.9', // Stroke
+    '266257000': 'G45.9', // TIA
+    '399957001': 'I73.9', // PAD
+    '27885002': 'R57.0', // Cardiogenic shock
+    '394659003': 'I24.9', // ACS
+    '128053003': 'I82.40', // DVT
+    '410429000': 'I46.9', // Cardiac arrest
+    '414545008': 'I25.9', // Ischemic heart disease
 
     // Respiratory
-    '13645005': 'J44.9',     // COPD
-    '195967001': 'J45.909',  // Asthma
-    '233604007': 'J18.9',    // Pneumonia
-    '59282003': 'I26.99',    // PE
-    '409622000': 'J96.90',   // Respiratory failure
+    '13645005': 'J44.9', // COPD
+    '195967001': 'J45.909', // Asthma
+    '233604007': 'J18.9', // Pneumonia
+    '59282003': 'I26.99', // PE
+    '409622000': 'J96.90', // Respiratory failure
 
     // Metabolic
-    '73211009': 'E11.9',     // DM
-    '46635009': 'E10.9',     // Type 1 DM
-    '44054006': 'E11.9',     // Type 2 DM
-    '55822004': 'E78.5',     // Hyperlipidemia
-    '414915002': 'E66.9',    // Obesity
+    '73211009': 'E11.9', // DM
+    '46635009': 'E10.9', // Type 1 DM
+    '44054006': 'E11.9', // Type 2 DM
+    '55822004': 'E78.5', // Hyperlipidemia
+    '414915002': 'E66.9', // Obesity
 
     // Renal
-    '709044004': 'N18.9',    // CKD
-    '14669001': 'N17.9',     // AKI
-    '46177005': 'N18.6',     // ESRD
+    '709044004': 'N18.9', // CKD
+    '14669001': 'N17.9', // AKI
+    '46177005': 'N18.6', // ESRD
 
     // Liver
-    '19943007': 'K74.60',    // Cirrhosis
-    '59927004': 'K72.90',    // Liver failure
+    '19943007': 'K74.60', // Cirrhosis
+    '59927004': 'K72.90', // Liver failure
 
     // Hematological
-    '271737000': 'D64.9',    // Anemia
-    '64779008': 'D68.9',     // Bleeding disorder
-    '415116008': 'D69.6',    // Thrombocytopenia
+    '271737000': 'D64.9', // Anemia
+    '64779008': 'D68.9', // Bleeding disorder
+    '415116008': 'D69.6', // Thrombocytopenia
 
     // Neurological
-    '52448006': 'F03.90',    // Dementia
-    '84757009': 'G40.909',   // Epilepsy
-    '49049000': 'G20',       // Parkinson's
-    '50582007': 'G81.90',    // Hemiplegia
+    '52448006': 'F03.90', // Dementia
+    '84757009': 'G40.909', // Epilepsy
+    '49049000': 'G20', // Parkinson's
+    '50582007': 'G81.90', // Hemiplegia
 
     // Malignancies
-    '363346000': 'C80.1',    // Malignancy
-    '94225005': 'C79.9',     // Metastatic cancer
+    '363346000': 'C80.1', // Malignancy
+    '94225005': 'C79.9', // Metastatic cancer
 
     // Infections
-    '91302008': 'A41.9',     // Sepsis
-    '86406008': 'B20',       // HIV
-    '840539006': 'U07.1'     // COVID-19
+    '91302008': 'A41.9', // Sepsis
+    '86406008': 'B20', // HIV
+    '840539006': 'U07.1' // COVID-19
 };
 
 /**

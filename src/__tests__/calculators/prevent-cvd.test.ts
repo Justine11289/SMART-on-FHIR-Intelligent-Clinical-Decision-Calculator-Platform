@@ -139,14 +139,7 @@ describe('PREVENT CVD Risk Calculator', () => {
     describe('Linear Predictor Calculation', () => {
         test('Base case with all false flags', () => {
             const transformed = calculateTransformedVariables(55, 5.0, 1.3, 130, 90);
-            const x = calculateLinearPredictor(
-                transformed,
-                'male',
-                false,
-                false,
-                false,
-                false
-            );
+            const x = calculateLinearPredictor(transformed, 'male', false, false, false, false);
             // Should be close to constant since all transformed values are ~0
             expect(x).toBeCloseTo(preventCoefficients.male.constant, 1);
         });

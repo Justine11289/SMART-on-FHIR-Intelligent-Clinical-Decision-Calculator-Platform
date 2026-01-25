@@ -76,18 +76,19 @@ export function calculateAge(birthDate: string): number {
 export function displayPatientInfo(client: any, patientInfoDiv: HTMLElement): Promise<any> {
     const renderPatient = (patient: any) => {
         const name = patient.name[0];
-        const formattedName = name.text || `${name.given?.join(' ') || ''} ${name.family || ''}`.trim();
+        const formattedName =
+            name.text || `${name.given?.join(' ') || ''} ${name.family || ''}`.trim();
         const age = calculateAge(patient.birthDate);
 
         // 檢查是否符合 TW Core Patient Profile
-        const isTWCore = patient.meta?.profile?.some(
-            (p: string) => p.includes("twcore/StructureDefinition/Patient-twcore")
+        const isTWCore = patient.meta?.profile?.some((p: string) =>
+            p.includes('twcore/StructureDefinition/Patient-twcore')
         );
 
         // 取得台灣身分證字號
-        const twId = patient.identifier?.find(
-            (i: any) => i.system === "http://www.moi.gov.tw/"
-        )?.value || "N/A";
+        const twId =
+            patient.identifier?.find((i: any) => i.system === 'http://www.moi.gov.tw/')?.value ||
+            'N/A';
 
         patientInfoDiv.innerHTML = `
             <div class="tw-core-info">

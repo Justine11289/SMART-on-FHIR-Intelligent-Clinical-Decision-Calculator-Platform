@@ -20,7 +20,7 @@ describe('FHIRDataService', () => {
         const container = document.getElementById('test-container');
         fhirDataService.initialize(mockClient, { id: 'test-patient-id' }, container as HTMLElement);
         mockRequest.mockClear();
-        jest.spyOn(console, 'error').mockImplementation(() => { });
+        jest.spyOn(console, 'error').mockImplementation(() => {});
     });
 
     afterEach(() => {
@@ -77,19 +77,23 @@ describe('FHIRDataService', () => {
     describe('Patient Name - TWCORE IG Support', () => {
         test('should read Chinese name from text field', () => {
             const container = document.getElementById('test-container') as HTMLElement;
-            fhirDataService.initialize(mockClient, {
-                id: 'test-patient-id',
-                name: [
-                    {
-                        use: 'official',
-                        text: '陳加玲',
-                        family: 'Chen',
-                        given: ['Chia Lin']
-                    }
-                ],
-                birthDate: '1990-01-01',
-                gender: 'female'
-            }, container);
+            fhirDataService.initialize(
+                mockClient,
+                {
+                    id: 'test-patient-id',
+                    name: [
+                        {
+                            use: 'official',
+                            text: '陳加玲',
+                            family: 'Chen',
+                            given: ['Chia Lin']
+                        }
+                    ],
+                    birthDate: '1990-01-01',
+                    gender: 'female'
+                },
+                container
+            );
 
             const name = fhirDataService.getPatientName();
             expect(name).not.toBeNull();
@@ -101,19 +105,23 @@ describe('FHIRDataService', () => {
 
         test('should prioritize official name over other uses', () => {
             const container = document.getElementById('test-container') as HTMLElement;
-            fhirDataService.initialize(mockClient, {
-                id: 'test-patient-id',
-                name: [
-                    {
-                        use: 'nickname',
-                        text: '阿玲'
-                    },
-                    {
-                        use: 'official',
-                        text: '陳加玲'
-                    }
-                ]
-            }, container);
+            fhirDataService.initialize(
+                mockClient,
+                {
+                    id: 'test-patient-id',
+                    name: [
+                        {
+                            use: 'nickname',
+                            text: '阿玲'
+                        },
+                        {
+                            use: 'official',
+                            text: '陳加玲'
+                        }
+                    ]
+                },
+                container
+            );
 
             const name = fhirDataService.getPatientName();
             expect(name?.display).toBe('陳加玲');
@@ -121,16 +129,20 @@ describe('FHIRDataService', () => {
 
         test('should fallback to family+given for Western format', () => {
             const container = document.getElementById('test-container') as HTMLElement;
-            fhirDataService.initialize(mockClient, {
-                id: 'test-patient-id',
-                name: [
-                    {
-                        use: 'official',
-                        family: 'Smith',
-                        given: ['John', 'Michael']
-                    }
-                ]
-            }, container);
+            fhirDataService.initialize(
+                mockClient,
+                {
+                    id: 'test-patient-id',
+                    name: [
+                        {
+                            use: 'official',
+                            family: 'Smith',
+                            given: ['John', 'Michael']
+                        }
+                    ]
+                },
+                container
+            );
 
             const name = fhirDataService.getPatientName();
             expect(name?.display).toBe('John Michael Smith');
@@ -138,19 +150,27 @@ describe('FHIRDataService', () => {
 
         test('getPatientDisplayName should return display string', () => {
             const container = document.getElementById('test-container') as HTMLElement;
-            fhirDataService.initialize(mockClient, {
-                id: 'test-patient-id',
-                name: [{ text: '王大明' }]
-            }, container);
+            fhirDataService.initialize(
+                mockClient,
+                {
+                    id: 'test-patient-id',
+                    name: [{ text: '王大明' }]
+                },
+                container
+            );
 
             expect(fhirDataService.getPatientDisplayName()).toBe('王大明');
         });
 
         test('should return null for patient with no name', () => {
             const container = document.getElementById('test-container') as HTMLElement;
-            fhirDataService.initialize(mockClient, {
-                id: 'test-patient-id'
-            }, container);
+            fhirDataService.initialize(
+                mockClient,
+                {
+                    id: 'test-patient-id'
+                },
+                container
+            );
 
             expect(fhirDataService.getPatientName()).toBeNull();
             expect(fhirDataService.getPatientDisplayName()).toBeNull();
@@ -163,10 +183,14 @@ describe('FHIRDataService', () => {
     describe('Patient Birth Date', () => {
         test('should return birth date as Date object', () => {
             const container = document.getElementById('test-container') as HTMLElement;
-            fhirDataService.initialize(mockClient, {
-                id: 'test-patient-id',
-                birthDate: '1990-01-01'
-            }, container);
+            fhirDataService.initialize(
+                mockClient,
+                {
+                    id: 'test-patient-id',
+                    birthDate: '1990-01-01'
+                },
+                container
+            );
 
             const birthDate = fhirDataService.getPatientBirthDate();
             expect(birthDate).toBeInstanceOf(Date);
@@ -177,19 +201,27 @@ describe('FHIRDataService', () => {
 
         test('should return birth date string', () => {
             const container = document.getElementById('test-container') as HTMLElement;
-            fhirDataService.initialize(mockClient, {
-                id: 'test-patient-id',
-                birthDate: '1990-01-01'
-            }, container);
+            fhirDataService.initialize(
+                mockClient,
+                {
+                    id: 'test-patient-id',
+                    birthDate: '1990-01-01'
+                },
+                container
+            );
 
             expect(fhirDataService.getPatientBirthDateString()).toBe('1990-01-01');
         });
 
         test('should return null for patient with no birth date', () => {
             const container = document.getElementById('test-container') as HTMLElement;
-            fhirDataService.initialize(mockClient, {
-                id: 'test-patient-id'
-            }, container);
+            fhirDataService.initialize(
+                mockClient,
+                {
+                    id: 'test-patient-id'
+                },
+                container
+            );
 
             expect(fhirDataService.getPatientBirthDate()).toBeNull();
             expect(fhirDataService.getPatientBirthDateString()).toBeNull();
@@ -202,12 +234,16 @@ describe('FHIRDataService', () => {
     describe('Patient Demographics', () => {
         test('should return complete demographics for TWCORE patient', () => {
             const container = document.getElementById('test-container') as HTMLElement;
-            fhirDataService.initialize(mockClient, {
-                id: 'test-patient-id',
-                name: [{ use: 'official', text: '陳加玲' }],
-                birthDate: '1990-01-01',
-                gender: 'female'
-            }, container);
+            fhirDataService.initialize(
+                mockClient,
+                {
+                    id: 'test-patient-id',
+                    name: [{ use: 'official', text: '陳加玲' }],
+                    birthDate: '1990-01-01',
+                    gender: 'female'
+                },
+                container
+            );
 
             const demographics = fhirDataService.getPatientDemographics();
             expect(demographics.name).toBe('陳加玲');

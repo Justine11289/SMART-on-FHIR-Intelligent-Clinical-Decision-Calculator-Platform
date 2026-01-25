@@ -817,7 +817,8 @@ export class FHIRDataService {
         }
 
         // Find the official name first, or use the first name entry
-        const officialName = this.patient.name.find(n => n.use === 'official') || this.patient.name[0];
+        const officialName =
+            this.patient.name.find(n => n.use === 'official') || this.patient.name[0];
 
         // TWCORE IG: Use 'text' field if available (Chinese full name)
         if (officialName.text) {
@@ -896,9 +897,7 @@ export class FHIRDataService {
     }
 
     getPatientNationalId(patient: any): string | null {
-        const twId = patient.identifier?.find(
-            (id: any) => id.system === "http://www.moi.gov.tw/"
-        );
+        const twId = patient.identifier?.find((id: any) => id.system === 'http://www.moi.gov.tw/');
         return twId ? twId.value : null;
     }
 }

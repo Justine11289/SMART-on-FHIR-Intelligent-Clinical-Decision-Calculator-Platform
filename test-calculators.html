@@ -26,16 +26,10 @@
             </div>
 
             <div class="controls">
-                <button class="btn btn-primary" id="startTestBtn">
-                    🚀 Start Tests
-                </button>
-                <button class="btn btn-secondary" id="stopTestBtn" disabled>
-                    ⏸️ Stop Tests
-                </button>
+                <button class="btn btn-primary" id="startTestBtn">🚀 Start Tests</button>
+                <button class="btn btn-secondary" id="stopTestBtn" disabled>⏸️ Stop Tests</button>
                 <button class="btn btn-secondary" id="clearResultsBtn">🗑️ Clear Results</button>
-                <button class="btn btn-secondary" id="exportResultsBtn">
-                    📥 Export Report
-                </button>
+                <button class="btn btn-secondary" id="exportResultsBtn">📥 Export Report</button>
             </div>
 
             <div class="progress-container" id="progressContainer" style="display: none">
@@ -64,16 +58,10 @@
 
             <div class="results">
                 <div class="filter-buttons" id="filterButtons" style="display: none">
-                    <button
-                        class="filter-btn active"
-                        data-filter="all"
-                    >
+                    <button class="filter-btn active" data-filter="all">
                         All (<span id="filterAll">0</span>)
                     </button>
-                    <button
-                        class="filter-btn"
-                        data-filter="success"
-                    >
+                    <button class="filter-btn" data-filter="success">
                         ✓ Passed (<span id="filterSuccess">0</span>)
                     </button>
                     <button class="filter-btn" data-filter="error">
