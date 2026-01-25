@@ -1,75 +1,98 @@
-import {
-    calculatorModules,
-    CalculatorMetadata // 確保有匯入型別
-} from './calculators/index.js';
+// src/calculator-page.ts
 import { displayPatientInfo } from './utils.js';
+import { loadCalculator, getCalculatorMetadata, CalculatorModule } from './calculators/index.js';
+import { favoritesManager } from './favorites.js';
+import { displayError } from './errorHandler.js';  
 
-window.onload = async () => {
-    const patientInfoDiv = document.getElementById('patient-info') as HTMLElement;
-    const calculatorCard = document.getElementById('calculator-card') as HTMLElement;
+declare global {
+    interface Window {
+        CACHE_VERSION: string;
+        FHIR: {
+            oauth2: {
+                ready(): Promise<any>;
+            };
+        };
+    }
+}
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const calcId = urlParams.get('id');
+// 快取版本號
+window.CACHE_VERSION = '1.1.1';
 
-    if (!calcId) {
-        if (calculatorCard) calculatorCard.innerHTML = '<h1>錯誤：未指定計算機 ID</h1>';
+/**
+ * 顯示載入中狀態
+ */
+function showLoading(element: HTMLElement): void {
+    element.innerHTML = `
+        <div class="loading-container">
+            <div class="loading-spinner"></div>
+            <p class="loading-text">Loading calculator and local test data...</p>
+        </div>
+    `;
+}
+
+window.onload = () => {
+    const params = new URLSearchParams(window.location.search);
+    const calculatorId = params.get('id');
+    const patientInfoDiv = document.getElementById('patient-info');
+    const container = document.getElementById('calculator-container');
+    const pageTitle = document.getElementById('page-title');
+
+    if (!patientInfoDiv || !container || !pageTitle) {
+        console.error('Required DOM elements not found');
         return;
     }
 
-    // 解決 'possibly undefined'：使用變數接收 find 結果
-    const foundCalc = calculatorModules.find(m => m.id === calcId);
-
-    // 守衛子句：如果找不到就中斷，這會讓 TS 知道後續的 calcMetadata 絕對存在
-    if (!foundCalc) {
-        if (calculatorCard) calculatorCard.innerHTML = '<h1>錯誤：找不到該計算機模組</h1>';
+    if (!calculatorId) {
+        container.innerHTML = '<h2>No calculator ID specified.</h2>';
         return;
     }
 
-    // 強制轉型確保 TS 認得 render 屬性
-    const calcMetadata = foundCalc as CalculatorMetadata;
+    const calculatorInfo = getCalculatorMetadata(calculatorId);
+    if (!calculatorInfo) {
+        container.innerHTML = `<h2>Calculator "${calculatorId}" not found.</h2>`;
+        return;
+    }
 
-    async function initializeWithoutAuth() {
+    pageTitle.textContent = calculatorInfo.title;
+    const card = document.createElement('div');
+    card.className = 'calculator-card';
+    container.appendChild(card);
+
+    favoritesManager.addToRecent(calculatorId);
+    favoritesManager.trackUsage(calculatorId);
+
+    const loadCalculatorModule = async () => {
         try {
-            // 修正：使用 const 宣告 client 以通過 Lint 檢查
-            const client = await (async () => {
-                const response = await fetch('./test-Patient.json');
-                if (!response.ok) throw new Error('找不到 test-Patient.json');
+            // 1. 載入計算器
+            const calculator = await loadCalculator(calculatorId);
+            card.innerHTML = calculator.generateHTML();
 
-                const bundle = await response.json();
-                const patientEntry = bundle.entry.find(
-                    (ent: any) => ent.resource.resourceType === 'Patient'
-                );
-                const patient = patientEntry.resource;
+            // 2. 讀取測試資料
+            const response = await fetch('/test-Patient.json');
+            const bundle = await response.json();
+            const patient = bundle.entry.find(
+                (e: any) => e.resource.resourceType === 'Patient'
+            )?.resource;
 
-                return {
-                    patient: { id: patient.id, read: () => Promise.resolve(patient) },
-                    request: async () => bundle,
-                    user: { read: () => Promise.reject('測試模式') }
-                };
-            })();
-
-            if (patientInfoDiv) {
-                displayPatientInfo(client, patientInfoDiv);
-            }
-
-            // 渲染計算機內容
-            if (calculatorCard) {
-                calculatorCard.innerHTML = '';
-
-                // 解決 'Property render does not exist'：現在 TS 知道它存在了
-                if (calcMetadata.render) {
-                    calcMetadata.render(calculatorCard, client);
-                } else {
-                    calculatorCard.innerHTML = `<h2>${calcMetadata.title}</h2><p>此計算機尚未實作渲染邏輯。</p>`;
-                }
+            // 核心修正：將 patient.id 傳入 mockClient 滿足 utils.ts 的檢查
+            const mockClient = {
+                patient: {
+                    id: patient.id,
+                    read: () => Promise.resolve(patient),
+                    // 核心修正：request 必須在 patient 物件內，且回傳整個 bundle (模擬 FHIR Search)
+                    request: (url: string) => Promise.resolve(bundle)
+                },
+                // 為了相容性，外層也可以放一個
+                request: (url: string) => Promise.resolve(bundle)
+            };
+            if (typeof calculator.initialize === 'function') {
+                calculator.initialize(mockClient, patient, card);
+                // 這裡會成功執行，不再跳出「No patient data」錯誤
+                displayPatientInfo(mockClient, patientInfoDiv);
             }
         } catch (error) {
-            console.error('初始化失敗:', error);
-            if (calculatorCard) {
-                calculatorCard.innerHTML = `<b style="color:red">無法載入測試資料，請確認 test-Patient.json 位於正確路徑。</b>`;
-            }
+            console.error(`Failed: ${calculatorId}`, error);
         }
-    }
-
-    await initializeWithoutAuth();
+    };
+    loadCalculatorModule();
 };
