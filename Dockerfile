@@ -4,18 +4,17 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-# 使用 package.json 中定義的編譯指令
+# 使用專案定義的編譯指令，確保路徑正確
 RUN npm run build:ts 
 
 # 階段 2: 運行 Nginx
 FROM nginx:alpine
 WORKDIR /usr/share/nginx/html
+# 清除 Nginx 預設檔案
 RUN rm -rf ./*
 
-# 修正：確保複製所有必要的 HTML 檔案，包含 launch.html
-COPY --from=builder /app/index.html .
-COPY --from=builder /app/launch.html . 
-COPY --from=builder /app/calculator.html .
+# 修正點：使用 *.html 確保 index.html, launch.html, calculator.html 全部被帶入
+COPY --from=builder /app/*.html ./
 COPY --from=builder /app/test-Patient.json .
 COPY --from=builder /app/js ./js
 COPY --from=builder /app/css ./css
