@@ -73,31 +73,18 @@ window.onload = async () => {
         renderCalculatorList(filtered, calculatorListDiv);
     }
 
-    async function loadTestData() {
-        patientInfoDiv.innerHTML = '正在載入測試資料...';
+    async function loadRealFHIRData() {
+        patientInfoDiv.innerHTML = '正在連接伺服器並載入病人資料...';
         try {
-            const response = await fetch('./test-Patient.json');
-            if (!response.ok) throw new Error(`無法讀取 JSON: ${response.status}`);
+            // 等待 SMART 框架就緒
+            const client = await window.FHIR.oauth2.ready();
+            const patient = await client.patient.read();
 
-            const bundle = (await response.json()) as any;
-            const patientEntry = bundle.entry.find(
-                (e: any) => e.resource.resourceType === 'Patient'
-            );
-            const patientResource = patientEntry.resource;
-
-            const mockClient = {
-                patient: {
-                    id: patientResource.id,
-                    read: () => Promise.resolve(patientResource)
-                },
-                request: async () => bundle,
-                user: { read: () => Promise.reject('測試模式') }
-            };
-
-            displayPatientInfo(mockClient, patientInfoDiv);
+            // 使用 utils.ts 中的函數顯示資訊
+            displayPatientInfo(client, patientInfoDiv);
         } catch (error) {
-            console.error('資料載入失敗:', error);
-            patientInfoDiv.innerHTML = `<b style="color:red">錯誤：無法讀取測試資料。</b>`;
+            console.error('FHIR 資料載入失敗:', error);
+            patientInfoDiv.innerHTML = `<b style="color:red">無法取得病人資料，請確認是否從啟動頁面進入。</b>`;
         }
     }
 
@@ -109,6 +96,6 @@ window.onload = async () => {
     }
 
     searchBar.oninput = updateDisplay;
-    await loadTestData();
+    await loadRealFHIRData();
     updateDisplay();
 };

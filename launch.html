@@ -1,28 +1,39 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-TW">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-        <!-- Security Headers -->
         <meta
             http-equiv="Content-Security-Policy"
-            content="default-src 'self' https://cdn.jsdelivr.net https://launch.smarthealthit.org https://*.smarthealthit.org https://*.cerner.com; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; img-src 'self' data: https:; connect-src 'self' https://cdn.jsdelivr.net https://launch.smarthealthit.org https://*.smarthealthit.org https://*.cerner.com; frame-ancestors 'none'; upgrade-insecure-requests;"
+            content="default-src 'self' https://cdn.jsdelivr.net https://*.smarthealthit.org https://*.cerner.com; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://cdn.jsdelivr.net https://*.smarthealthit.org https://*.cerner.com; frame-ancestors 'none'; upgrade-insecure-requests;"
         />
-        <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-        <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
-        <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()" />
 
-        <title>CGMH EHRCALC on FHIR</title>
+        <title>CGMH EHRCALC - 系統啟動中</title>
     </head>
 
-    <body>
-        <script
-            src="https://cdn.jsdelivr.net/npm/fhirclient@2.6.3/build/fhir-client.js"
-            integrity="sha384-dGS6R4ht5hVL6tx4pQCGGEFJV/rS1ywziGTuH/fJeDtWoS4YQJeAaF1qu2/0ZXkk"
-            crossorigin="anonymous"
-        ></script>
-        <script src="js/fhir-launch.js"></script>
+    <body style="font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #f8f9fa;">
+        <div style="text-align: center;">
+            <div style="border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 20px;"></div>
+            <h2 id="status">正在執行安全授權流程...</h2>
+            <p id="sub-status" style="color: #666;">即將導向至 FHIR 授權頁面</p>
+        </div>
+
+        <style>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
+
+        <script>
+            window.MEDCALC_CONFIG = {
+                fhir: {
+                    clientId: "cc344727-6f90-496c-94fd-c7829aa9a51d",
+                    clientSecret: "79f04b56b33491716c0880af72cdef7d3f0629111421cedd18353651cd313d9e",
+                    scope: "launch/patient patient/*.read openid fhirUser online_access",
+                    redirectUri: "index.html"
+                }
+            };
+        </script>
+
+        <script src="https://cdn.jsdelivr.net/npm/fhirclient@2.6.3/build/fhir-client.js"></script>
+        <script type="module" src="js/fhir-launch.js"></script>
     </body>
 </html>
