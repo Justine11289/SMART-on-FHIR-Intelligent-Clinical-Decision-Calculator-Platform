@@ -24,21 +24,25 @@
 
         <script>
             const urlParams = new URLSearchParams(window.location.search);
+            let clientId = urlParams.get("clientId") || 
+                        localStorage.getItem("TEMP_CLIENT_ID") || 
+                        "cc344727-6f90-496c-94fd-c7829aa9a51d";
 
             window.MEDCALC_CONFIG = {
                 fhir: {
-                    // 完全依賴網址傳參，不寫死任何字串
-                    clientId: urlParams.get("clientId"),
-                    clientSecret: urlParams.get("clientSecret"),
-                    // 允許從網址覆蓋 Scope，若無則用預設
-                    scope: urlParams.get("scope") || "launch launch/patient patient/*.read openid fhirUser online_access",
+                    clientId: clientId,
+                    clientSecret: urlParams.get("clientSecret") || localStorage.getItem("TEMP_CLIENT_SECRET"),
+                    scope: "launch launch/patient patient/*.read openid fhirUser online_access",
                     redirectUri: "index.html"
                 }
             };
 
-            // 簡單檢查，如果沒抓到 ID，在控制台提醒
             if (!window.MEDCALC_CONFIG.fhir.clientId) {
-                console.warn("提醒：網址中未偵測到 clientId 參數。");
+                const inputId = prompt("Input Client ID : ");
+                if (inputId) {
+                    localStorage.setItem("TEMP_CLIENT_ID", inputId);
+                    location.reload();
+                }
             }
         </script>
 
