@@ -51,13 +51,13 @@ window.onload = async () => {
         // --- 關鍵修改：改用真實 FHIR Client ---
         // 使用 fhirclient 庫等待 OAuth2 授權完成並取得 client
         const client = await window.FHIR.oauth2.ready();
-        
+
         // 從伺服器讀取當前病人的完整 Resource 資料
         const patient = await client.patient.read();
 
         // 載入計算機模組
         const calculator = await loadCalculator(calculatorId);
-        
+
         // 渲染 HTML
         card.innerHTML = calculator.generateHTML();
 
@@ -67,7 +67,6 @@ window.onload = async () => {
             // 顯示病人資訊（頭部區塊）
             displayPatientInfo(client, patientInfoDiv as HTMLElement);
         }
-        
     } catch (error) {
         console.error(`初始化或連接 FHIR Server 失敗: ${calculatorId}`, error);
         container.innerHTML = `<div class="error">無法連接至 FHIR 伺服器或取得病人資料。</div>`;
