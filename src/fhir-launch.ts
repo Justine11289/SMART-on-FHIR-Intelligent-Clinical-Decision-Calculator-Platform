@@ -6,8 +6,8 @@ async function performLaunch(): Promise<void> {
         const urlParams = new URLSearchParams(window.location.search);
         const iss = urlParams.get('iss') || '';
 
-        let client_id = config?.clientId;
-        let client_secret = config?.clientSecret;
+        const client_id = config?.clientId;
+        const client_secret = config?.clientSecret;
 
         // 2. 驗證：若沒輸入 ID，直接噴錯停止執行
         if (!client_id) {
