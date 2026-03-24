@@ -146,7 +146,8 @@ window.onload = async () => {
         ): any {
             this.__medcalcMethod = method;
             this.__medcalcUrl = String(url);
-            return originalOpen.call(this, method, url, ...args);
+            const [asyncFlag, username, password] = args;
+            return originalOpen.call(this, method, url, asyncFlag, username, password);
         };
         XMLHttpRequest.prototype.send = function (
             this: XMLHttpRequest & { __medcalcMethod?: string; __medcalcUrl?: string },
@@ -170,7 +171,8 @@ window.onload = async () => {
                     );
                 }
             }
-            return originalSend.call(this, ...args);
+            const [body] = args;
+            return originalSend.call(this, body);
         };
 
         win.__MEDCALC_READY_BASIC_AUTH_PATCHED = true;
