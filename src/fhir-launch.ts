@@ -4,15 +4,18 @@ async function performLaunch(): Promise<void> {
 
     function installTokenBasicAuthInterceptor(clientId: string, clientSecret: string): void {
         const win = window as any;
-        if (win.__MEDCALC_TOKEN_BASIC_AUTH_PATCHED)
-            return;
+        if (win.__MEDCALC_TOKEN_BASIC_AUTH_PATCHED) return;
 
         const originalFetch = window.fetch.bind(window);
         const basicToken = btoa(unescape(encodeURIComponent(`${clientId}:${clientSecret}`)));
 
         window.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
-            const requestUrl = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url;
-            const requestMethod = (init?.method || (typeof input !== 'string' && !(input instanceof URL) ? input.method : 'GET')).toUpperCase();
+            const requestUrl =
+                typeof input === 'string' ? input : input instanceof URL ? input.href : input.url;
+            const requestMethod = (
+                init?.method ||
+                (typeof input !== 'string' && !(input instanceof URL) ? input.method : 'GET')
+            ).toUpperCase();
             const isTokenRequest = /\/auth\/token(?:\?|$)/i.test(requestUrl);
 
             if (isTokenRequest && requestMethod === 'POST') {
