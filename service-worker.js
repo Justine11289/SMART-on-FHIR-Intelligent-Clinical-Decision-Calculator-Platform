@@ -3,7 +3,7 @@
  * Provides offline support and caching strategies
  */
 
-const CACHE_VERSION = '1.0.1';
+const CACHE_VERSION = '1.0.2';
 const CACHE_NAMES = {
     static: `medcalc-static-v${CACHE_VERSION}`,
     calculators: `medcalc-calculators-v${CACHE_VERSION}`,
