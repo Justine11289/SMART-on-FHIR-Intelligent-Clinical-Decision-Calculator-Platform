@@ -91,12 +91,15 @@ window.onload = async () => {
             params.get('clientId') ||
             win.MEDCALC_CONFIG?.fhir?.clientId ||
             localStorage.getItem('TEMP_CLIENT_ID') ||
-            '';
+            'cc344727-6f90-496c-94fd-c7829aa9a51d';
         const clientSecret =
             params.get('clientSecret') ||
             win.MEDCALC_CONFIG?.fhir?.clientSecret ||
             localStorage.getItem('TEMP_CLIENT_SECRET') ||
-            '';
+            '79f04b56b33491716c0880af72cdef7d3f0629111421cedd18353651cd313d9e';
+
+        localStorage.setItem('TEMP_CLIENT_ID', clientId);
+        localStorage.setItem('TEMP_CLIENT_SECRET', clientSecret);
 
         if (!clientId || !clientSecret) return;
 
