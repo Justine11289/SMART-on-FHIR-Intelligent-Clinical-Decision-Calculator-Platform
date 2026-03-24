@@ -141,14 +141,16 @@ window.onload = async () => {
         XMLHttpRequest.prototype.open = function (
             this: XMLHttpRequest & { __medcalcMethod?: string; __medcalcUrl?: string },
             method: string,
-            url: string | URL
+            url: string | URL,
+            ...args: any[]
         ): any {
             this.__medcalcMethod = method;
             this.__medcalcUrl = String(url);
-            return originalOpen.apply(this, arguments as any);
+            return originalOpen.call(this, method, url, ...args);
         };
         XMLHttpRequest.prototype.send = function (
-            this: XMLHttpRequest & { __medcalcMethod?: string; __medcalcUrl?: string }
+            this: XMLHttpRequest & { __medcalcMethod?: string; __medcalcUrl?: string },
+            ...args: any[]
         ): any {
             const method = this.__medcalcMethod || 'GET';
             const url = this.__medcalcUrl || '';
@@ -168,7 +170,7 @@ window.onload = async () => {
                     );
                 }
             }
-            return originalSend.apply(this, arguments as any);
+            return originalSend.call(this, ...args);
         };
 
         win.__MEDCALC_READY_BASIC_AUTH_PATCHED = true;
