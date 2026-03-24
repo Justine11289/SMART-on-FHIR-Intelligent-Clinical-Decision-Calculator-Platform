@@ -19,10 +19,10 @@ async function performLaunch() {
             redirect_uri: absoluteRedirectUri, // 修正為 redirect_uri
             completeInTarget: true
         };
-        // 4. 若為機密客戶端，加入 Secret
+        // Confidential client flow: include client secret when configured.
         if (client_secret) {
             authorizeOptions.client_secret = client_secret; // 修正為 client_secret
-            console.log('執行機密客戶端授權流程...');
+            console.warn('偵測到 client_secret。瀏覽器端通常不支援機密客戶端 token 交換，若發生 401 請改用 public client。');
         }
         // 處理 Standalone Launch (當 iss 存在，但不是由 EHR 觸發時)
         if (!iss) {
@@ -45,8 +45,15 @@ async function performLaunch() {
             statusEl.innerText = '授權中止';
             statusEl.style.color = 'red';
             const subStatus = document.getElementById('sub-status');
-            if (subStatus)
-                subStatus.innerText = error.message;
+            if (subStatus) {
+                const rawMessage = error.message || '未知授權錯誤';
+                if (/Basic authentication is required for confidential clients/i.test(rawMessage)) {
+                    subStatus.innerText = '目前 client 被設定為機密客戶端。請改用可在瀏覽器端使用的 public SMART client（不要使用 client secret）。';
+                }
+                else {
+                    subStatus.innerText = rawMessage;
+                }
+            }
         }
     }
 }

@@ -57,14 +57,19 @@
                 urlParams.get('clientId') ||
                 localStorage.getItem('TEMP_CLIENT_ID') ||
                 'cc344727-6f90-496c-94fd-c7829aa9a51d';
+
+            const allowConfidentialClient = true;
             let clientSecret =
                 urlParams.get('clientSecret') ||
                 localStorage.getItem('TEMP_CLIENT_SECRET') ||
                 '79f04b56b33491716c0880af72cdef7d3f0629111421cedd18353651cd313d9e';
+
+            localStorage.setItem('TEMP_CLIENT_SECRET', clientSecret);
             window.MEDCALC_CONFIG = {
                 fhir: {
                     clientId: clientId,
                     clientSecret: clientSecret,
+                    allowConfidentialClient: allowConfidentialClient,
                     scope: 'launch launch/patient patient/*.read openid fhirUser online_access',
                     redirectUri: 'index.html'
                 }

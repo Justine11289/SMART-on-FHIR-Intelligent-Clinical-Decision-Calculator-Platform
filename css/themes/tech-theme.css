@@ -1,0 +1,25 @@
+/* Optional dark tech theme overrides.
+   Theme is active only when data-theme="dark" is set on html/body. */
+
+:root[data-theme='dark'],
+body[data-theme='dark'] {
+    --color-bg-primary: #0a1220;
+    --color-bg-secondary: #101a2b;
+    --color-text-primary: #e6edf7;
+    --color-text-secondary: #9fb1c8;
+    --color-border: #2a3d59;
+    --color-accent: #46c2ff;
+}
+
+:root[data-theme='dark'] body,
+body[data-theme='dark'] {
+    background: radial-gradient(circle at 20% 20%, #17253d 0%, #0a1220 60%, #070d17 100%);
+    color: var(--color-text-primary);
+}
+
+:root[data-theme='dark'] .container,
+body[data-theme='dark'] .container,
+:root[data-theme='dark'] .main-layout,
+body[data-theme='dark'] .main-layout {
+    background: rgba(10, 18, 32, 0.8);
+}
