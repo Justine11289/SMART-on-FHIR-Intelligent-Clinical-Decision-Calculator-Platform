@@ -53,30 +53,29 @@ async function performLaunch(): Promise<void> {
 
         // 3. 關鍵修正：使用 snake_case 參數名稱，SDK 才能正確識別
         const authorizeOptions: any = {
-            client_id: client_id, // 修正為 client_id
+            clientId: client_id,
             scope: config?.scope || 'openid fhirUser launch profile patient/*.read online_access',
-            redirect_uri: absoluteRedirectUri, // 修正為 redirect_uri
+            redirectUri: absoluteRedirectUri,
             completeInTarget: true
         };
 
         // Confidential client flow: include client secret when configured.
         if (client_secret) {
             installTokenBasicAuthInterceptor(client_id, client_secret);
-            authorizeOptions.client_secret = client_secret; // 修正為 client_secret
+            authorizeOptions.clientSecret = client_secret;
             console.warn(
                 '偵測到 client_secret。瀏覽器端通常不支援機密客戶端 token 交換，若發生 401 請改用 public client。'
             );
         }
 
-        // 處理 Standalone Launch (當 iss 存在，但不是由 EHR 觸發時)
-        if (!iss) {
-            // 如果連 iss 都沒有（使用者直接打 localhost:8080/launch.html）
-            // 則退回到預設的測試沙盒
+        if (iss) {
+            // EHR launch: use the issuer provided by the SMART app launch context.
+            authorizeOptions.iss = iss;
+            console.log('偵測到 EHR 模式，目標伺服器：', iss);
+        } else {
+            // If no iss is present, fall back to the sandbox FHIR server.
             authorizeOptions.fhirServiceUrl =
                 config.fhirServiceUrl || 'https://launch.smarthealthit.org/v/r4/fhir';
-        } else {
-            // 如果有 iss (Standalone 模式)，SDK 會自動使用該 iss 作為目標伺服器
-            console.log('偵測到 Standalone 模式，目標伺服器：', iss);
         }
 
         // 執行跳轉
