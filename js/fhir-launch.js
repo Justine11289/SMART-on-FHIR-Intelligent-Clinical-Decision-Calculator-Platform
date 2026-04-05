@@ -34,22 +34,21 @@ async function performLaunch() {
             throw new Error('認證失敗：未提供 Client ID。請在 MEDCALC_CONFIG 中設定。');
         }
         const absoluteRedirectUri = new URL(config?.redirectUri || 'index.html', window.location.href).href;
-        // 3. 使用 SMART client 的標準 camelCase 參數
+        // 3. 使用 SMART client 文件所示的 snake_case 參數
         const authorizeOptions = {
-            clientId: client_id,
+            client_id: client_id,
             scope: config?.scope || 'openid fhirUser launch profile patient/*.read online_access',
-            redirectUri: absoluteRedirectUri,
+            redirect_uri: absoluteRedirectUri,
             completeInTarget: true
         };
         // Confidential client flow: include client secret when configured.
         if (client_secret) {
             installTokenBasicAuthInterceptor(client_id, client_secret);
-            authorizeOptions.clientSecret = client_secret;
+            authorizeOptions.client_secret = client_secret;
             console.warn('偵測到 client_secret。瀏覽器端通常不支援機密客戶端 token 交換，若發生 401 請改用 public client。');
         }
         if (iss) {
-            // EHR launch: explicitly pass the issuer instead of letting the SDK infer it.
-            authorizeOptions.iss = iss;
+            // EHR launch: the SMART client reads iss from the current launch URL.
             console.log('偵測到 EHR 模式，目標伺服器：', iss);
         }
         else {
