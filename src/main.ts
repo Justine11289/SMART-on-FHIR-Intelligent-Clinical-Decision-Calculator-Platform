@@ -186,13 +186,18 @@ window.onload = async () => {
             installTokenBasicAuthInterceptor();
             // 等待 SMART 框架就緒
             const client = await window.FHIR.oauth2.ready();
-            const patient = await client.patient.read();
 
             // 使用 utils.ts 中的函數顯示資訊
-            displayPatientInfo(client, patientInfoDiv);
+                await displayPatientInfo(client, patientInfoDiv);
         } catch (error) {
-            console.error('FHIR 資料載入失敗:', error);
-            patientInfoDiv.innerHTML = `<b style="color:red">無法取得病人資料，請確認是否從啟動頁面進入。</b>`;
+                const message = error instanceof Error ? error.message : String(error);
+                if (/Patient is not available/i.test(message)) {
+                    patientInfoDiv.innerHTML = '<p>No patient data available. Standalone launch is ready.</p>';
+                    return;
+                }
+
+                console.error('FHIR 資料載入失敗:', error);
+                patientInfoDiv.innerHTML = `<b style="color:red">無法取得病人資料，請確認是否從啟動頁面進入。</b>`;
         }
     }
 
