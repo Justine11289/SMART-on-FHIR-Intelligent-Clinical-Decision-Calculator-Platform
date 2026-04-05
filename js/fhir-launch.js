@@ -47,7 +47,7 @@ async function performLaunch() {
             authorizeOptions.client_secret = client_secret; // 修正為 client_secret
             console.warn('偵測到 client_secret。瀏覽器端通常不支援機密客戶端 token 交換，若發生 401 請改用 public client。');
         }
-        // 處理 Standalone Launch (當 iss 存在，但不是由 EHR 觸發時)
+        // EHR Launch: iss is present, so the app should authorize against the EHR-provided issuer.
         if (!iss) {
             // 如果連 iss 都沒有（使用者直接打 localhost:8080/launch.html）
             // 則退回到預設的測試沙盒
@@ -55,8 +55,8 @@ async function performLaunch() {
                 config.fhirServiceUrl || 'https://launch.smarthealthit.org/v/r4/fhir';
         }
         else {
-            // 如果有 iss (Standalone 模式)，SDK 會自動使用該 iss 作為目標伺服器
-            console.log('偵測到 Standalone 模式，目標伺服器：', iss);
+            // The app is running in EHR launch mode and will use the provided issuer.
+            console.log('偵測到 EHR 模式，目標伺服器：', iss);
         }
         // 執行跳轉
         await FHIR.oauth2.authorize(authorizeOptions);
