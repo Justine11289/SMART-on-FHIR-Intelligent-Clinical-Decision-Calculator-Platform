@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
-  <title id="title">CGMH EHRCALC app icon</title>
-  <desc id="desc">A simplified desktop-style medical calculator icon with a blue calculator body and a white cross.</desc>
+  <title id="title">Desktop app medical calculator icon</title>
+  <desc id="desc">A desktop-style app icon with a glossy window frame, calculator grid, and medical cross.</desc>
   <rect x="28" y="24" width="200" height="208" rx="30" fill="#1f4e8c" opacity="0.16" />
   <rect x="36" y="32" width="184" height="192" rx="26" fill="none" stroke="#ffffff" stroke-opacity="0.16" />
 
