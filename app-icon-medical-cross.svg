@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">Medical cross app icon</title>
+  <desc id="desc">Simple blue app icon with a centered white medical cross.</desc>
+  <rect width="256" height="256" rx="56" fill="#1e88e5" />
+  <rect x="44" y="44" width="168" height="168" rx="36" fill="#0f4c81" opacity="0.18" />
+  <rect x="108" y="66" width="40" height="124" rx="12" fill="#ffffff" />
+  <rect x="66" y="108" width="124" height="40" rx="12" fill="#ffffff" />
+  <circle cx="128" cy="128" r="74" fill="#ffffff" opacity="0.08" />
+</svg>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">CGMH EHRCALC app icon</title>
+  <desc id="desc">Simple blue medical calculator icon with a white cross.</desc>
+  <rect width="256" height="256" rx="56" fill="#1e88e5" />
+  <rect x="40" y="40" width="176" height="176" rx="36" fill="#0f4c81" opacity="0.22" />
+  <rect x="72" y="60" width="112" height="56" rx="18" fill="#ffffff" opacity="0.16" />
+  <rect x="72" y="128" width="112" height="56" rx="18" fill="#ffffff" opacity="0.1" />
+  <rect x="72" y="100" width="112" height="12" rx="6" fill="#ffffff" opacity="0.5" />
+  <rect x="102" y="78" width="12" height="56" rx="6" fill="#ffffff" />
+  <rect x="84" y="96" width="48" height="12" rx="6" fill="#ffffff" />
+  <rect x="104" y="146" width="8" height="8" rx="2" fill="#ffffff" opacity="0.9" />
+  <rect x="120" y="146" width="8" height="8" rx="2" fill="#ffffff" opacity="0.9" />
+  <rect x="136" y="146" width="8" height="8" rx="2" fill="#ffffff" opacity="0.9" />
+  <rect x="104" y="162" width="8" height="8" rx="2" fill="#ffffff" opacity="0.9" />
+  <rect x="120" y="162" width="8" height="8" rx="2" fill="#ffffff" opacity="0.9" />
+  <rect x="136" y="162" width="8" height="8" rx="2" fill="#ffffff" opacity="0.9" />
+</svg>

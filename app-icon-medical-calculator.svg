@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">Medical calculator app icon</title>
+  <desc id="desc">A simple app icon combining a calculator body with a medical cross and subtle button grid.</desc>
+  <rect width="256" height="256" rx="56" fill="#1565c0" />
+  <rect x="38" y="34" width="180" height="188" rx="28" fill="#0d47a1" opacity="0.22" />
+  <rect x="58" y="48" width="140" height="42" rx="12" fill="#ffffff" opacity="0.18" />
+  <rect x="58" y="102" width="38" height="38" rx="10" fill="#ffffff" opacity="0.14" />
+  <rect x="102" y="102" width="38" height="38" rx="10" fill="#ffffff" opacity="0.14" />
+  <rect x="146" y="102" width="38" height="38" rx="10" fill="#ffffff" opacity="0.14" />
+  <rect x="58" y="146" width="38" height="38" rx="10" fill="#ffffff" opacity="0.14" />
+  <rect x="102" y="146" width="38" height="38" rx="10" fill="#ffffff" opacity="0.14" />
+  <rect x="146" y="146" width="38" height="38" rx="10" fill="#ffffff" opacity="0.14" />
+  <rect x="102" y="190" width="38" height="12" rx="6" fill="#ffffff" opacity="0.16" />
+  <rect x="114" y="108" width="14" height="50" rx="7" fill="#ffffff" />
+  <rect x="99" y="123" width="44" height="14" rx="7" fill="#ffffff" />
+  <circle cx="176" cy="176" r="16" fill="#ffffff" opacity="0.18" />
+</svg>
