@@ -188,16 +188,17 @@ window.onload = async () => {
             const client = await window.FHIR.oauth2.ready();
 
             // 使用 utils.ts 中的函數顯示資訊
-                await displayPatientInfo(client, patientInfoDiv);
+            await displayPatientInfo(client, patientInfoDiv);
         } catch (error) {
-                const message = error instanceof Error ? error.message : String(error);
-                if (/Patient is not available/i.test(message)) {
-                    patientInfoDiv.innerHTML = '<p>No patient data available. Standalone launch is ready.</p>';
-                    return;
-                }
+            const message = error instanceof Error ? error.message : String(error);
+            if (/Patient is not available/i.test(message)) {
+                patientInfoDiv.innerHTML =
+                    '<p>No patient data available. Standalone launch is ready.</p>';
+                return;
+            }
 
-                console.error('FHIR 資料載入失敗:', error);
-                patientInfoDiv.innerHTML = `<b style="color:red">無法取得病人資料，請確認是否從啟動頁面進入。</b>`;
+            console.error('FHIR 資料載入失敗:', error);
+            patientInfoDiv.innerHTML = `<b style="color:red">無法取得病人資料，請確認是否從啟動頁面進入。</b>`;
         }
     }
 

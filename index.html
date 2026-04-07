@@ -13,7 +13,11 @@
                 const hasLaunch = params.has('launch');
                 const hasCode = params.has('code');
 
-                if ((hasIss || hasLaunch) && !hasCode && !window.location.pathname.endsWith('/launch.html')) {
+                if (
+                    (hasIss || hasLaunch) &&
+                    !hasCode &&
+                    !window.location.pathname.endsWith('/launch.html')
+                ) {
                     window.location.replace(`launch.html?${params.toString()}`);
                 }
             })();
