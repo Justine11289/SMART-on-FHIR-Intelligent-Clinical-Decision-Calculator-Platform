@@ -10,7 +10,8 @@ async function performLaunch() {
         const basicToken = btoa(unescape(encodeURIComponent(`${clientId}:${clientSecret}`)));
         window.fetch = async (input, init) => {
             const requestUrl = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url;
-            const requestMethod = (init?.method || (typeof input !== 'string' && !(input instanceof URL) ? input.method : 'GET')).toUpperCase();
+            const requestMethod = (init?.method ||
+                (typeof input !== 'string' && !(input instanceof URL) ? input.method : 'GET')).toUpperCase();
             const isTokenRequest = /\/auth\/token(?:\?|$)/i.test(requestUrl);
             if (isTokenRequest && requestMethod === 'POST') {
                 const mergedHeaders = new Headers(init?.headers);
@@ -34,7 +35,7 @@ async function performLaunch() {
             throw new Error('認證失敗：未提供 Client ID。請在 MEDCALC_CONFIG 中設定。');
         }
         const absoluteRedirectUri = new URL(config?.redirectUri || 'index.html', window.location.href).href;
-        // 3. 使用 SMART client 文件所示的 snake_case 參數
+        // 3. 使用 SMART client 文件所示的 snake_case 參數名稱
         const authorizeOptions = {
             client_id: client_id,
             scope: config?.scope || 'openid fhirUser launch profile patient/*.read online_access',
@@ -69,7 +70,8 @@ async function performLaunch() {
             if (subStatus) {
                 const rawMessage = error.message || '未知授權錯誤';
                 if (/Basic authentication is required for confidential clients/i.test(rawMessage)) {
-                    subStatus.innerText = '目前 client 被設定為機密客戶端。請改用可在瀏覽器端使用的 public SMART client（不要使用 client secret）。';
+                    subStatus.innerText =
+                        '目前 client 被設定為機密客戶端。請改用可在瀏覽器端使用的 public SMART client（不要使用 client secret）。';
                 }
                 else {
                     subStatus.innerText = rawMessage;

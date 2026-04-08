@@ -13,7 +13,11 @@ type ListFilterType = 'all' | 'favorites' | 'recent';
 /**
  * 渲染計算機清單
  */
-function renderCalculatorList(calculators: CalculatorMetadata[], container: HTMLElement): void {
+function renderCalculatorList(
+    calculators: CalculatorMetadata[],
+    container: HTMLElement,
+    smartParams: URLSearchParams
+): void {
     container.innerHTML = '';
     if (calculators.length === 0) {
         container.innerHTML = `<p class="no-results">找不到符合的計算機。</p>`;
@@ -21,8 +25,11 @@ function renderCalculatorList(calculators: CalculatorMetadata[], container: HTML
     }
 
     calculators.forEach(calc => {
+        const nextParams = new URLSearchParams(smartParams.toString());
+        nextParams.set('id', calc.id);
+
         const link = document.createElement('a');
-        link.href = `calculator.html?id=${calc.id}`;
+        link.href = `calculator.html?${nextParams.toString()}`;
         link.className = 'list-item';
         link.innerHTML = `
             <div class="list-item-content">
@@ -62,6 +69,18 @@ window.onload = async () => {
     let currentListFilter: ListFilterType = 'all';
     let currentCategory: string = 'all';
 
+    const smartParamKeys = ['iss', 'launch', 'code', 'state', 'clientId', 'clientSecret'];
+    const currentParams = new URLSearchParams(window.location.search);
+    const hasSmartParams = smartParamKeys.some(key => currentParams.has(key));
+
+    if (hasSmartParams) {
+        sessionStorage.setItem('MEDCALC_SMART_PARAMS', currentParams.toString());
+    }
+
+    const persistedSmartParams = new URLSearchParams(
+        hasSmartParams ? currentParams.toString() : sessionStorage.getItem('MEDCALC_SMART_PARAMS') || ''
+    );
+
     function updateDisplay(): void {
         const searchTerm = searchBar.value.toLowerCase();
         const filtered = calculatorModules.filter(calc => {
@@ -91,7 +110,7 @@ window.onload = async () => {
             });
         }
 
-        renderCalculatorList(filtered, calculatorListDiv);
+        renderCalculatorList(filtered, calculatorListDiv, persistedSmartParams);
 
         if (statsText) {
             statsText.textContent = `Showing ${filtered.length} / ${calculatorModules.length}`;

@@ -16,6 +16,27 @@ function showLoading(element) {
 }
 window.onload = async () => {
     const params = new URLSearchParams(window.location.search);
+    const smartParamKeys = ['iss', 'launch', 'code', 'state', 'clientId', 'clientSecret'];
+    const hasSmartParams = smartParamKeys.some(key => params.has(key));
+    if (hasSmartParams) {
+        sessionStorage.setItem('MEDCALC_SMART_PARAMS', params.toString());
+    }
+    else {
+        const persisted = sessionStorage.getItem('MEDCALC_SMART_PARAMS');
+        if (persisted) {
+            const merged = new URL(window.location.href);
+            const persistedParams = new URLSearchParams(persisted);
+            persistedParams.forEach((value, key) => {
+                if (!merged.searchParams.has(key)) {
+                    merged.searchParams.set(key, value);
+                }
+            });
+            if (merged.search !== window.location.search) {
+                window.location.replace(merged.toString());
+                return;
+            }
+        }
+    }
     const calculatorId = params.get('id');
     const patientInfoDiv = document.getElementById('patient-info');
     const container = document.getElementById('calculator-container');

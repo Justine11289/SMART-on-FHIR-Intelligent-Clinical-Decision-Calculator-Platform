@@ -4,15 +4,17 @@ import { favoritesManager } from './favorites.js';
 /**
  * 渲染計算機清單
  */
-function renderCalculatorList(calculators, container) {
+function renderCalculatorList(calculators, container, smartParams) {
     container.innerHTML = '';
     if (calculators.length === 0) {
         container.innerHTML = `<p class="no-results">找不到符合的計算機。</p>`;
         return;
     }
     calculators.forEach(calc => {
+        const nextParams = new URLSearchParams(smartParams.toString());
+        nextParams.set('id', calc.id);
         const link = document.createElement('a');
-        link.href = `calculator.html?id=${calc.id}`;
+        link.href = `calculator.html?${nextParams.toString()}`;
         link.className = 'list-item';
         link.innerHTML = `
             <div class="list-item-content">
@@ -46,6 +48,13 @@ window.onload = async () => {
     let currentSortType = 'a-z';
     let currentListFilter = 'all';
     let currentCategory = 'all';
+    const smartParamKeys = ['iss', 'launch', 'code', 'state', 'clientId', 'clientSecret'];
+    const currentParams = new URLSearchParams(window.location.search);
+    const hasSmartParams = smartParamKeys.some(key => currentParams.has(key));
+    if (hasSmartParams) {
+        sessionStorage.setItem('MEDCALC_SMART_PARAMS', currentParams.toString());
+    }
+    const persistedSmartParams = new URLSearchParams(hasSmartParams ? currentParams.toString() : sessionStorage.getItem('MEDCALC_SMART_PARAMS') || '');
     function updateDisplay() {
         const searchTerm = searchBar.value.toLowerCase();
         const filtered = calculatorModules.filter(calc => {
@@ -74,7 +83,7 @@ window.onload = async () => {
                 return a.title.localeCompare(b.title);
             });
         }
-        renderCalculatorList(filtered, calculatorListDiv);
+        renderCalculatorList(filtered, calculatorListDiv, persistedSmartParams);
         if (statsText) {
             statsText.textContent = `Showing ${filtered.length} / ${calculatorModules.length}`;
         }
@@ -146,16 +155,14 @@ window.onload = async () => {
             lastInjected: false
         };
         const params = new URLSearchParams(window.location.search);
-        const clientId =
-            params.get('clientId') ||
-                win.MEDCALC_CONFIG?.fhir?.clientId ||
-                localStorage.getItem('TEMP_CLIENT_ID') ||
-                'cc344727-6f90-496c-94fd-c7829aa9a51d';
-        const clientSecret =
-            params.get('clientSecret') ||
-                win.MEDCALC_CONFIG?.fhir?.clientSecret ||
-                localStorage.getItem('TEMP_CLIENT_SECRET') ||
-                '79f04b56b33491716c0880af72cdef7d3f0629111421cedd18353651cd313d9e';
+        const clientId = params.get('clientId') ||
+            win.MEDCALC_CONFIG?.fhir?.clientId ||
+            localStorage.getItem('TEMP_CLIENT_ID') ||
+            'cc344727-6f90-496c-94fd-c7829aa9a51d';
+        const clientSecret = params.get('clientSecret') ||
+            win.MEDCALC_CONFIG?.fhir?.clientSecret ||
+            localStorage.getItem('TEMP_CLIENT_SECRET') ||
+            '79f04b56b33491716c0880af72cdef7d3f0629111421cedd18353651cd313d9e';
         localStorage.setItem('TEMP_CLIENT_ID', clientId);
         localStorage.setItem('TEMP_CLIENT_SECRET', clientSecret);
         if (!clientId || !clientSecret)
@@ -165,7 +172,8 @@ window.onload = async () => {
         const originalFetch = window.fetch.bind(window);
         window.fetch = async (input, init) => {
             const url = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url;
-            const method = (init?.method || (typeof input !== 'string' && !(input instanceof URL) ? input.method : 'GET')).toUpperCase();
+            const method = (init?.method ||
+                (typeof input !== 'string' && !(input instanceof URL) ? input.method : 'GET')).toUpperCase();
             if (shouldPatch(url, method)) {
                 win.__MEDCALC_AUTH_DEBUG.matchedCount += 1;
                 win.__MEDCALC_AUTH_DEBUG.lastUrl = url;
@@ -183,12 +191,13 @@ window.onload = async () => {
         };
         const originalOpen = XMLHttpRequest.prototype.open;
         const originalSend = XMLHttpRequest.prototype.send;
-        XMLHttpRequest.prototype.open = function (method, url) {
+        XMLHttpRequest.prototype.open = function (method, url, ...args) {
             this.__medcalcMethod = method;
             this.__medcalcUrl = String(url);
-            return originalOpen.apply(this, arguments);
+            const [asyncFlag, username, password] = args;
+            return originalOpen.call(this, method, url, asyncFlag, username, password);
         };
-        XMLHttpRequest.prototype.send = function () {
+        XMLHttpRequest.prototype.send = function (...args) {
             const method = this.__medcalcMethod || 'GET';
             const url = this.__medcalcUrl || '';
             if (shouldPatch(url, method)) {
@@ -206,7 +215,8 @@ window.onload = async () => {
                     console.warn('[MEDCALC][AUTH] ready/xhr token match, failed to set Authorization');
                 }
             }
-            return originalSend.apply(this, arguments);
+            const [body] = args;
+            return originalSend.call(this, body);
         };
         win.__MEDCALC_READY_BASIC_AUTH_PATCHED = true;
         win.__MEDCALC_AUTH_DEBUG.installed = true;
@@ -224,7 +234,8 @@ window.onload = async () => {
         catch (error) {
             const message = error instanceof Error ? error.message : String(error);
             if (/Patient is not available/i.test(message)) {
-                patientInfoDiv.innerHTML = '<p>No patient data available. Standalone launch is ready.</p>';
+                patientInfoDiv.innerHTML =
+                    '<p>No patient data available. Standalone launch is ready.</p>';
                 return;
             }
             console.error('FHIR 資料載入失敗:', error);
