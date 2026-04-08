@@ -78,7 +78,9 @@ window.onload = async () => {
     }
 
     const persistedSmartParams = new URLSearchParams(
-        hasSmartParams ? currentParams.toString() : sessionStorage.getItem('MEDCALC_SMART_PARAMS') || ''
+        hasSmartParams
+            ? currentParams.toString()
+            : sessionStorage.getItem('MEDCALC_SMART_PARAMS') || ''
     );
 
     function updateDisplay(): void {
