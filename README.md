@@ -1,113 +1,83 @@
-# CGMH EHRCALC on FHIR
+# SMART on FHIR Intelligent Clinical Decision Calculator Platform
 
-Clinical calculator web app with SMART on FHIR integration.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)](https://www.typescriptlang.org/)
+[![FHIR R4](https://img.shields.io/badge/FHIR-R4-orange.svg)](https://www.hl7.org/fhir/resourcelist.html)
+[![Docker](https://img.shields.io/badge/Docker-Ready-brightgreen.svg)]()
 
-- Purpose: provide point-of-care clinical calculators with optional FHIR auto-fill
-- Stack: TypeScript, JavaScript, HTML/CSS, Nginx, Docker
-- Scope: 90+ calculators (risk scores, formulas, conversions, pediatrics, critical care)
+Engineered to streamline clinical diagnostic workflows, this platform integrates HL7 FHIR R4 standards and Taiwan Core Implementation Guide (TW Core IG) with a modular calculation engine to provide real-time clinical decision support (CDS). By leveraging SMART on FHIR protocols and OAuth 2.0, it automates patient data retrieval for over 92 standardized clinical calculators across 14 specialties, effectively eliminating manual entry errors and transcription risks.
 
-## Quick Start (Docker)
+## Project Overview
+In contemporary medical practice, clinical risk assessment often relies on independent tools that require clinicians to manually extract and input values from Electronic Health Records (EHR). This process is not only administratively burdensome but also highly susceptible to transcription errors. Furthermore, inconsistent data formats across different medical institutions hinder the development of universal clinical tools.
 
-### 1. Build and run
+This platform addresses these challenges by implementing a standardized FHIR-based architecture. By embedding calculators as apps within the hospital's EHR system, the system actively retrieves patient demographics, laboratory results, and vitals using the patient ID in context. This "Zero-Entry" experience ensures data integrity and allows healthcare providers to focus on clinical judgment rather than manual data processing.
 
-```bash
-docker compose up -d --build
-```
 
-### 2. Open pages
+### Introduction Video
+<p align="center">
+  <a href="https://youtu.be/NlIZ0fhsojc">
+    <img src="fig/Home%20page.png" width="800" alt="Platform Overview">
+  </a>
+</p>
 
-- App: http://localhost:8080
-- Launch page: http://localhost:8080/launch.html
-- Health check: http://localhost:8080/health-check.html
-- Calculator test page: http://localhost:8080/test-calculators.html
 
-### 3. Stop
+### Key Features
 
-```bash
-docker compose down
-```
+* **Intelligent Auto-Fill (90%+ Automation):** Utilizes authorized FHIR R4 APIs to map clinical data. Empirical tests show the system can automatically complete over 90% of required data fields, minimizing human intervention.
+* **Configuration-Driven Factory Model:** Implements a modular architecture where clinical logic (TypeScript-based) is decoupled from the UI, allowing for rapid scaling to 92+ tools while maintaining interface consistency.
+* **TW Core IG Integration:** Fully adapted to the Taiwan Core Profiles, ensuring seamless data interoperability within the local medical ecosystem.
+* **Multi-dimensional Decision Analysis:** Provides visual "Trade-off Analysis" reports for complex cases, assisting medical teams in making data-driven clinical decisions.
+* **Advanced Safety & Verification:** Features a Data Staleness Check to ensure the validity of clinical parameters and adheres to Software as a Medical Device (SaMD) verification protocols.
 
-## SMART on FHIR Test
+## Technical Architecture
 
-Use SMART Health IT Launcher:
+The system is designed with a three-tier architecture to ensure logic accuracy and data security:
+1.  **Foundation Layer**: Manages FHIR OAuth2 authorization, data fetching, and unit conversions.
+2.  **Factory Core**: Features the `UnifiedFormulaFactory` and `ScoringFactory` which parse clinical blueprints into executable logic.
+3.  **Application Layer**: A responsive UI built with TypeScript and CSS variables, supporting Point-of-Care usage on mobile and desktop.
 
-1. Go to https://launch.smarthealthit.org/
-2. Set App Launch URL to `http://localhost:8080/launch.html`
-3. Choose FHIR R4 sandbox and a test patient
-4. Click Launch
+<p align="center">
+  <img src="fig/Calculator.png" width="600" alt="Calculator Interface">
+</p>
 
-## Local Dev (without Docker)
-
-Use any static file server at project root:
-
-```bash
-npx http-server -p 8000
-```
-
-Then open:
-
-- http://localhost:8000
-- http://localhost:8000/launch.html
-
-## Project Layout (Simplified)
-
+### Directory Structure
 ```text
-.
-├── index.html                 # main list page
-├── calculator.html            # single calculator page
-├── launch.html                # SMART launch bootstrap
-├── health-check.html          # runtime checks
-├── test-calculators.html      # calculator loading test UI
-├── src/                       # TypeScript source
-├── js/                        # runtime JavaScript output/modules
-├── css/                       # styles
-├── docs/                      # architecture and developer docs
-├── text/                      # additional guides/reports
-├── Dockerfile
-├── docker-compose.yml
-└── nginx.conf
+├── src/
+│   ├── calculators/      # Speciality-specific configurations (JSON & Logic)
+│   ├── shared/           # Core Engines (Unified Formula & Scoring Factories)
+│   ├── fhir-data-service.ts # SMART on FHIR & OAuth 2.0 integration logic
+│   └── validator.ts      # Clinical range & Data staleness validation
+├── docs/
+│   ├── compliance/       # SaMD documents (SRS, Risk Management, etc.)
+│   └── ARCHITECTURE.md   # Detailed technical design of the Factory Pattern
+├── text/                 # Verification protocols and Test Reports
+├── fig/                  # UI screenshots and architectural diagrams
+└── nginx.conf            # Security Proxy and CSP configurations
 ```
 
-## Common Commands
+### Outcomes
+* Validated Feasibility: Successfully demonstrated high automation rates in clinical settings.
+* Safety Enhancement: Eliminated transcription risks and improved trend assessment via intuitive visualizations.
+* Interoperability: Proven the value of cross-system data integration in clinical decision support.
+### Future Work
+* AI Integration: Transitioning from static calculations to dynamic risk warnings using AI predictive models.
+* Ecosystem Expansion: Promoting standardized templates across different hospital systems to create a shared ecosystem of clinical calculators.
+* Personalized Logic: Developing custom calculation functions to adapt to specific clinical scenarios.
+### Credits & License
+* Development: Justine Huang, Rian Chen, and Chang Gung Memorial Hospital (CGMH)
+* Technical Standards: HL7 FHIR Standard, TW Core IG, LOINC Codes
+* License: MIT License
 
+## Getting Started
+**Launch URL**: [https://justine11289.github.io/SMART-on-FHIR-Intelligent-Clinical-Decision-Calculator-Platform/launch](https://justine11289.github.io/SMART-on-FHIR-Intelligent-Clinical-Decision-Calculator-Platform/launch)
+
+**Docker Deployment**
 ```bash
-# install deps
+git clone [https://github.com/justine11289/SMART-on-FHIR-Intelligent-Clinical-Decision-Calculator-Platform.git](https://github.com/justine11289/SMART-on-FHIR-Intelligent-Clinical-Decision-Calculator-Platform.git)
+cd SMART-on-FHIR-Intelligent-Clinical-Decision-Calculator-Platform
 npm install
-
-# compile TypeScript
-npm run build:ts
-
-# run tests
-npm test
-```
-
-## CSP / FHIR Endpoint Note
-
-If SMART launch fails with a CSP `connect-src` error, add your FHIR launcher domain to CSP allowlist in:
-
-- `nginx.conf`
-- HTML pages using meta CSP (`launch.html`, `calculator.html`, `health-check.html`)
-
-After CSP changes, rebuild/restart Docker:
-
-```bash
+npm run build:ts  # Transpile TypeScript
+npm start         # Launch local development server
 docker compose up -d --build
 ```
 
-## Key Docs
-
-- Docker guide: [text/README_DOCKER.md](text/README_DOCKER.md)
-- Developer guide: [docs/DEVELOPER_GUIDE.md](docs/DEVELOPER_GUIDE.md)
-- Calculator style guide: [text/CALCULATOR_STYLE_GUIDE.md](text/CALCULATOR_STYLE_GUIDE.md)
-- Calculator testing guide: [text/CALCULATOR_TESTING_GUIDE.md](text/CALCULATOR_TESTING_GUIDE.md)
-
-## Contributing
-
-PRs are welcome.
-
-Minimum expectation before opening PR:
-
-1. Build passes
-2. Tests pass
-3. New calculator logic includes tests
-4. Documentation is updated when behavior changes
